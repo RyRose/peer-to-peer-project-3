@@ -1,4 +1,4 @@
-package sockdemo;
+package ferrer_stuff;
 
 import java.net.*;
 import java.io.*;
