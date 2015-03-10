@@ -11,7 +11,9 @@ public class TestPlayer implements PlayerInterface {
 	
 	private TestPoint point;
 	private int id = 0;
+	private boolean alive;
 	public ArrayList<BulletInterface> bullets;
+	
 
 	public TestPlayer( int x, int y) {
 		point = new TestPoint(x, y);
@@ -41,6 +43,11 @@ public class TestPlayer implements PlayerInterface {
 	@Override
 	public int getUniqueId() {
 		return id;
+	}
+	
+	@Override
+	public boolean isAlive() {
+		return alive;
 	}
 	
 	@Override
