@@ -27,4 +27,10 @@ public class TestBullet implements BulletInterface {
 		return "x: " + point.x + "|y: " + point.y + "|dir: " + direction;
 	}
 
+	@Override
+	public void move() {
+		point = new TestPoint(point.getX() + 5*Math.cos(direction), point.getY() - 5*Math.sin(direction));
+
+	}
+
 }

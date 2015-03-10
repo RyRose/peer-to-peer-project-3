@@ -21,5 +21,10 @@ public class Bullet implements BulletInterface{
 	public double getDirection() {
 		return direction;
 	}
+	
+	@Override
+	public void move() {
+		coordinates = new Point(coordinates.getX() + 5*Math.cos(direction), coordinates.getY() - 5*Math.sin(direction));
+	}
 
 }
