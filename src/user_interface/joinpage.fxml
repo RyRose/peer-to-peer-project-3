@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.Controlljoinpage">
+   <left>
+      <Pane prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="add" layoutX="78.0" layoutY="199.0" mnemonicParsing="false" onAction="#addnew" prefHeight="44.0" prefWidth="89.0" text="add" textAlignment="CENTER" textFill="#e4310d">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="play" layoutX="78.0" layoutY="356.0" mnemonicParsing="false" onAction="#joinGame" prefHeight="104.0" prefWidth="363.0" text="Play">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font>
+            </Button>
+            <ChoiceBox fx:id="users" layoutX="218.0" layoutY="15.0" prefHeight="50.0" prefWidth="223.0" />
+            <TextField fx:id="IP" layoutX="219.0" layoutY="206.0" prefHeight="31.0" prefWidth="217.0" promptText="Enter IP Address of Game Creater" />
+         </children>
+      </Pane>
+   </left>
+</BorderPane>

@@ -1,5 +1,4 @@
 package user_interface;
-
 	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,12 +12,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("Gui.fxml"));
+			loader.setLocation(Main.class.getResource("Beginpage.fxml"));
 			BorderPane root = (BorderPane) loader.load();
-			Scene scene = new Scene(root,1024,620);
+			Scene scene = new Scene(root,500,500);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("PeerToPeerProject3");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -29,3 +27,4 @@ public class Main extends Application {
 		launch(args);
 	}
 }
+

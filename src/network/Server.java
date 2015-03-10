@@ -1,10 +1,11 @@
-package ferrer_stuff;
+package network;
 
 import java.net.*;
 import java.io.*;
 
 public class Server {
 	private ServerSocket accepter;
+	private Boolean started = false;
 
 	public Server(int port) throws IOException {
 		accepter = new ServerSocket(port);
@@ -14,10 +15,14 @@ public class Server {
 	public void listen() throws IOException {
 		for (;;) {
 			Socket s = accepter.accept();
-			SocketEchoThread echoer = new SocketEchoThread(s);
+			SocketThread echoer = new SocketThread(s, started);
 			System.out.println("Connection accepted from " + s.getInetAddress());
 			echoer.start();
 		}
+	}
+	
+	public void setStarted(Boolean started) {
+		this.started = started;
 	}
 
 	public static void main(String[] args) throws IOException {
