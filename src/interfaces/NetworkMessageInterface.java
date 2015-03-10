@@ -1,8 +1,14 @@
 package interfaces;
 
+
 import network_to_game.PlayerData;
 
+import java.util.List;
+
 public interface NetworkMessageInterface {
-	public String getMessage(); // String representation of what should be displayed to everybody over the network
-	public PlayerData getPlayerData(); // Object representation of...
+	public String getMyPlayerJson();
+	public String getAllPlayerJson();
+
+	public PlayerData getClientPlayerData();
+	public List<PlayerData> getAllPlayerData();
 }

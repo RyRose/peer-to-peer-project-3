@@ -3,34 +3,56 @@ package network_to_game;
 
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 
-
 public class JSONparser {
 
-	public PlayerData parseJSON( InputStream in) {
+	public PlayerData parseOnePlayerJSON( InputStream in) {
 		JsonParser parser = Json.createParser(in);
-		return extractPlayerFromJson(parser);
+		return getPlayerFromJson(parser);
 
 	}
 
-	public PlayerData parseJSON( String json ) {
+	public PlayerData parseOnePlayerJSON( String json ) {
 		JsonParser parser = Json.createParser( new StringReader(json) );
-		return extractPlayerFromJson(parser);
+		return getPlayerFromJson(parser);
 	}
-
-	private PlayerData extractPlayerFromJson( JsonParser parser ) {
+	
+	public ArrayList<PlayerData> parseMultipleJson( InputStream in ) {
+		JsonParser parser = Json.createParser(in);
+		return extractMultiplePlayersFromJson(parser);
+	}
+	
+	public ArrayList<PlayerData> parseMultipleJson( String json ) {
+		JsonParser parser = Json.createParser( new StringReader(json) );
+		return extractMultiplePlayersFromJson(parser);
+	}
+	
+	private ArrayList<PlayerData> extractMultiplePlayersFromJson( JsonParser parser ) {
+		ArrayList<PlayerData> list = new ArrayList<>();
+		while ( parser.hasNext() ) {
+			list.add( getPlayerFromJson(parser) );
+		}
+		return list;
+	}
+	
+	private PlayerData getPlayerFromJson( JsonParser parser ) {
 		PlayerData player = new PlayerData();
-		while (parser.hasNext()) {
-			Event e = parser.next();
+		Event e = parser.next();
+		while ( parser.hasNext() && !e.equals(Event.END_ARRAY) ) {
 			if (e == Event.KEY_NAME) {
 				switch (parser.getString()) {
 				case "id":
 					parser.next();
 					player.id = parser.getInt();
+					break;
+				case "alive":
+					e = parser.next();
+					player.isAlive = (e == Event.VALUE_TRUE);
 					break;
 				case "x":
 					parser.next();
@@ -48,7 +70,9 @@ public class JSONparser {
 					}
 				}
 			}
+			e = parser.next();
 		}
+		parser.next();
 		return player;
 	}
 

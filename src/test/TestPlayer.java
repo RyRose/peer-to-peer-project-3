@@ -10,7 +10,7 @@ import interfaces.PointInterface;
 public class TestPlayer implements PlayerInterface {
 	
 	private TestPoint point;
-	private int id = 0;
+	private int id = 8080;
 	private boolean alive;
 	public ArrayList<BulletInterface> bullets;
 	
@@ -18,6 +18,7 @@ public class TestPlayer implements PlayerInterface {
 	public TestPlayer( int x, int y) {
 		point = new TestPoint(x, y);
 		bullets = new ArrayList<BulletInterface>();
+		alive = true;
 	}
 	
 	public void addBullet( TestBullet bullet ) {
@@ -52,6 +53,6 @@ public class TestPlayer implements PlayerInterface {
 	
 	@Override
 	public String toString() {
-		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "\n" + bullets;
+		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "|isAlive: " + alive + "\n" + bullets;
 	}
 }
