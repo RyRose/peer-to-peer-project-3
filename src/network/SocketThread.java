@@ -20,6 +20,7 @@ public class SocketThread extends Thread {
         this.controller = controller;
     }
 
+    @Override
     public void run() {
         try {
             BufferedReader responses = 
@@ -28,7 +29,7 @@ public class SocketThread extends Thread {
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             System.out.println(started.toString());
             if (!started) {
-            	writer.print("Waiting");
+            	writer.println("Waiting");
             }
             else {
             	writer.print(networkMessage.getAllPlayerJson());

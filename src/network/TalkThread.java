@@ -38,9 +38,11 @@ public class TalkThread extends Thread {
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			while (going) {
 				while (going && !responses.ready());
-				CharBuffer buf = CharBuffer.allocate(10000);
-				responses.read(buf);
-				if (String.valueOf(buf.array()) != null) {channel.put(String.valueOf(buf.array()));}
+				//CharBuffer buf = CharBuffer.allocate(10000);
+				//responses.read(buf);
+				String line = responses.readLine();
+				System.out.println("line: " + line);
+				if ( line != null ) {channel.put(line);}
 			}
 			going = false;
 		} catch (IOException ioe) {

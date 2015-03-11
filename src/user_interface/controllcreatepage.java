@@ -25,13 +25,14 @@ public class controllcreatepage {
 	
 	network.Server server;
 	ObservableList<String> names = FXCollections.observableArrayList();
-	ArrayList<Point> startCoordinates;
-	ArrayList<Direction> directions;
+	ArrayList<Point> startCoordinates = new ArrayList<Point>();
+	ArrayList<Direction> directions = new ArrayList<Direction>();
 	
 	@FXML
-	public void intialize() throws IOException {
-		server = new network.Server(8888);
+	public void initialize() throws IOException {
+		server = new network.Server(8888, this);
 		listNames.setItems(names);
+		server.start();
 		setupCoordinates();
 		setupDirections();
 	}
