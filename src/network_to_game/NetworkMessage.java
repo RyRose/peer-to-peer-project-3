@@ -66,5 +66,4 @@ public class NetworkMessage implements NetworkMessageInterface{
 		return player;
 	}
 
-
 }

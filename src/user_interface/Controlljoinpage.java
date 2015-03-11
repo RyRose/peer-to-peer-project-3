@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
-
 import network.TalkThread;
-//import network.TalkerGUI.Receiver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -120,7 +118,7 @@ public class Controlljoinpage {
 	
 	public void startGame(String line) {
 		try {
-			Parent home_page_parent = FXMLLoader.load(getClass().getResource("")); //TODO: place name of game controller FXML here
+			Parent home_page_parent = FXMLLoader.load(getClass().getResource("GameScreen.fxml"));
 			Scene home_page_scene = new Scene(home_page_parent);
 			Stage app_stage = (Stage) canvas.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
