@@ -63,7 +63,7 @@ public class controllcreatepage {
 		NetworkMessage networkMessage = new NetworkMessage(players);
 		server.setNetworkMessage(networkMessage);
 		server.setStarted(true);
-		//TODO: new game controller with all players in the listview starts and send a message with all initial coordinates
+		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
 	}
 	
 	public void addtolist(String name) {

@@ -28,7 +28,7 @@ public class TestBullet implements BulletInterface {
 	}
 
 	@Override
-	public void move() {
+	public void shoot() {
 		point = new TestPoint(point.getX() + 5*Math.cos(direction), point.getY() - 5*Math.sin(direction));
 
 	}

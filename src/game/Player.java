@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import interfaces.BulletInterface;
@@ -13,9 +14,16 @@ public class Player implements PlayerInterface{
 	private Direction heading;
 	private boolean alive = true;
 	
-	public Player (PointInterface coordinates, List<BulletInterface> bullets) {
+	public Player (PointInterface coordinates, Direction heading) {
+		this.coordinates = coordinates;
+		this.heading = heading;
+		this.bullets = new ArrayList<BulletInterface>();
+	}
+	
+	public Player (PointInterface coordinates, List<BulletInterface> bullets, Direction heading) {
 		this.coordinates = coordinates;
 		this.bullets = bullets;
+		this.heading = heading;
 	}
 	
 	@Override
