@@ -4,9 +4,12 @@ import game.Direction;
 import game.Player;
 import game.Point;
 import interfaces.PlayerInterface;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 import network_to_game.NetworkMessage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -68,7 +71,9 @@ public class controllcreatepage {
 	}
 	
 	public void addtolist(String name) {
-		names.add(name);
+		Platform.runLater(() -> {
+			names.add(name);
+		});
 	}
 	
 	private void openGame() {
