@@ -3,16 +3,21 @@ package network;
 import java.net.*;
 import java.io.*;
 
+import network_to_game.NetworkMessage;
 import user_interface.controllcreatepage;
 import javafx.fxml.FXMLLoader;
 
 public class SocketThread extends Thread {
     private Socket socket;
     private Boolean started;
+    private NetworkMessage networkMessage;
+    private controllcreatepage controller;
     
-    public SocketThread(Socket socket, Boolean started) {
+    public SocketThread(Socket socket, Boolean started, NetworkMessage networkMessage, controllcreatepage controller) {
         this.socket = socket;
         this.started = started;
+        this.networkMessage = networkMessage;
+        this.controller = controller;
     }
 
     public void run() {
@@ -21,12 +26,14 @@ public class SocketThread extends Thread {
                 new BufferedReader
                 (new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            System.out.println(started.toString());
             if (!started) {
-            	writer.println("Waiting");
+            	writer.print("Waiting");
             }
             else {
-            	//writer.println(//TODO: here send the json object of all player data)
+            	writer.print(networkMessage.getAllPlayerJson());
             }
+            writer.flush();
             while (!responses.ready()){}
             while (responses.ready()) {
             	if (started) {
@@ -35,20 +42,17 @@ public class SocketThread extends Thread {
             	}
             	else {
             		updateController(responses);
+            		System.out.println(responses.readLine());
             	}
             }
-            writer.flush();
             socket.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } 
     }
     
-    private void updateController(BufferedReader names) {
-    	FXMLLoader loader = new FXMLLoader();
-		controllcreatepage controller = 
-				loader.<controllcreatepage>getController();
-		controller.addtolist(names.toString());
+    private void updateController(BufferedReader names) throws IOException {
+		controller.addtolist(names.readLine());
     }
    
 }

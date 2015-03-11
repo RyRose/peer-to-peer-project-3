@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -9,7 +10,10 @@
    <center>
       <AnchorPane prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="Begin" layoutX="180.0" layoutY="351.0" mnemonicParsing="false" onAction="#begin" prefHeight="79.0" prefWidth="140.0" text="Begin" />
+            <Button fx:id="Begin" layoutX="180.0" layoutY="351.0" mnemonicParsing="false" onAction="#begin" prefHeight="79.0" prefWidth="140.0" text="Begin">
+               <font>
+                  <Font size="24.0" />
+               </font></Button>
             <ListView fx:id="listNames" layoutX="150.0" layoutY="62.0" prefHeight="235.0" prefWidth="200.0" />
          </children>
       </AnchorPane>

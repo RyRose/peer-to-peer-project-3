@@ -16,7 +16,6 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	
 	public void updatePlayer(NetworkMessage message) {
 		PlayerData playerUpdate = message.getClientPlayerData();
 		int playerId = playerUpdate.id;
