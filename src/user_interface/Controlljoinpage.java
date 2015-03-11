@@ -42,7 +42,6 @@ public class Controlljoinpage {
 		users.getSelectionModel().select(0);
 		addSavedIPs();
 		
-
 		channel = new ArrayBlockingQueue<String>(2, true);
 	}
 	

@@ -5,7 +5,6 @@ import java.io.*;
 
 import network_to_game.NetworkMessage;
 import user_interface.controllcreatepage;
-import javafx.fxml.FXMLLoader;
 
 public class SocketThread extends Thread {
     private Socket socket;

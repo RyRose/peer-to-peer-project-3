@@ -3,13 +3,9 @@ package user_interface;
 import game.Direction;
 import game.Player;
 import game.Point;
-import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
-
-import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import network_to_game.NetworkMessage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,15 +25,16 @@ public class controllcreatepage {
 	
 	network.Server server;
 	ObservableList<String> names = FXCollections.observableArrayList();
-	ArrayList<Point> startCoordinates;
-	ArrayList<Direction> directions;
+	ArrayList<Point> startCoordinates = new ArrayList<Point>();
+	ArrayList<Direction> directions = new ArrayList<Direction>();
 	
 	@FXML
-	public void intialize() throws IOException {
+	public void initialize() throws IOException {
 		server = new network.Server(8888, this);
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
+		server.start();
 	}
 	
 	private void setupCoordinates() {
