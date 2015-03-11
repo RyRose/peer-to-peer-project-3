@@ -32,15 +32,14 @@ public class TalkThread extends Thread {
 		try {
 			s = new Socket(host, port);
 			PrintWriter writer = new PrintWriter(s.getOutputStream());
-			writer.print(msg);
+			writer.println(msg);
 			writer.flush();
 
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			while (going) {
 				while (going && !responses.ready());
-				CharBuffer buf = CharBuffer.allocate(10000);
-				responses.read(buf);
-				if (String.valueOf(buf.array()) != null) {channel.put(String.valueOf(buf.array()));}
+				String line = responses.readLine();
+				if (line != null) {channel.put(line);}
 			}
 			going = false;
 		} catch (IOException ioe) {

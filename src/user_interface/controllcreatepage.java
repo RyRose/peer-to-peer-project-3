@@ -14,8 +14,12 @@ import network_to_game.NetworkMessage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 public class controllcreatepage {
 	@FXML
@@ -30,7 +34,7 @@ public class controllcreatepage {
 	
 	@FXML
 	public void intialize() throws IOException {
-		server = new network.Server(8888);
+		server = new network.Server(8888, this);
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
@@ -54,9 +58,7 @@ public class controllcreatepage {
 	private void begin() {
 		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
 		for (int i = 0; i == names.size(); i++) {
-			Point p = new Point(5, 5);
-			Player player = new Player(startCoordinates.get(i));
-			player.setHeading(directions.get(i));
+			Player player = new Player(startCoordinates.get(i), directions.get(i));
 			player.setUniqueId(i);
 			players.add(player);
 		}
@@ -64,9 +66,23 @@ public class controllcreatepage {
 		server.setNetworkMessage(networkMessage);
 		server.setStarted(true);
 		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
+		openGame();
 	}
 	
 	public void addtolist(String name) {
 		names.add(name);
+	}
+	
+	private void openGame() {
+		try {
+			Parent home_page_parent = FXMLLoader.load(getClass().getResource("GameScreen.fxml"));
+			Scene home_page_scene = new Scene(home_page_parent);
+			Stage app_stage = (Stage) Begin.getScene().getWindow();
+			app_stage.setScene(home_page_scene);
+			app_stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
