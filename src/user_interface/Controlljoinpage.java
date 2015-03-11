@@ -81,7 +81,7 @@ public class Controlljoinpage {
 	@FXML
 	private void joinGame() {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
-			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
+			send("Player", users.getSelectionModel().getSelectedItem(), 8889);
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
 		else {

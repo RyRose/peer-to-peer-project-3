@@ -35,7 +35,7 @@ public class TalkThread extends Thread {
 			writer.flush();
 
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			while (going) {
+			if (going) {
 				while (going && !responses.ready());
 				String line = responses.readLine();
 				System.out.println("line: " + line);
