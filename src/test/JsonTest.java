@@ -22,9 +22,7 @@ public class JsonTest {
 		player.addBullet( new TestBullet( 0, 1, 90 ));
 		player.addBullet( new TestBullet( 25, 50, 10.32442));
 		String json = generator.generateOnePlayerJson(player);
-		System.out.println(player);
 		PlayerData transmitted_player = parser.parseOnePlayerJSON(json);
-		System.out.println(transmitted_player);
 		assertTrue( player.toString().equals(transmitted_player.toString()));
 	}
 	
