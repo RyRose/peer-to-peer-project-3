@@ -1,6 +1,8 @@
 package network_to_game;
 
 
+import game.Direction;
+
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -61,6 +63,14 @@ public class JSONparser {
 				case "y":
 					parser.next();
 					player.y = parser.getInt();
+					break;
+				case "heading_enum":
+					parser.next();
+					player.heading_enum = Direction.valueOf(parser.getString());
+					break;
+				case "heading_double":
+					parser.next();
+					player.heading_double = parser.getBigDecimal().doubleValue();
 					break;
 				case "bullet":
 					parser.next();

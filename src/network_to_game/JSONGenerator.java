@@ -45,6 +45,8 @@ public class JSONGenerator {
 			.write("alive", player.isAlive())
 			.write("x", player.getCoordinates().getX())
 			.write("y", player.getCoordinates().getY())
+			.write("heading_enum", player.getHeading().name())
+			.write("heading_double", player.getHeadingAsDouble())
 			.writeStartObject("bullets");
 		
 		for( BulletInterface b : player.getBullets()) {

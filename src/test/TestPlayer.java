@@ -21,6 +21,7 @@ public class TestPlayer implements PlayerInterface {
 		point = new TestPoint(x, y);
 		bullets = new ArrayList<BulletInterface>();
 		alive = true;
+		heading = Direction.DOWN;
 	}
 	
 	public void addBullet( TestBullet bullet ) {
@@ -55,7 +56,7 @@ public class TestPlayer implements PlayerInterface {
 	
 	@Override
 	public String toString() {
-		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "|isAlive: " + alive + "\n" + bullets;
+		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + getHeadingAsDouble() + "\n" + bullets;
 	}
 
 	@Override

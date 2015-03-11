@@ -1,5 +1,7 @@
 package network_to_game;
 
+import game.Direction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,8 @@ public class PlayerData {
 	public double x;
 	public double y;
 	public boolean isAlive;
+	public Direction heading_enum;
+	public double heading_double;
 	
 	private ArrayList<BulletData> bullets;
 	
@@ -25,6 +29,6 @@ public class PlayerData {
 	
 	@Override
 	public String toString() {
-		return "id: " + id + "|x: " + x + "|y: " + y + "|isAlive: " + isAlive + "\n" + bullets;
+		return "id: " + id + "|x: " + x + "|y: " + y + "|isAlive: " + isAlive + "|heading_enum " + heading_enum + "|heading_double " + heading_double + "\n" + bullets;
 	}
 }
