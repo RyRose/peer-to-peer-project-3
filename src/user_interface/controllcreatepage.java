@@ -30,6 +30,7 @@ public class controllcreatepage {
 	
 	@FXML
 	public void initialize() throws IOException {
+
 		server = new network.Server(8888, this);
 		listNames.setItems(names);
 		setupCoordinates();
