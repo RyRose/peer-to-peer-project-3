@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.CharBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class TalkThread extends Thread {
@@ -37,8 +38,9 @@ public class TalkThread extends Thread {
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			while (going) {
 				while (going && !responses.ready());
-				String line = responses.readLine();
-				if (line != null) {channel.put(line);}
+				CharBuffer buf = CharBuffer.allocate(10000);
+				responses.read(buf);
+				if (String.valueOf(buf.array()) != null) {channel.put(String.valueOf(buf.array()));}
 			}
 			going = false;
 		} catch (IOException ioe) {
