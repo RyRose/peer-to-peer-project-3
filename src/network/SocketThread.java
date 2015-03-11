@@ -3,16 +3,19 @@ package network;
 import java.net.*;
 import java.io.*;
 
+import network_to_game.NetworkMessage;
 import user_interface.controllcreatepage;
 import javafx.fxml.FXMLLoader;
 
 public class SocketThread extends Thread {
     private Socket socket;
     private Boolean started;
+    private NetworkMessage networkMessage;
     
-    public SocketThread(Socket socket, Boolean started) {
+    public SocketThread(Socket socket, Boolean started, NetworkMessage networkMessage) {
         this.socket = socket;
         this.started = started;
+        this.networkMessage = networkMessage;
     }
 
     public void run() {
@@ -25,7 +28,7 @@ public class SocketThread extends Thread {
             	writer.println("Waiting");
             }
             else {
-            	//writer.println(//TODO: here send the json object of all player data)
+            	writer.println(networkMessage.getAllPlayerJson());
             }
             while (!responses.ready()){}
             while (responses.ready()) {

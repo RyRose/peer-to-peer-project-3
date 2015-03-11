@@ -108,7 +108,7 @@ public class Controlljoinpage {
 				try {
 					line = channel.take();
 					if (line.equals("Waiting")) {}
-					else { //TODO: use protocol and else if to determine if this is all of a json string, maybe just check end braces
+					else if (line.endsWith("}}}]}")) {
 						startGame(line);
 					}
 				} catch (InterruptedException e) {
