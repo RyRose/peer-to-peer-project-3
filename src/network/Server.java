@@ -28,7 +28,7 @@ public class Server extends Thread {
 			Socket s = accepter.accept();
 			
 			if( isSettingUp ) {
-				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted);
+				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted, this);
 
 				System.out.println("Connection accepted from " + s.getInetAddress());
 				gameSetup.start();

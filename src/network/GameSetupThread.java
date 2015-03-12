@@ -19,12 +19,14 @@ public class GameSetupThread extends Thread {
 	    private Socket socket;
 	    public boolean started;
 	    private controllcreatepage controller;
+	    private Server server;
 	    
 	    
-	    public GameSetupThread(Socket socket, controllcreatepage controller, boolean isGameStarted) {
+	    public GameSetupThread(Socket socket, controllcreatepage controller, boolean isGameStarted, Server server) {
 	        this.socket = socket;
 	        this.controller = controller;
 	        started = isGameStarted;
+	        this.server = server;
 	    }
 
 	    @Override
@@ -35,19 +37,22 @@ public class GameSetupThread extends Thread {
             	
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
-            		String s = responses.readLine();
             		if (started) {
             			PrintWriter writer = new PrintWriter(socket.getOutputStream());
         				GameToNetworkMessage message = new GameToNetworkMessage(null, controller.all_players);
-        				writer.print(message.getAllPlayersJson());
+        				writer.println(message.getAllPlayersJson());
         				writer.flush();
-            		} else if (!s.isEmpty()) {
+        				server.isSettingUp = false;
+        				break;
+            		} else {
+                		String s = responses.readLine();
+                		if (s.isEmpty()) continue;
             			updateLobbyScreen(s);
             			Server.IPaddresses.add( socket.getInetAddress().getHostAddress() );
         	            
         	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
         	            GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
-                    	writer.print(message.getSingleJson());
+                    	writer.println(message.getSingleJson());
                     	writer.flush();
             		}
 	            }
@@ -62,6 +67,7 @@ public class GameSetupThread extends Thread {
 	    	Player player = new Player( controller.getStartCoordinates().get(controller.player_id), controller.getStartDirections().get(controller.player_id));
 	    	player.setUniqueId(controller.player_id);
 	    	controller.player_id++;
+	    	controller.all_players.add(player);
 	    	return player;
 	    }
 	    

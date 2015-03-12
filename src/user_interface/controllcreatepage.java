@@ -45,6 +45,7 @@ public class controllcreatepage {
 		setupDirections();
 		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
 		all_players.add(player);
+		player_id++;
 		server.start();
 	}
 	
@@ -83,8 +84,6 @@ public class controllcreatepage {
 	
 	private void openGame(NetworkMessage networkMessage) {
 		try {
-			server.isGameStarted = true;
-			server.isSettingUp = false;
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));
 			Parent home_page_parent = (Parent) cont.load();  
@@ -96,6 +95,7 @@ public class controllcreatepage {
 			
 			GameToNetworkMessage message = new GameToNetworkMessage(null, all_players);
 			NetworkToGameMessage message2 = new NetworkToGameMessage(message.getAllPlayersJson(), true);
+			server.isGameStarted = true;
 			System.out.println(message2.getAllPlayers());
 			controller.initialize(message2, all_players.get(0).getUniqueId());
 			controller.initializePlayer(all_players.get(0));

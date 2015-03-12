@@ -14,6 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import network.GameJoiningThread;
 import network_to_game.NetworkMessage;
 import network_to_game.NetworkToGameMessage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -139,9 +140,8 @@ public class Controlljoinpage {
 						if (message.getAllPlayers().size() == 1) {
 							initializePlayer( message );
 						} else {
-							System.out.println("hello world!");
 							talker.halt();
-							startGame(message);
+							Platform.runLater( () -> {startGame(message); } );
 						}
 					} 
 				} catch (InterruptedException e) {
@@ -163,7 +163,7 @@ public class Controlljoinpage {
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
 			Parent home_page_parent = (Parent) cont.load();  
 			Scene home_page_scene = new Scene(home_page_parent);
-			Stage app_stage = (Stage) canvas.getScene().getWindow();
+			Stage app_stage = (Stage) play.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
