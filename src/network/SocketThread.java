@@ -43,9 +43,9 @@ public class SocketThread extends Thread {
             		}
             	}
             	else {
-            		if (responses.readLine().endsWith("Player")) {
-            			updateController(responses);
-            			System.out.println(responses.readLine());
+            		String s = responses.readLine();
+            		if (s.endsWith("Player")) {
+            			updateController(s);
             		}
             	}
             }
@@ -55,8 +55,8 @@ public class SocketThread extends Thread {
         } 
     }
     
-    private void updateController(BufferedReader names) throws IOException {
-		controller.addtolist(names.readLine());
+    private void updateController(String names) throws IOException {
+		controller.addtolist(names);
     }
    
 }

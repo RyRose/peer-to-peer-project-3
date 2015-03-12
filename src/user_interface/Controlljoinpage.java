@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.Timer;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkThread;
@@ -85,11 +86,12 @@ public class Controlljoinpage {
 	}
 	
 	@FXML
-	private void joinGame() {
+	private void joinGame() throws InterruptedException {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
 			notStarted = true;
 			while (notStarted) {
+				wait(100);
 				send("", users.getSelectionModel().getSelectedItem(), 8888);
 			}
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater

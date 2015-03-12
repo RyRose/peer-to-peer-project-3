@@ -59,11 +59,12 @@ public class controllcreatepage {
 	@FXML
 	private void begin() {
 		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
-		for (int i = 0; i == names.size(); i++) {
+		for (int i = 0; i < names.size() +1; i++) {
 			Player player = new Player(startCoordinates.get(i), directions.get(i));
 			player.setUniqueId(i);
 			players.add(player);
 		}
+		System.out.println(players);
 		NetworkMessage networkMessage = new NetworkMessage(players);
 		server.setNetworkMessage(networkMessage);
 		server.setStarted(true);
