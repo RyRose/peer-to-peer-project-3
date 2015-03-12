@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkThread;
@@ -90,10 +91,21 @@ public class Controlljoinpage {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
 			notStarted = true;
-			while (notStarted) {
-				wait(100);
-				send("", users.getSelectionModel().getSelectedItem(), 8888);
-			}
+			
+			Timer timer = new Timer();
+			timer.scheduleAtFixedRate( new TimerTask() {
+
+				@Override
+				public void run() {
+					if(!notStarted) {
+						cancel();
+					} else {
+						send("", users.getSelectionModel().getSelectedItem(), 8888);
+					}
+				}
+				
+			}, 0, 100);
+			
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
 		else {
