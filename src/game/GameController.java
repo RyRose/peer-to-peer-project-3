@@ -1,7 +1,10 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 
+import network.TalkThread;
+import network_to_game.NetworkMessage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -17,6 +20,10 @@ public class GameController {
 	
 	ScreenBuffer screen;
 	ArrayList<Circle> bullets;
+	private ArrayBlockingQueue<String> channel;
+	private TalkThread talker;
+	private String host;
+	private NetworkMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
 	
 	@FXML
 	private void initialize() {
@@ -49,6 +56,14 @@ public class GameController {
 		
 	}
 	
+	public void initializeNetworkMessage(NetworkMessage networkMessage) {
+		this.networkMessage = networkMessage;
+	}
+	
+	public void initializeHost(String host) {
+		this.host = host;
+	}
+	
 	private void move(double x, double y) {
 		me.setTranslateX(me.getTranslateX() + x);
 		me.setTranslateY(me.getTranslateY() + y);
@@ -59,6 +74,31 @@ public class GameController {
 		for (Circle bullet : bullets) {
 			bullet.setTranslateX(bullet.getTranslateX() + 10*Math.cos(heading));
 			bullet.setTranslateY(bullet.getTranslateY() - 10*Math.sin(heading));
+		}
+	}
+	
+	private void send(int port) { //TODO: call this periodically IF host is not null!
+		if (talker != null && talker.isGoing()) {
+			talker.halt();
+		}
+		talker = new TalkThread(networkMessage.getMyPlayerJson(), host, port, channel);
+		new GameReceiver().start();
+		talker.start();		
+	}
+	
+	private class GameReceiver extends Thread {
+		public void run() {
+			while (talker.isGoing()) {
+				String line;
+				try {
+					line = channel.take();
+					if (line.endsWith("}}}]}")) {
+						networkMessage = new NetworkMessage(line, true);
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

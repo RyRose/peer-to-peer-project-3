@@ -1,6 +1,7 @@
 package user_interface;
 
 import game.Direction;
+import game.GameController;
 import game.Player;
 import game.Point;
 import interfaces.PlayerInterface;
@@ -67,7 +68,7 @@ public class controllcreatepage {
 		server.setNetworkMessage(networkMessage);
 		server.setStarted(true);
 		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
-		openGame();
+		openGame(networkMessage);
 	}
 	
 	public void addtolist(String name) {
@@ -76,13 +77,17 @@ public class controllcreatepage {
 		});
 	}
 	
-	private void openGame() {
+	private void openGame(NetworkMessage networkMessage) {
 		try {
-			Parent home_page_parent = FXMLLoader.load(getClass().getResource("GameScreen.fxml"));
+			FXMLLoader cont = new FXMLLoader();
+			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
+			Parent home_page_parent = (Parent) cont.load();  
 			Scene home_page_scene = new Scene(home_page_parent);
 			Stage app_stage = (Stage) Begin.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
-			app_stage.show();
+			GameController controller = 
+					cont.<GameController>getController();
+			controller.initializeNetworkMessage(networkMessage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

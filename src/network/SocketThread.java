@@ -37,12 +37,16 @@ public class SocketThread extends Thread {
             while (!responses.ready()){}
             while (responses.ready()) {
             	if (started) {
-            	//TODO: each "responses" will be one player's data.all responses should edit the json
-            	//that next call to PrintWriter will output;
+            		String response = responses.readLine();
+            		if (response.endsWith("}}}]}")) {
+            			networkMessage = new NetworkMessage(response, false);
+            		}
             	}
             	else {
-            		updateController(responses);
-            		System.out.println(responses.readLine());
+            		if (responses.readLine().endsWith("Player")) {
+            			updateController(responses);
+            			System.out.println(responses.readLine());
+            		}
             	}
             }
             socket.close();

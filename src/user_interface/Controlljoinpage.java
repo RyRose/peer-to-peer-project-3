@@ -1,12 +1,16 @@
 package user_interface;
 
+import game.GameController;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
+
 import network.TalkThread;
+import network_to_game.NetworkMessage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,6 +40,7 @@ public class Controlljoinpage {
 	private ArrayBlockingQueue<String> channel;
 	private TalkThread talker;
 	
+	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
 	private void initialize(){
 		users.setItems(IPAddresses);
@@ -81,7 +86,7 @@ public class Controlljoinpage {
 	@FXML
 	private void joinGame() {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
-			send("Player", users.getSelectionModel().getSelectedItem(), 8889);
+			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
 		else {
@@ -117,12 +122,16 @@ public class Controlljoinpage {
 	
 	public void startGame(String line) {
 		try {
-			Parent home_page_parent = FXMLLoader.load(getClass().getResource("GameScreen.fxml"));
+			FXMLLoader cont = new FXMLLoader();
+			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
+			Parent home_page_parent = (Parent) cont.load();  
 			Scene home_page_scene = new Scene(home_page_parent);
 			Stage app_stage = (Stage) canvas.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
-			app_stage.show();
-			//TODO: line is all player starting positions. will need to use to set up starting positions.
+			GameController controller = 
+					cont.<GameController>getController();
+			controller.initializeNetworkMessage(new NetworkMessage(line, true));
+			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 		}
 		catch (IOException e) {
 			e.printStackTrace();
