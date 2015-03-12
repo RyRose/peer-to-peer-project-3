@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 import network_to_game.GameToNetworkMessage;
 import network_to_game.NetworkMessage;
@@ -16,16 +17,14 @@ import user_interface.controllcreatepage;
 public class GameSetupThread extends Thread {
 	
 	    private Socket socket;
-	    private Boolean started;
+	    public boolean started;
 	    private controllcreatepage controller;
-	    private ArrayList<String> IPaddresses;
 	    
-	    private int player_id; // increments as players are added
 	    
-	    public GameSetupThread(Socket socket, controllcreatepage controller) {
+	    public GameSetupThread(Socket socket, controllcreatepage controller, boolean isGameStarted) {
 	        this.socket = socket;
 	        this.controller = controller;
-	        player_id = 0;
+	        started = isGameStarted;
 	    }
 
 	    @Override
@@ -37,14 +36,17 @@ public class GameSetupThread extends Thread {
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
             		String s = responses.readLine();
-            		if (!s.isEmpty()) {
+            		if (started) {
+            			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        				GameToNetworkMessage message = new GameToNetworkMessage(null, controller.all_players);
+        				writer.print(message.getAllPlayersJson());
+        				writer.flush();
+            		} else if (!s.isEmpty()) {
             			updateLobbyScreen(s);
-            			controller.getIPaddresses().add( socket.getInetAddress().getHostAddress() );
+            			Server.IPaddresses.add( socket.getInetAddress().getHostAddress() );
         	            
         	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-        	            
         	            GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
-        	            
                     	writer.print(message.getSingleJson());
                     	writer.flush();
             		}
@@ -57,9 +59,9 @@ public class GameSetupThread extends Thread {
 	    }
 	    
 	    private Player makeAnotherPlayer() {
-	    	Player player = new Player( controller.getStartCoordinates().get(player_id), controller.getStartDirections().get(player_id));
-	    	player.setUniqueId(player_id);
-	    	player_id++;
+	    	Player player = new Player( controller.getStartCoordinates().get(controller.player_id), controller.getStartDirections().get(controller.player_id));
+	    	player.setUniqueId(controller.player_id);
+	    	controller.player_id++;
 	    	return player;
 	    }
 	    

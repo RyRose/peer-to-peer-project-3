@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import network_to_game.NetworkMessage;
+import network_to_game.NetworkToGameMessage;
 import network_to_game.PlayerData;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -12,8 +13,6 @@ import interfaces.PointInterface;
 
 public class ScreenBuffer {
 	
-	public ConcurrentHashMap<Integer,Player> player_hashmap;
-
 	private Map map;
 	public Player me;
 	
@@ -21,8 +20,8 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	public ScreenBuffer(NetworkMessage message, int player_id) {
-		List<PlayerData> allPlayerData = message.getAllPlayerData();
+	public ScreenBuffer(NetworkToGameMessage networkMessage, int player_id) {
+		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (PlayerData playerData : allPlayerData) {
 			players.add(playerData.toPlayer());
@@ -40,8 +39,8 @@ public class ScreenBuffer {
 		map.players.set(playerId, updatedPlayer);
 	}
 	
-	public void updatePlayers(NetworkMessage message) {
-		List<PlayerData> allPlayerData = message.getAllPlayerData();
+	public void updatePlayers(NetworkToGameMessage networkMessage) {
+		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
 		for (PlayerData playerUpdate : allPlayerData) {
 			int playerId = playerUpdate.id;
 			Player player = map.players.get(playerId);

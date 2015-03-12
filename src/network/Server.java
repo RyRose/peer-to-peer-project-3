@@ -4,12 +4,15 @@ import java.net.*;
 import java.util.ArrayList;
 import java.io.*;
 
+import user_interface.GameController;
 import user_interface.controllcreatepage;
-import network_to_game.NetworkMessage;
 
 public class Server extends Thread {
 	private ServerSocket accepter;
 	private controllcreatepage controller;
+	private GameController gameController;
+	
+	public static final ArrayList<String> IPaddresses = new ArrayList<String>();
 	
 	public boolean isSettingUp;
 	public boolean isGameStarted;
@@ -25,12 +28,16 @@ public class Server extends Thread {
 			Socket s = accepter.accept();
 			
 			if( isSettingUp ) {
-				GameSetupThread gameSetup = new GameSetupThread(s, controller);
+				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted);
 
 				System.out.println("Connection accepted from " + s.getInetAddress());
 				gameSetup.start();
-			} else {
+			} else if (isGameStarted) {
+				if (gameController != null) {
+					GameRunningThread gameRunning = new GameRunningThread(s, IPaddresses, gameController);
 				
+					gameRunning.start();
+				}
 			}
 		}
 	}
@@ -43,6 +50,10 @@ public class Server extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void startGame( GameController controller ) {
+		gameController = controller;
 	}
 
 }

@@ -3,12 +3,15 @@ package user_interface;
 import game.Direction;
 import game.Player;
 import game.ScreenBuffer;
+import interfaces.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import network.TalkThread;
+import network.GameJoiningThread;
+import network_to_game.GameToNetworkMessage;
 import network_to_game.NetworkMessage;
+import network_to_game.NetworkToGameMessage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -27,9 +30,9 @@ public class GameController {
 	ArrayList<Circle> bullets;
 	ArrayList<Ellipse> players;
 	private ArrayBlockingQueue<String> channel;
-	private TalkThread talker;
+	private GameJoiningThread talker;
 	private String host;
-	private NetworkMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
+	private NetworkToGameMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
 	
 	@FXML
 	private void initialize() {
@@ -63,8 +66,8 @@ public class GameController {
 		
 	}
 	
-	public void initializeNetworkMessage(NetworkMessage networkMessage) {
-		this.networkMessage = networkMessage;
+	public void initializeNetworkMessage(NetworkToGameMessage message) {
+		this.networkMessage = message;
 	}
 	
 	public void initializeHost(String host) {
@@ -75,9 +78,9 @@ public class GameController {
 		my_id = id;
 	}
 	
-	public void initializePlayer( Player player ) {
-		screen.me = player;
-		my_id = player.getUniqueId();
+	public void initializePlayer( PlayerInterface playerInterface ) {
+		screen.me = (Player) playerInterface;
+		my_id = playerInterface.getUniqueId();
 	}
 	
 	private void move(double x, double y) {
@@ -93,8 +96,8 @@ public class GameController {
 		}
 	}
 	
-	private void update(int port) {
-		screen.updatePlayers(networkMessage);
+	private void update(NetworkToGameMessage message, int port) {
+		screen.updatePlayers(message);
 		screen.updateBullets();
 		shoot();
 		send(port);
@@ -104,7 +107,8 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		talker = new TalkThread(networkMessage.getMyPlayerJson(), host, port, channel);
+		String json = new GameToNetworkMessage(screen.me, null).getSingleJson();
+		talker = new GameJoiningThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
 	}
@@ -116,7 +120,7 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						networkMessage.setNetworkToGameMessage(line, true);
+						update(new NetworkToGameMessage(line, true), 8888);
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import network.TalkThread;
+import network.GameJoiningThread;
 import network_to_game.NetworkMessage;
 import network_to_game.NetworkToGameMessage;
 import javafx.collections.FXCollections;
@@ -44,7 +44,7 @@ public class Controlljoinpage {
 	String filename = "friendlist.txt";
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
 	private ArrayBlockingQueue<String> channel;
-	private TalkThread talker;
+	private GameJoiningThread talker;
 	private Boolean notStarted;
 	private Integer uniqueID;
 	
@@ -123,7 +123,7 @@ public class Controlljoinpage {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		talker = new TalkThread(msg, host, port, channel);
+		talker = new GameJoiningThread(msg, host, port, channel);
 		new Receiver().start();
 		talker.start();		
 	}
@@ -135,11 +135,14 @@ public class Controlljoinpage {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						NetworkToGameMessage message = new NetworkToGameMessage(line, false);
-						initializePlayer( message );
-					} else if ( line.equals("start") ) {
-						startGame(line);
-					}
+						NetworkToGameMessage message = new NetworkToGameMessage(line, true);
+						if (message.getAllPlayers().size() == 1) {
+							initializePlayer( message );
+						} else {
+							startGame(message);
+							talker.halt();
+						}
+					} 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -148,10 +151,10 @@ public class Controlljoinpage {
 	}
 	
 	private void initializePlayer( NetworkToGameMessage message ) {
-		this.player = message.getPlayer().toPlayer();
+		this.player = message.getAllPlayers().get(0).toPlayer();
 	}
 	
-	public void startGame(String line) {
+	public void startGame( NetworkToGameMessage message ) {
 		try {
 			System.out.println("startGame in ControllJoinPage");
 			notStarted = false;
@@ -163,8 +166,6 @@ public class Controlljoinpage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			NetworkMessage message = new NetworkMessage(controller);
-			message.setNetworkToGameMessage(line, true);
 			controller.initializeNetworkMessage(message);
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializePlayer(player);

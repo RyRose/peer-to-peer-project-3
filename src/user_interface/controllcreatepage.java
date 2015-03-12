@@ -8,7 +8,9 @@ import interfaces.PlayerInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import network_to_game.GameToNetworkMessage;
 import network_to_game.NetworkMessage;
+import network_to_game.NetworkToGameMessage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,10 +34,13 @@ public class controllcreatepage {
 	ArrayList<Direction> directions = new ArrayList<Direction>();
 	
 	private ArrayList<String> IPaddresses;
+	public ArrayList<PlayerInterface> all_players;
+	public int player_id = 0;
 	
 	@FXML
 	public void initialize() throws IOException {
-
+		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
+		all_players.add(player);
 		server = new network.Server(8888, this);
 		server.isSettingUp = true;
 		IPaddresses = new ArrayList<String>();
@@ -79,10 +84,13 @@ public class controllcreatepage {
 	
 	public void addtolist(String name) {
 		Platform.runLater(() -> { names.add(name); });
+		
 	}
 	
 	private void openGame(NetworkMessage networkMessage) {
 		try {
+			server.isGameStarted = true;
+			server.isSettingUp = false;
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));
 			Parent home_page_parent = (Parent) cont.load();  
@@ -91,9 +99,11 @@ public class controllcreatepage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			controller.initializeNetworkMessage(networkMessage);
-			controller.initializeUniqueId(0);
-			server.isSettingUp = false;
+			
+			GameToNetworkMessage message = new GameToNetworkMessage(null, all_players);
+			NetworkToGameMessage message2 = new NetworkToGameMessage(message.getAllPlayersJson(), true);
+			controller.initializeNetworkMessage(message2);
+			controller.initializePlayer(all_players.get(0));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

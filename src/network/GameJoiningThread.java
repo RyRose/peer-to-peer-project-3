@@ -7,13 +7,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class TalkThread extends Thread {
+public class GameJoiningThread extends Thread {
 	private String msg, host;
 	private int port;
 	private ArrayBlockingQueue<String> channel;
 	private boolean going;
 	
-	public TalkThread(String msg, String host, int port, ArrayBlockingQueue<String> channel) {
+	public GameJoiningThread(String msg, String host, int port, ArrayBlockingQueue<String> channel) {
 		this.msg = msg.endsWith("\n") ? msg : msg + "\n";
 		this.host = host;
 		this.port = port;
@@ -38,14 +38,12 @@ public class TalkThread extends Thread {
 			while (going) {
 				while (going && !responses.ready());
 				String line = responses.readLine();
-				// System.out.println("line: " + line);
 				if ( line != null ) {channel.put(line);}
 			}
 			going = false;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
             try {
