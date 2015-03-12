@@ -1,4 +1,7 @@
-package game;
+package user_interface;
+
+import game.Direction;
+import game.ScreenBuffer;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
