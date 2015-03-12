@@ -31,10 +31,13 @@ public class controllcreatepage {
 	ArrayList<Point> startCoordinates = new ArrayList<Point>();
 	ArrayList<Direction> directions = new ArrayList<Direction>();
 	
+	private ArrayList<String> IPaddresses;
+	
 	@FXML
 	public void initialize() throws IOException {
 
 		server = new network.Server(8888, this);
+		IPaddresses = new ArrayList<String>();
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
@@ -55,21 +58,23 @@ public class controllcreatepage {
 		directions.add(Direction.UP);
 	}
 	
+	public ArrayList<Point> getStartCoordinates() {
+		return startCoordinates;
+	}
+	
+	public ArrayList<Direction> getStartDirections() {
+		return directions;
+	}
+	
+	public ArrayList<String> getIPaddresses() {
+		return IPaddresses;
+	}
+	
 	@FXML
 	private void begin() {
-		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
-		for (int i = 0; i < names.size() +1; i++) {
-			Player player = new Player(startCoordinates.get(i), directions.get(i));
-			player.setUniqueId(i);
-			players.add(player);
-		}
-		System.out.println(players);
-		NetworkMessage networkMessage = new NetworkMessage(null);
-		networkMessage.setGameToNetworkMessage(null, players);
-		server.setNetworkMessage(networkMessage);
 		server.setStarted(true);
 		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
-		openGame(networkMessage);
+		openGame(null);
 	}
 	
 	public void addtolist(String name) {

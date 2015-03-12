@@ -25,7 +25,7 @@ public class GameToNetworkMessage {
 			all_players_json = "NULL PLAYERS";
 	}
 	
-	public String getClientJson() {
+	public String getSingleJson() {
 		return client_json;
 	}
 	

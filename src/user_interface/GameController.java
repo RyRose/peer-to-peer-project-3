@@ -1,6 +1,7 @@
 package user_interface;
 
 import game.Direction;
+import game.Player;
 import game.ScreenBuffer;
 
 import java.util.ArrayList;
@@ -72,6 +73,11 @@ public class GameController {
 	
 	public void initializeUniqueId(int id) {
 		my_id = id;
+	}
+	
+	public void initializePlayer( Player player ) {
+		screen.me = player;
+		my_id = player.getUniqueId();
 	}
 	
 	private void move(double x, double y) {

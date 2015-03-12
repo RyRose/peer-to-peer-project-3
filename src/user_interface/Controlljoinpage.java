@@ -1,5 +1,7 @@
 package user_interface;
 
+import game.Player;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkThread;
 import network_to_game.NetworkMessage;
+import network_to_game.NetworkToGameMessage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,6 +27,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Controlljoinpage {
+	
+	Player player;
+	
 	@FXML
 	Pane canvas;
 	@FXML
@@ -90,21 +96,6 @@ public class Controlljoinpage {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
 			notStarted = true;
-			/*
-			Timer timer = new Timer();
-			timer.scheduleAtFixedRate( new TimerTask() {
-
-				@Override
-				public void run() {
-					if(!notStarted) {
-						cancel();
-					} else {
-						send("", users.getSelectionModel().getSelectedItem(), 8888);
-					}
-				}
-				
-			}, 0, 100);
-			*/
 			
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
@@ -128,11 +119,12 @@ public class Controlljoinpage {
 				String line;
 				try {
 					line = channel.take();
-					if (line.endsWith("Waiting")) {
+					if (line.equals("Waiting")) {
 						uniqueID = Integer.valueOf(line);
-					}
-					else if (line.endsWith("}}]}")) {
-						notStarted = false;
+					} else if (line.endsWith("}}]}")) {
+						NetworkToGameMessage message = new NetworkToGameMessage(line, false);
+						initializePlayer( message );
+					} else if ( line.equals("start") ) {
 						startGame(line);
 					}
 				} catch (InterruptedException e) {
@@ -142,8 +134,13 @@ public class Controlljoinpage {
 		}
 	}
 	
+	private void initializePlayer( NetworkToGameMessage message ) {
+		this.player = message.getPlayer().toPlayer();
+	}
+	
 	public void startGame(String line) {
 		try {
+			System.out.println("startGame in ControllJoinPage");
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
 			Parent home_page_parent = (Parent) cont.load();  
@@ -156,7 +153,7 @@ public class Controlljoinpage {
 			message.setNetworkToGameMessage(line, true);
 			controller.initializeNetworkMessage(message);
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
-			controller.initializeUniqueId(uniqueID);
+			controller.initializePlayer(player);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -47,7 +47,7 @@ public class NetworkMessage implements NetworkMessageInterface{
 
 	@Override
 	public String getMyPlayerJson() {
-		return game_to_network.getClientJson();
+		return game_to_network.getSingleJson();
 	}
 
 	@Override

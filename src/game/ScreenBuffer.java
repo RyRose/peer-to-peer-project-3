@@ -15,7 +15,7 @@ public class ScreenBuffer {
 	public ConcurrentHashMap<Integer,Player> player_hashmap;
 
 	private Map map;
-	private Player me;
+	public Player me;
 	
 	public ScreenBuffer(Map m) {
 		map = m;

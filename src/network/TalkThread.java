@@ -35,10 +35,10 @@ public class TalkThread extends Thread {
 			writer.flush();
 
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			if (going) {
+			while (going) {
 				while (going && !responses.ready());
 				String line = responses.readLine();
-				System.out.println("line: " + line);
+				// System.out.println("line: " + line);
 				if ( line != null ) {channel.put(line);}
 			}
 			going = false;
