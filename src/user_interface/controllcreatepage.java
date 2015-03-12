@@ -44,6 +44,7 @@ public class controllcreatepage {
 		setupCoordinates();
 		setupDirections();
 		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
+		player.setUniqueId(player_id);
 		all_players.add(player);
 		player_id++;
 		server.start();
@@ -74,7 +75,7 @@ public class controllcreatepage {
 	@FXML
 	private void begin() {
 		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
-		openGame(null);
+		openGame();
 	}
 	
 	public void addtolist(String name) {
@@ -82,7 +83,7 @@ public class controllcreatepage {
 		
 	}
 	
-	private void openGame(NetworkMessage networkMessage) {
+	private void openGame() {
 		try {
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));

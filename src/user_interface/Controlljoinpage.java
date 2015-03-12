@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import network.GameJoiningThread;
+import network.TalkerThread;
 import network_to_game.NetworkMessage;
 import network_to_game.NetworkToGameMessage;
 import javafx.application.Platform;
@@ -45,7 +45,7 @@ public class Controlljoinpage {
 	String filename = "friendlist.txt";
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
 	private ArrayBlockingQueue<String> channel;
-	private GameJoiningThread talker;
+	private TalkerThread talker;
 	private Boolean notStarted;
 	private Integer uniqueID;
 	
@@ -124,7 +124,7 @@ public class Controlljoinpage {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		talker = new GameJoiningThread(msg, host, port, channel);
+		talker = new TalkerThread(msg, host, port, channel);
 		new Receiver().start();
 		talker.start();		
 	}

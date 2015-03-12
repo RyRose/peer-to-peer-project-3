@@ -7,13 +7,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class GameJoiningThread extends Thread {
+public class TalkerThread extends Thread {
 	private String msg, host;
 	private int port;
 	private ArrayBlockingQueue<String> channel;
 	private boolean going;
 	
-	public GameJoiningThread(String msg, String host, int port, ArrayBlockingQueue<String> channel) {
+	public TalkerThread(String msg, String host, int port, ArrayBlockingQueue<String> channel) {
 		this.msg = msg.endsWith("\n") ? msg : msg + "\n";
 		this.host = host;
 		this.port = port;

@@ -8,10 +8,11 @@ import interfaces.PlayerInterface;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import network.GameJoiningThread;
+import network.TalkerThread;
 import network_to_game.GameToNetworkMessage;
 import network_to_game.NetworkMessage;
 import network_to_game.NetworkToGameMessage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -30,16 +31,16 @@ public class GameController {
 	ArrayList<Circle> bullets;
 	ArrayList<Ellipse> players;
 	private ArrayBlockingQueue<String> channel;
-	private GameJoiningThread talker;
+	private TalkerThread talker;
 	private String host;
 	private NetworkToGameMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
 	
 	@FXML
 	private void initialize() {
-	
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
+			System.out.println(screen.me);
 			if (event.getCode() == KeyCode.UP) {
 				y = -1;
 				screen.move(Direction.UP);
@@ -66,7 +67,6 @@ public class GameController {
 	public void initialize(NetworkToGameMessage message, int unique_id) {
 		this.networkMessage = message;
 		screen = new ScreenBuffer(networkMessage, my_id);
-		me = new Ellipse(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY());
 	}
 	
 	public void initializeHost(String host) {
@@ -75,6 +75,7 @@ public class GameController {
 	
 	public void initializePlayer( PlayerInterface playerInterface ) {
 		screen.me = (Player) playerInterface;
+		me = new Ellipse(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY());
 		my_id = playerInterface.getUniqueId();
 		
 	}
@@ -92,6 +93,14 @@ public class GameController {
 		}
 	}
 	
+	public ScreenBuffer getScreen() {
+		return screen;
+	}
+	
+	public void updatePlayer(NetworkToGameMessage message) {
+		screen.updatePlayer(message);
+	}
+	
 	private void update(NetworkToGameMessage message, int port) {
 		screen.updatePlayers(message);
 		screen.updateBullets();
@@ -104,7 +113,7 @@ public class GameController {
 			talker.halt();
 		}
 		String json = new GameToNetworkMessage(screen.me, null).getSingleJson();
-		talker = new GameJoiningThread(json, host, port, channel);
+		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
 	}
@@ -116,7 +125,7 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						update(new NetworkToGameMessage(line, true), 8888);
+						Platform.runLater( () -> { update(new NetworkToGameMessage(line, true), 8888); } );
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

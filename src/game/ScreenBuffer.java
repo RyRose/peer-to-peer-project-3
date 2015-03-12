@@ -22,18 +22,18 @@ public class ScreenBuffer {
 	
 	public ScreenBuffer(NetworkToGameMessage networkMessage, int player_id) {
 		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
 		for (PlayerData playerData : allPlayerData) {
 			players.add(playerData.toPlayer());
-			if (playerData.id == player_id) {me = playerData.toPlayer();}
 		}
+		me = null;
 		map = new Map(players, new ArrayList<Point>());
 	}
 	
-	public void updatePlayer(NetworkMessage message) {
-		PlayerData playerUpdate = message.getClientPlayerData();
+	public void updatePlayer(NetworkToGameMessage message) {
+		PlayerData playerUpdate = message.getPlayer();
 		int playerId = playerUpdate.id;
-		Player player = map.players.get(playerId);
+		Player player = (Player) map.players.get(playerId);
 		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		map.players.set(playerId, updatedPlayer);
@@ -43,7 +43,7 @@ public class ScreenBuffer {
 		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
 		for (PlayerData playerUpdate : allPlayerData) {
 			int playerId = playerUpdate.id;
-			Player player = map.players.get(playerId);
+			Player player = (Player) map.players.get(playerId);
 			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			map.players.set(playerId, updatedPlayer);
@@ -80,5 +80,9 @@ public class ScreenBuffer {
 	
 	public Player getMe() {
 		return me;
+	}
+	
+	public Map getMap() {
+		return map;
 	}
 }

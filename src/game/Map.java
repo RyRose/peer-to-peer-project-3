@@ -1,5 +1,7 @@
 package game;
 
+import interfaces.PlayerInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,20 +12,20 @@ import interfaces.PointInterface;*/
 
 public class Map /*implements MapInterface*/{
 	
-	ArrayList<Player> players;
+	ArrayList<PlayerInterface> players;
 	ArrayList<Point> obstacles;
 	
 	public Map (ArrayList<Point> obstacles) {
 		this.obstacles = obstacles;
 	}
 	
-	public Map (ArrayList<Player> players, ArrayList<Point> obstacles) {
+	public Map (ArrayList<PlayerInterface> players, ArrayList<Point> obstacles) {
 		this.players = players;
 		this.obstacles = obstacles;
 	}
 
 	//@Override
-	public List<Player> getPlayers() {
+	public ArrayList<PlayerInterface> getPlayers() {
 		return players;
 	}
 
