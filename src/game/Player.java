@@ -81,5 +81,12 @@ public class Player implements PlayerInterface{
 	public boolean isAlive() {
 		return alive;
 	}
+	
+	@Override
+	public String toString() {
+		return "id: " + uniqueId + "|x: " + coordinates.getX() + "|y: " + coordinates.getY() + 
+				"|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + 
+				getHeadingAsDouble() + "\n" + bullets;
+	}
 
 }
