@@ -1,6 +1,7 @@
 package network;
 
 import game.Player;
+import interfaces.PlayerInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,23 +38,40 @@ public class GameSetupThread extends Thread {
             	
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
+    	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
             		if (started) {
-            			PrintWriter writer = new PrintWriter(socket.getOutputStream());
         				GameToNetworkMessage message = new GameToNetworkMessage(null, controller.all_players);
         				writer.println(message.getAllPlayersJson());
         				writer.flush();
         				server.isSettingUp = false;
         				break;
             		} else {
+                    	
                 		String s = responses.readLine();
-                		if (s.isEmpty()) continue;
-            			updateLobbyScreen(s);
-            			Server.IPaddresses.add( socket.getInetAddress().getHostAddress() );
-        	            
-        	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-        	            GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
-                    	writer.println(message.getSingleJson());
-                    	writer.flush();
+                    	
+        	            if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
+        	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
+        	            	GameToNetworkMessage message = new GameToNetworkMessage(player, null);
+                			writer.println(message.getSingleJson());
+                			writer.flush();
+                		} else {
+                	        
+                			if(s.isEmpty()) {
+            	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()) );
+            	            	GameToNetworkMessage message = new GameToNetworkMessage(player, null);
+                    			writer.println(message.getSingleJson());
+                    			writer.flush();
+                			} else {
+                			
+                			GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
+                			writer.println(message.getSingleJson());
+                			writer.flush();
+                    	
+                			updateLobbyScreen(s);
+                			Server.IPaddresses.add( socket.getInetAddress().toString() );
+                			}
+                		}
             		}
 	            }
 	            	            
@@ -61,6 +79,10 @@ public class GameSetupThread extends Thread {
 	        } catch (IOException ioe) {
 	            ioe.printStackTrace();
 	        }
+	    }
+	    
+	    private String getUniqueID() {
+	    	return String.valueOf(server.IPaddresses.indexOf(socket.getInetAddress().toString()) + 1);
 	    }
 	    
 	    private Player makeAnotherPlayer() {
