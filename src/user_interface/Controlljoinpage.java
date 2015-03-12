@@ -119,9 +119,7 @@ public class Controlljoinpage {
 				String line;
 				try {
 					line = channel.take();
-					if (line.equals("Waiting")) {
-						uniqueID = Integer.valueOf(line);
-					} else if (line.endsWith("}}]}")) {
+					if (line.endsWith("}}]}")) {
 						NetworkToGameMessage message = new NetworkToGameMessage(line, false);
 						initializePlayer( message );
 					} else if ( line.equals("start") ) {
