@@ -20,6 +20,11 @@ public class Player implements PlayerInterface{
 		this.bullets = new ArrayList<BulletInterface>();
 	}
 	
+	public Player (PointInterface coordinates, List<BulletInterface> bullets) {
+		this.coordinates = coordinates;
+		this.bullets = bullets;		
+	}
+	
 	public Player (PointInterface coordinates, List<BulletInterface> bullets, Direction heading) {
 		this.coordinates = coordinates;
 		this.bullets = bullets;

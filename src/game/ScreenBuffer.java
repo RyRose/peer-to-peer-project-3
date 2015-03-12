@@ -21,7 +21,7 @@ public class ScreenBuffer {
 		int playerId = playerUpdate.id;
 		PlayerInterface player = map.players.get(playerId);
 		PointInterface updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-		PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets());
+		PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		map.players.set(playerId, updatedPlayer);
 	}
 	
@@ -31,7 +31,7 @@ public class ScreenBuffer {
 			int playerId = playerUpdate.id;
 			PlayerInterface player = map.players.get(playerId);
 			PointInterface updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-			PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets());
+			PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			map.players.set(playerId, updatedPlayer);
 		}
 	}
@@ -54,7 +54,7 @@ public class ScreenBuffer {
 	public void updateBullets() {
 		for (PlayerInterface player : map.players) {
 			for (BulletInterface bullet : player.getBullets()) {
-				bullet.move();
+				bullet.shoot();
 			}
 		}
 	}
@@ -62,5 +62,9 @@ public class ScreenBuffer {
 	public void shootBullet() {
 		BulletInterface newBullet = new Bullet(me.getCoordinates(), me.getHeadingAsDouble());
 		me.getBullets().add(newBullet);
+	}
+	
+	public Player getMe() {
+		return me;
 	}
 }
