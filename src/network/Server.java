@@ -1,6 +1,7 @@
 package network;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.io.*;
 
 import user_interface.controllcreatepage;
@@ -11,6 +12,7 @@ public class Server extends Thread {
 	private Boolean started = false;
 	private NetworkMessage networkMessage;
 	private controllcreatepage controller;
+    private ArrayList<String> IPaddresses = new ArrayList<String>();
 
 	public Server(int port, controllcreatepage controller) throws IOException {
 		accepter = new ServerSocket(port);
@@ -22,7 +24,10 @@ public class Server extends Thread {
 		for (;;) {
 			System.out.println("here");
 			Socket s = accepter.accept();
-			SocketThread echoer = new SocketThread(s, started, networkMessage, controller);
+			SocketThread echoer = new SocketThread(s, started, networkMessage, controller, IPaddresses);
+			if (!IPaddresses.contains(s.getInetAddress().toString())) {
+				IPaddresses.add(s.getInetAddress().toString());
+			}
 			System.out.println("Connection accepted from " + s.getInetAddress());
 			echoer.start();
 		}

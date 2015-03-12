@@ -128,8 +128,10 @@ public class Controlljoinpage {
 				String line;
 				try {
 					line = channel.take();
-					if (line.equals("Waiting")) {}
-					else if (line.endsWith("}}}]}")) {
+					if (line.endsWith("Waiting")) {
+						//TODO: line is the unique id. what do I do with it?
+					}
+					else if (line.endsWith("}}]}")) {
 						notStarted = false;
 						startGame(line);
 					}

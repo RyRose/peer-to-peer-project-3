@@ -1,6 +1,7 @@
 package network;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.io.*;
 
 import network_to_game.NetworkMessage;
@@ -11,12 +12,14 @@ public class SocketThread extends Thread {
     private Boolean started;
     private NetworkMessage networkMessage;
     private controllcreatepage controller;
+    private ArrayList<String> IPaddresses;
     
-    public SocketThread(Socket socket, Boolean started, NetworkMessage networkMessage, controllcreatepage controller) {
+    public SocketThread(Socket socket, Boolean started, NetworkMessage networkMessage, controllcreatepage controller, ArrayList<String> IPaddresses) {
         this.socket = socket;
         this.started = started;
         this.networkMessage = networkMessage;
         this.controller = controller;
+        this.IPaddresses = IPaddresses;
     }
 
     @Override
@@ -28,7 +31,12 @@ public class SocketThread extends Thread {
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             System.out.println(started.toString());
             if (!started) {
-            	writer.println("Waiting");
+            	if (IPaddresses.contains(socket.getInetAddress().toString())) {
+        			writer.println(getUniqueID() + "Waiting");
+        		}
+            	else {
+            		writer.println(IPaddresses.size() + "Waiting");
+            	}
             }
             else {
             	writer.print(networkMessage.getAllPlayerJson());
@@ -53,6 +61,10 @@ public class SocketThread extends Thread {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } 
+    }
+    
+    private String getUniqueID() {
+    	return String.valueOf(IPaddresses.indexOf(socket.getInetAddress().toString()));
     }
     
     private void updateController(String names) throws IOException {
