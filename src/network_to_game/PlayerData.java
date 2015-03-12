@@ -36,8 +36,8 @@ public class PlayerData {
 	}
 	
 	public Player toPlayer() {
-		Player player = new Player(new Point(x, y), toBullets());
-		player.setHeading(heading_enum);
+		Player player = new Player(new Point(x, y), heading_enum);
+		player.getBullets().addAll(toBullets());
 		player.setUniqueId(id);
 		return player;
 	}
