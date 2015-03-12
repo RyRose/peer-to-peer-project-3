@@ -1,7 +1,6 @@
 package user_interface;
 
 import game.Direction;
-import game.GameController;
 import game.Player;
 import game.Point;
 import interfaces.PlayerInterface;
@@ -81,11 +80,15 @@ public class controllcreatepage {
 	private void openGame(NetworkMessage networkMessage) {
 		try {
 			FXMLLoader cont = new FXMLLoader();
-			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
+			cont.setLocation(getClass().getResource("GameScreen.fxml"));
+			System.out.println(cont);
 			Parent home_page_parent = (Parent) cont.load();  
+			System.out.println(home_page_parent);
 			Scene home_page_scene = new Scene(home_page_parent);
+			System.out.println(home_page_scene);
 			Stage app_stage = (Stage) Begin.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
+			System.out.println(app_stage);
 			GameController controller = 
 					cont.<GameController>getController();
 			controller.initializeNetworkMessage(networkMessage);

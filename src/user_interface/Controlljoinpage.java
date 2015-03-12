@@ -1,7 +1,5 @@
 package user_interface;
 
-import game.GameController;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
