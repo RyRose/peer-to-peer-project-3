@@ -40,6 +40,7 @@ public class Controlljoinpage {
 	private ArrayBlockingQueue<String> channel;
 	private TalkThread talker;
 	private Boolean notStarted;
+	private Integer uniqueID;
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
@@ -127,7 +128,7 @@ public class Controlljoinpage {
 				try {
 					line = channel.take();
 					if (line.endsWith("Waiting")) {
-						//TODO: line is the unique id. what do I do with it?
+						uniqueID = Integer.valueOf(line);
 					}
 					else if (line.endsWith("}}]}")) {
 						notStarted = false;
@@ -152,6 +153,7 @@ public class Controlljoinpage {
 					cont.<GameController>getController();
 			controller.initializeNetworkMessage(new NetworkMessage(line, true));
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
+			controller.initializeUniqueId(uniqueID);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
