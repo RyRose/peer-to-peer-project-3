@@ -127,7 +127,7 @@ public class Controlljoinpage {
 				try {
 					line = channel.take();
 					if (line.equals("Waiting")) {}
-					else if (line.endsWith("}}}]}")) {
+					else if (line.endsWith("}}]}")) {
 						notStarted = false;
 						startGame(line);
 					}

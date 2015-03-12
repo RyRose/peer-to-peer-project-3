@@ -31,9 +31,6 @@ public class GameController {
 	@FXML
 	private void initialize() {
 		
-		shoot();
-		screen.updateBullets();
-		
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
@@ -52,6 +49,7 @@ public class GameController {
 			} else if (event.getCode() == KeyCode.SPACE) {
 				Circle bullet = new Circle(me.getTranslateX(), me.getTranslateY(), 5);
 				bullets.add(bullet);
+				canvas.getChildren().add(bullet);
 				screen.shootBullet();
 			}
 			move(x,y);
@@ -78,6 +76,13 @@ public class GameController {
 			bullet.setTranslateX(bullet.getTranslateX() + 10*Math.cos(heading));
 			bullet.setTranslateY(bullet.getTranslateY() - 10*Math.sin(heading));
 		}
+	}
+	
+	private void update() {
+		screen.updatePlayers(networkMessage);
+		screen.updateBullets();
+		shoot();
+		send(8888);
 	}
 	
 	private void send(int port) { //TODO: call this periodically IF host is not null!
