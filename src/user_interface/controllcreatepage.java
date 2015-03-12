@@ -33,20 +33,18 @@ public class controllcreatepage {
 	ArrayList<Point> startCoordinates = new ArrayList<Point>();
 	ArrayList<Direction> directions = new ArrayList<Direction>();
 	
-	private ArrayList<String> IPaddresses;
-	public ArrayList<PlayerInterface> all_players;
+	public ArrayList<PlayerInterface> all_players = new ArrayList<PlayerInterface>();
 	public int player_id = 0;
 	
 	@FXML
 	public void initialize() throws IOException {
-		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
-		all_players.add(player);
 		server = new network.Server(8888, this);
 		server.isSettingUp = true;
-		IPaddresses = new ArrayList<String>();
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
+		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
+		all_players.add(player);
 		server.start();
 	}
 	
@@ -70,10 +68,6 @@ public class controllcreatepage {
 	
 	public ArrayList<Direction> getStartDirections() {
 		return directions;
-	}
-	
-	public ArrayList<String> getIPaddresses() {
-		return IPaddresses;
 	}
 	
 	@FXML
@@ -102,7 +96,8 @@ public class controllcreatepage {
 			
 			GameToNetworkMessage message = new GameToNetworkMessage(null, all_players);
 			NetworkToGameMessage message2 = new NetworkToGameMessage(message.getAllPlayersJson(), true);
-			controller.initializeNetworkMessage(message2);
+			System.out.println(message2.getAllPlayers());
+			controller.initialize(message2, all_players.get(0).getUniqueId());
 			controller.initializePlayer(all_players.get(0));
 		} catch (IOException e) {
 			e.printStackTrace();

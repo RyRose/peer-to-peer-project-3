@@ -139,8 +139,9 @@ public class Controlljoinpage {
 						if (message.getAllPlayers().size() == 1) {
 							initializePlayer( message );
 						} else {
-							startGame(message);
+							System.out.println("hello world!");
 							talker.halt();
+							startGame(message);
 						}
 					} 
 				} catch (InterruptedException e) {
@@ -166,7 +167,7 @@ public class Controlljoinpage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			controller.initializeNetworkMessage(message);
+			controller.initialize(message, player.getUniqueId());
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializePlayer(player);
 		}

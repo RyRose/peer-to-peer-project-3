@@ -36,10 +36,7 @@ public class GameController {
 	
 	@FXML
 	private void initialize() {
-		
-		screen = new ScreenBuffer(networkMessage, my_id);
-		me = new Ellipse(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY());
-		
+	
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
@@ -66,21 +63,20 @@ public class GameController {
 		
 	}
 	
-	public void initializeNetworkMessage(NetworkToGameMessage message) {
+	public void initialize(NetworkToGameMessage message, int unique_id) {
 		this.networkMessage = message;
+		screen = new ScreenBuffer(networkMessage, my_id);
+		me = new Ellipse(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY());
 	}
 	
 	public void initializeHost(String host) {
 		this.host = host;
 	}
 	
-	public void initializeUniqueId(int id) {
-		my_id = id;
-	}
-	
 	public void initializePlayer( PlayerInterface playerInterface ) {
 		screen.me = (Player) playerInterface;
 		my_id = playerInterface.getUniqueId();
+		
 	}
 	
 	private void move(double x, double y) {
