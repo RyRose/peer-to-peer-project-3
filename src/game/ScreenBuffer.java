@@ -50,6 +50,10 @@ public class ScreenBuffer {
 		}
 	}
 	
+	public ArrayList<PlayerInterface> getPlayers() {
+		return map.players;
+	}
+	
 	public void move(Direction d) {
 		PointInterface coordinates = me.getCoordinates();
 		switch (d) {

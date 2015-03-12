@@ -167,7 +167,7 @@ public class Controlljoinpage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			controller.initialize(message, player.getUniqueId());
+			controller.initializeScreen(message, player.getUniqueId());
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializePlayer(player);
 		}
