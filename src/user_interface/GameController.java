@@ -30,7 +30,7 @@ public class GameController {
 	int my_id;
 	ArrayList<Circle> bullets;
 	ArrayList<Ellipse> players;
-	private ArrayBlockingQueue<String> channel;
+	private ArrayBlockingQueue<String> channel = new ArrayBlockingQueue<String>(2);
 	private TalkerThread talker;
 	private String host;
 	private NetworkToGameMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
@@ -62,6 +62,10 @@ public class GameController {
 			move(x,y);
 		});
 		
+	}
+	
+	public void start() {
+		send(8888);
 	}
 	
 	public void initialize(NetworkToGameMessage message, int unique_id) {
@@ -113,6 +117,7 @@ public class GameController {
 			talker.halt();
 		}
 		String json = new GameToNetworkMessage(screen.me, null).getSingleJson();
+		System.out.println(json);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();

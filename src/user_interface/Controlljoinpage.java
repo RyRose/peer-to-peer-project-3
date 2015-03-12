@@ -135,12 +135,13 @@ public class Controlljoinpage {
 				String line;
 				try {
 					line = channel.take();
+					System.out.println("line: " + line);
 					if (line.endsWith("}}]}")) {
 						NetworkToGameMessage message = new NetworkToGameMessage(line, true);
 						if (message.getAllPlayers().size() == 1) {
 							initializePlayer( message );
 						} else {
-							talker.halt();
+							//talker.halt();
 							Platform.runLater( () -> {startGame(message); } );
 						}
 					} 
@@ -167,9 +168,11 @@ public class Controlljoinpage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
+			System.out.println(player);
 			controller.initialize(message, player.getUniqueId());
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializePlayer(player);
+			controller.start();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
