@@ -129,6 +129,7 @@ public class Controlljoinpage {
 				try {
 					line = channel.take();
 					if (line.endsWith("Waiting")) {
+						line = line.replace("Waiting", "");
 						uniqueID = Integer.valueOf(line);
 					}
 					else if (line.endsWith("}}]}")) {
