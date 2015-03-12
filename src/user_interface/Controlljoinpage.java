@@ -170,6 +170,7 @@ public class Controlljoinpage {
 					cont.<GameController>getController();
 			System.out.println(player);
 			controller.initialize(message, player.getUniqueId());
+			controller.initializeScreen(message, player.getUniqueId());
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializePlayer(player);
 			controller.start();

@@ -98,7 +98,7 @@ public class controllcreatepage {
 			NetworkToGameMessage message2 = new NetworkToGameMessage(message.getAllPlayersJson(), true);
 			server.isGameStarted = true;
 			System.out.println(message2.getAllPlayers());
-			controller.initialize(message2, all_players.get(0).getUniqueId());
+			controller.initializeScreen(message2, all_players.get(0).getUniqueId());
 			controller.initializePlayer(all_players.get(0));
 		} catch (IOException e) {
 			e.printStackTrace();
