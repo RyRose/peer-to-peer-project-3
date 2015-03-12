@@ -37,6 +37,7 @@ public class controllcreatepage {
 	public void initialize() throws IOException {
 
 		server = new network.Server(8888, this);
+		server.isSettingUp = true;
 		IPaddresses = new ArrayList<String>();
 		listNames.setItems(names);
 		setupCoordinates();
@@ -72,7 +73,6 @@ public class controllcreatepage {
 	
 	@FXML
 	private void begin() {
-		server.setStarted(true);
 		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
 		openGame(null);
 	}
@@ -93,6 +93,7 @@ public class controllcreatepage {
 					cont.<GameController>getController();
 			controller.initializeNetworkMessage(networkMessage);
 			controller.initializeUniqueId(0);
+			server.isSettingUp = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

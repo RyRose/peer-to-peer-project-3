@@ -25,9 +25,7 @@ public class SocketThread extends Thread {
     @Override
     public void run() {
         try {
-            BufferedReader responses = 
-                new BufferedReader
-                (new InputStreamReader(socket.getInputStream()));
+            BufferedReader responses = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             System.out.println(started.toString());
             if (!started) {

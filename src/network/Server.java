@@ -9,10 +9,10 @@ import network_to_game.NetworkMessage;
 
 public class Server extends Thread {
 	private ServerSocket accepter;
-	private Boolean started = false;
-	private NetworkMessage networkMessage;
 	private controllcreatepage controller;
-    private ArrayList<String> IPaddresses = new ArrayList<String>();
+	
+	public boolean isSettingUp;
+	public boolean isGameStarted;
 
 	public Server(int port, controllcreatepage controller) throws IOException {
 		accepter = new ServerSocket(port);
@@ -23,12 +23,15 @@ public class Server extends Thread {
 	public void listen() throws IOException {
 		for (;;) {
 			Socket s = accepter.accept();
-			GameSetupThread gameSetup = new GameSetupThread(s, started, controller, IPaddresses);
-			if (!IPaddresses.contains(s.getInetAddress().toString())) {
-				IPaddresses.add(s.getInetAddress().toString());
+			
+			if( isSettingUp ) {
+				GameSetupThread gameSetup = new GameSetupThread(s, controller);
+
+				System.out.println("Connection accepted from " + s.getInetAddress());
+				gameSetup.start();
+			} else {
+				
 			}
-			System.out.println("Connection accepted from " + s.getInetAddress());
-			gameSetup.start();
 		}
 	}
 	
@@ -41,12 +44,5 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	public void setStarted(Boolean started) {
-		this.started = started;
-	}
-	
-	public void setNetworkMessage(NetworkMessage networkMessage) {
-		this.networkMessage = networkMessage;
-	}
+
 }

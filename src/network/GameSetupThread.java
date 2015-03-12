@@ -22,9 +22,8 @@ public class GameSetupThread extends Thread {
 	    
 	    private int player_id; // increments as players are added
 	    
-	    public GameSetupThread(Socket socket, Boolean started, controllcreatepage controller) {
+	    public GameSetupThread(Socket socket, controllcreatepage controller) {
 	        this.socket = socket;
-	        this.started = started;
 	        this.controller = controller;
 	        player_id = 0;
 	    }
