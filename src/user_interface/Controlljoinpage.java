@@ -39,6 +39,7 @@ public class Controlljoinpage {
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
 	private ArrayBlockingQueue<String> channel;
 	private TalkThread talker;
+	private Boolean notStarted;
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
@@ -87,6 +88,10 @@ public class Controlljoinpage {
 	private void joinGame() {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
+			notStarted = true;
+			while (notStarted) {
+				send("", users.getSelectionModel().getSelectedItem(), 8888);
+			}
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
 		else {
@@ -111,6 +116,7 @@ public class Controlljoinpage {
 					line = channel.take();
 					if (line.equals("Waiting")) {}
 					else if (line.endsWith("}}}]}")) {
+						notStarted = false;
 						startGame(line);
 					}
 				} catch (InterruptedException e) {
