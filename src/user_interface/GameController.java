@@ -109,8 +109,8 @@ public class GameController {
 				String line;
 				try {
 					line = channel.take();
-					if (line.endsWith("}}}]}")) {
-						networkMessage = new NetworkMessage(line, true);
+					if (line.endsWith("}}]}")) {
+						networkMessage.setNetworkToGameMessage(line, true);
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

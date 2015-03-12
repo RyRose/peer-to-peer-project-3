@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import network_to_game.NetworkMessage;
 import network_to_game.PlayerData;
@@ -10,6 +11,9 @@ import interfaces.PlayerInterface;
 import interfaces.PointInterface;
 
 public class ScreenBuffer {
+	
+	public ConcurrentHashMap<Integer,Player> player_hashmap;
+
 	private Map map;
 	private Player me;
 	

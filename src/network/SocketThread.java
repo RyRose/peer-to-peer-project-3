@@ -46,8 +46,8 @@ public class SocketThread extends Thread {
             while (responses.ready()) {
             	if (started) {
             		String response = responses.readLine();
-            		if (response.endsWith("}}}]}")) {
-            			networkMessage = new NetworkMessage(response, false);
+            		if (response.endsWith("}}]}")) {
+            			networkMessage.setNetworkToGameMessage(response, false);
             		}
             	}
             	else {

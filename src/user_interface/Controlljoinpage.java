@@ -90,7 +90,7 @@ public class Controlljoinpage {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
 			notStarted = true;
-			
+			/*
 			Timer timer = new Timer();
 			timer.scheduleAtFixedRate( new TimerTask() {
 
@@ -104,6 +104,7 @@ public class Controlljoinpage {
 				}
 				
 			}, 0, 100);
+			*/
 			
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
@@ -151,7 +152,9 @@ public class Controlljoinpage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			controller.initializeNetworkMessage(new NetworkMessage(line, true));
+			NetworkMessage message = new NetworkMessage(controller);
+			message.setNetworkToGameMessage(line, true);
+			controller.initializeNetworkMessage(message);
 			controller.initializeHost(users.getSelectionModel().getSelectedItem());
 			controller.initializeUniqueId(uniqueID);
 		}

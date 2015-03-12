@@ -2,12 +2,14 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*import interfaces.MapInterface;
 import interfaces.PlayerInterface;
 import interfaces.PointInterface;*/
 
 public class Map /*implements MapInterface*/{
+	
 	ArrayList<Player> players;
 	ArrayList<Point> obstacles;
 	

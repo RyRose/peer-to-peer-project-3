@@ -22,14 +22,13 @@ public class Server extends Thread {
 
 	public void listen() throws IOException {
 		for (;;) {
-			System.out.println("here");
 			Socket s = accepter.accept();
-			SocketThread echoer = new SocketThread(s, started, networkMessage, controller, IPaddresses);
+			GameSetupThread gameSetup = new GameSetupThread(s, started, networkMessage, controller, IPaddresses);
 			if (!IPaddresses.contains(s.getInetAddress().toString())) {
 				IPaddresses.add(s.getInetAddress().toString());
 			}
 			System.out.println("Connection accepted from " + s.getInetAddress());
-			echoer.start();
+			gameSetup.start();
 		}
 	}
 	
