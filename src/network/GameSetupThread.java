@@ -37,17 +37,18 @@ public class GameSetupThread extends Thread {
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
             		String s = responses.readLine();
-	            	updateLobbyScreen(s);
+            		if (!s.isEmpty()) {
+            			updateLobbyScreen(s);
+            			controller.getIPaddresses().add( socket.getInetAddress().getHostAddress() );
+        	            
+        	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        	            
+        	            GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
+        	            
+                    	writer.print(message.getSingleJson());
+                    	writer.flush();
+            		}
 	            }
-	            
-	            controller.getIPaddresses().add( socket.getInetAddress().getHostAddress() );
-	            
-	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-	            
-	            GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
-	            
-            	writer.print(message.getSingleJson());
-            	writer.flush();
 	            	            
 	            socket.close();
 	        } catch (IOException ioe) {
