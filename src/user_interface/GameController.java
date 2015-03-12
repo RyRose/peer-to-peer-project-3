@@ -22,7 +22,9 @@ public class GameController {
 	Ellipse me;
 	
 	ScreenBuffer screen;
+	int my_id;
 	ArrayList<Circle> bullets;
+	ArrayList<Ellipse> players;
 	private ArrayBlockingQueue<String> channel;
 	private TalkThread talker;
 	private String host;
@@ -30,6 +32,9 @@ public class GameController {
 	
 	@FXML
 	private void initialize() {
+		
+		screen = new ScreenBuffer(networkMessage, my_id);
+		me = new Ellipse(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY());
 		
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
@@ -65,6 +70,10 @@ public class GameController {
 		this.host = host;
 	}
 	
+	public void initializeUniqueId(int id) {
+		my_id = id;
+	}
+	
 	private void move(double x, double y) {
 		me.setTranslateX(me.getTranslateX() + x);
 		me.setTranslateY(me.getTranslateY() + y);
@@ -78,11 +87,11 @@ public class GameController {
 		}
 	}
 	
-	private void update() {
+	private void update(int port) {
 		screen.updatePlayers(networkMessage);
 		screen.updateBullets();
 		shoot();
-		send(8888);
+		send(port);
 	}
 	
 	private void send(int port) { //TODO: call this periodically IF host is not null!
@@ -91,7 +100,7 @@ public class GameController {
 		}
 		talker = new TalkThread(networkMessage.getMyPlayerJson(), host, port, channel);
 		new GameReceiver().start();
-		talker.start();		
+		talker.start();
 	}
 	
 	private class GameReceiver extends Thread {

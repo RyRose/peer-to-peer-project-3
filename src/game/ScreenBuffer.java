@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import network_to_game.NetworkMessage;
@@ -16,12 +17,22 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
+	public ScreenBuffer(NetworkMessage message, int player_id) {
+		List<PlayerData> allPlayerData = message.getAllPlayerData();
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (PlayerData playerData : allPlayerData) {
+			players.add(playerData.toPlayer());
+			if (playerData.id == player_id) {me = playerData.toPlayer();}
+		}
+		map = new Map(players, new ArrayList<Point>());
+	}
+	
 	public void updatePlayer(NetworkMessage message) {
 		PlayerData playerUpdate = message.getClientPlayerData();
 		int playerId = playerUpdate.id;
-		PlayerInterface player = map.players.get(playerId);
-		PointInterface updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-		PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
+		Player player = map.players.get(playerId);
+		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
+		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		map.players.set(playerId, updatedPlayer);
 	}
 	
@@ -29,9 +40,9 @@ public class ScreenBuffer {
 		List<PlayerData> allPlayerData = message.getAllPlayerData();
 		for (PlayerData playerUpdate : allPlayerData) {
 			int playerId = playerUpdate.id;
-			PlayerInterface player = map.players.get(playerId);
-			PointInterface updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-			PlayerInterface updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
+			Player player = map.players.get(playerId);
+			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
+			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			map.players.set(playerId, updatedPlayer);
 		}
 	}

@@ -1,19 +1,18 @@
 package game;
 
 import interfaces.BulletInterface;
-import interfaces.PointInterface;
 
 public class Bullet implements BulletInterface{
-	private PointInterface coordinates;
+	private Point coordinates;
 	private double direction;
 	
-	public Bullet(PointInterface c, double d) {
+	public Bullet(Point c, double d) {
 		coordinates = c;
 		direction = d;
 	}
 
 	@Override
-	public PointInterface getCoordinates() {
+	public Point getCoordinates() {
 		return coordinates;
 	}
 

@@ -5,27 +5,26 @@ import java.util.List;
 
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
-import interfaces.PointInterface;
 
 public class Player implements PlayerInterface{
 	private int uniqueId;
 	private List<BulletInterface> bullets;
-	private PointInterface coordinates;
+	private Point coordinates;
 	private Direction heading;
 	private boolean alive = true;
 	
-	public Player (PointInterface coordinates, Direction heading) {
+	public Player (Point coordinates, Direction heading) {
 		this.coordinates = coordinates;
 		this.heading = heading;
 		this.bullets = new ArrayList<BulletInterface>();
 	}
 	
-	public Player (PointInterface coordinates, List<BulletInterface> bullets) {
+	public Player (Point coordinates, List<BulletInterface> bullets) {
 		this.coordinates = coordinates;
 		this.bullets = bullets;		
 	}
 	
-	public Player (PointInterface coordinates, List<BulletInterface> bullets, Direction heading) {
+	public Player (Point coordinates, List<BulletInterface> bullets, Direction heading) {
 		this.coordinates = coordinates;
 		this.bullets = bullets;
 		this.heading = heading;
@@ -68,7 +67,7 @@ public class Player implements PlayerInterface{
 	}
 
 	@Override
-	public PointInterface getCoordinates() {
+	public Point getCoordinates() {
 		return coordinates;
 	}
 	

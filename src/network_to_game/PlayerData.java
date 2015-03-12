@@ -1,9 +1,9 @@
 package network_to_game;
 
+import game.Bullet;
 import game.Direction;
 import game.Player;
 import game.Point;
-import interfaces.BulletInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +42,8 @@ public class PlayerData {
 		return player;
 	}
 	
-	private List<BulletInterface> toBullets() {
-		ArrayList<BulletInterface> bullets = new ArrayList<BulletInterface>();
+	private List<Bullet> toBullets() {
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 		for( BulletData bullet : this.bullets ) {
 			bullets.add(bullet.toBullet());
 		}
