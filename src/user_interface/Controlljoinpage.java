@@ -95,6 +95,21 @@ public class Controlljoinpage {
 	private void joinGame() throws InterruptedException {
 		if (users.getSelectionModel().getSelectedIndex() != -1) {
 			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
+			
+			Timer timer = new Timer();
+			
+			timer.scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					if (!notStarted) {
+						cancel();
+					}
+					send("", users.getSelectionModel().getSelectedItem(), 8888);
+				}
+				
+			}, 0, 100);
+			
 			notStarted = true;
 			
 			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
@@ -139,6 +154,7 @@ public class Controlljoinpage {
 	public void startGame(String line) {
 		try {
 			System.out.println("startGame in ControllJoinPage");
+			notStarted = false;
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
 			Parent home_page_parent = (Parent) cont.load();  
