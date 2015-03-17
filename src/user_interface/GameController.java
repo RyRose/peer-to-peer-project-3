@@ -47,7 +47,9 @@ public class GameController {
 			@Override
 			public void run() {
 				if (screen != null && !playerSprites.isEmpty()) {
-					drawScreen();
+					Platform.runLater( () -> {
+						drawScreen();
+					});
 					screen.updateBullets();
 				}
 				if (host != null){

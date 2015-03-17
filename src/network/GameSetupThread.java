@@ -51,15 +51,10 @@ public class GameSetupThread extends Thread {
                     	
         	            if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
         	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
-<<<<<<< HEAD
         	            	System.out.println(player);
-        	            	String json = JSON.generateJson(player);
-                			writer.println(json);
-=======
         	            	JSON j = new JSON();
         	            	String single_json = j.generateJson(player);
                 			writer.println(single_json);
->>>>>>> a513eaef276ce4b458b2e4f7c270b0026feeb529
                 			writer.flush();
                 		} else {
                 	        
