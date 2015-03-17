@@ -6,13 +6,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkerThread;
-import network_to_game.NetworkMessage;
 import network_to_game.NetworkToGameMessage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -27,7 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Controlljoinpage {
+public class ControlJoinPage {
 	
 	Player player;
 	
@@ -41,6 +41,10 @@ public class Controlljoinpage {
 	Button play;
 	@FXML
 	TextField IP;
+	@FXML
+	TextField username;
+	@FXML
+	TextField hostname;
 	
 	String filename = "friendlist.txt";
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
@@ -48,6 +52,7 @@ public class Controlljoinpage {
 	private TalkerThread talker;
 	private Boolean notStarted;
 	private Integer uniqueID;
+	private HashMap<String, String> NametoIP = new HashMap<String, String>();
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
@@ -64,7 +69,10 @@ public class Controlljoinpage {
 			File f = new File(filename);
 			Scanner s = new Scanner(f);
 			while (s.hasNextLine()) {
-	        	IPAddresses.add(s.nextLine());
+				String next = s.nextLine();
+				String[] comboInfo = next.split(",", 2);
+				NametoIP.put(comboInfo[1], comboInfo[0]);
+	        	IPAddresses.add(comboInfo[1]);
 	        }  
 	        s.close();
 		} catch (FileNotFoundException e) {
@@ -74,17 +82,23 @@ public class Controlljoinpage {
 	
 	@FXML
 	private void addnew(){
-		String input = IP.getText();
-		IPAddresses.add(input);
+		String tempHostIP = IP.getText();
+		String tempHostName = hostname.getText();
+		NametoIP.put(tempHostName, tempHostIP);
+		IPAddresses.add(tempHostName);
 		IP.setText("");
+		hostname.setText("");
 		saveFriendList();
+		users.getSelectionModel().selectLast();
+		
 	}
 	
 	private void saveFriendList() {
 		try {
 			PrintWriter printWriter = new PrintWriter(filename);
-			for (int i = 0; i < IPAddresses.size(); i++) {
-				printWriter.write(IPAddresses.get(i) + "\n");
+			for (int i = 0; i < NametoIP.size(); i++) {
+				String name = IPAddresses.get(i);
+				printWriter.write(NametoIP.get(name) + "," + name + "\n");
 			}
 	        printWriter.close();
 		} catch (IOException e) {
@@ -94,8 +108,9 @@ public class Controlljoinpage {
 	
 	@FXML
 	private void joinGame() throws InterruptedException {
-		if (users.getSelectionModel().getSelectedIndex() != -1) {
-			send("Player", users.getSelectionModel().getSelectedItem(), 8888);
+		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("")) {
+			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
+			//TODO: I think on the other end it automatically adds player or something, check that out.
 			
 			Timer timer = new Timer();
 			

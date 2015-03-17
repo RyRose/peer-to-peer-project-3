@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.controllcreatepage">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.ControlCreatePage">
    <center>
       <AnchorPane prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>

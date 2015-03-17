@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class controllBeginpage {
+public class ControlBeginPage {
 	
 	@FXML
 	Button Join;

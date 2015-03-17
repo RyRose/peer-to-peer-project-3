@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.controllBeginpage">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.ControlBeginPage">
    <center>
       <AnchorPane prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="Create" layoutX="173.0" layoutY="98.0" mnemonicParsing="false" onAction="#openCreatePage" prefHeight="80.0" prefWidth="160.0" text="Create">
+            <Button fx:id="Create" layoutX="154.0" layoutY="98.0" mnemonicParsing="false" onAction="#openCreatePage" prefHeight="80.0" prefWidth="199.0" text="Create">
                <font>
                   <Font size="37.0" />
                </font>
             </Button>
-            <Button fx:id="Join" layoutX="173.0" layoutY="269.0" mnemonicParsing="false" onAction="#openJoinPage" prefHeight="80.0" prefWidth="160.0" text="Join">
+            <Button fx:id="Join" layoutX="174.0" layoutY="267.0" mnemonicParsing="false" onAction="#openJoinPage" prefHeight="80.0" prefWidth="160.0" text="Join">
                <font>
                   <Font size="37.0" />
                </font>

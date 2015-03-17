@@ -13,17 +13,17 @@ import java.util.Random;
 
 import network_to_game.GameToNetworkMessage;
 import network_to_game.NetworkMessage;
-import user_interface.controllcreatepage;
+import user_interface.ControlCreatePage;
 
 public class GameSetupThread extends Thread {
 	
 	    private Socket socket;
 	    public boolean started;
-	    private controllcreatepage controller;
+	    private ControlCreatePage controller;
 	    private Server server;
 	    
 	    
-	    public GameSetupThread(Socket socket, controllcreatepage controller, boolean isGameStarted, Server server) {
+	    public GameSetupThread(Socket socket, ControlCreatePage controller, boolean isGameStarted, Server server) {
 	        this.socket = socket;
 	        this.controller = controller;
 	        started = isGameStarted;

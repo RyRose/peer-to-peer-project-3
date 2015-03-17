@@ -22,7 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-public class controllcreatepage {
+public class ControlCreatePage {
 	@FXML
 	Button Begin;
 	@FXML

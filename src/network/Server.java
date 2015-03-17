@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.io.*;
 
 import user_interface.GameController;
-import user_interface.controllcreatepage;
+import user_interface.ControlCreatePage;
 
 public class Server extends Thread {
 	private ServerSocket accepter;
-	private controllcreatepage controller;
+	private ControlCreatePage controller;
 	private GameController gameController;
 	
 	public static final ArrayList<String> IPaddresses = new ArrayList<String>();
@@ -17,7 +17,7 @@ public class Server extends Thread {
 	public boolean isSettingUp;
 	public boolean isGameStarted;
 
-	public Server(int port, controllcreatepage controller) throws IOException {
+	public Server(int port, ControlCreatePage controller) throws IOException {
 		accepter = new ServerSocket(port);
 		this.controller = controller;
 		System.out.println("Server IP address: " + accepter.getInetAddress());
