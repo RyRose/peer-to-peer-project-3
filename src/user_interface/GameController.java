@@ -39,7 +39,7 @@ public class GameController {
 	
 	@FXML
 	private void initialize() {
-				
+
 		Timer timer = new Timer();
 		
 		timer.scheduleAtFixedRate(new TimerTask() {

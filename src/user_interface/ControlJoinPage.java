@@ -186,7 +186,7 @@ public class ControlJoinPage {
 			GameController controller = 
 					cont.<GameController>getController();
 			System.out.println(player);
-			controller.initializeGame(player, players, users.getSelectionModel().getSelectedItem());
+			controller.initializeGame(player, players, NametoIP.get(users.getSelectionModel().getSelectedItem()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
