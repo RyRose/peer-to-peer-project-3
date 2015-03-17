@@ -4,16 +4,11 @@ import interfaces.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
-/*import interfaces.MapInterface;
-import interfaces.PlayerInterface;
-import interfaces.PointInterface;*/
-
-public class Map /*implements MapInterface*/{
+public class Map {
 	
-	ArrayList<PlayerInterface> players;
-	ArrayList<Point> obstacles;
+	private ArrayList<PlayerInterface> players;
+	private ArrayList<Point> obstacles;
 	
 	public Map (ArrayList<Point> obstacles) {
 		this.obstacles = obstacles;
@@ -24,13 +19,11 @@ public class Map /*implements MapInterface*/{
 		this.obstacles = obstacles;
 	}
 
-	//@Override
-	public ArrayList<PlayerInterface> getPlayers() {
+		public ArrayList<PlayerInterface> getPlayers() {
 		return players;
 	}
 
-	//@Override
-	public List<Point> getObstacles() {
+		public List<Point> getObstacles() {
 		return obstacles;
 	}
 	
