@@ -65,6 +65,10 @@ public class Player implements PlayerInterface{
 	public List<BulletInterface> getBullets() {
 		return bullets;
 	}
+	
+	public void addBullet(BulletInterface bullet) {
+		bullets.add(bullet);
+	}
 
 	@Override
 	public Point getCoordinates() {

@@ -7,9 +7,6 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.GameController">
    <center>
-      <Pane fx:id="canvas" onMouseEntered="#grabKeys" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-         <children>
-            <Circle fx:id="me" fill="DODGERBLUE" layoutX="259.0" layoutY="411.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-         </children></Pane>
+      <Pane fx:id="canvas" onMouseEntered="#grabKeys" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

@@ -86,15 +86,19 @@ public class ControlCreatePage {
 		try {
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));
-			Parent home_page_parent = (Parent) cont.load();  
-			Scene home_page_scene = new Scene(home_page_parent);
-			Stage app_stage = (Stage) Begin.getScene().getWindow();
-			app_stage.setScene(home_page_scene);
+			Parent home_page_parent = (Parent) cont.load();
+			
 			GameController controller = 
 					cont.<GameController>getController();
 									
 			server.isGameStarted = true;
 			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
+			
+			Scene home_page_scene = new Scene(home_page_parent);
+			Stage app_stage = (Stage) Begin.getScene().getWindow();
+			app_stage.setScene(home_page_scene);
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

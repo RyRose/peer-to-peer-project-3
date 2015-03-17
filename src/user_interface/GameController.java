@@ -26,33 +26,35 @@ public class GameController {
 	@FXML
 	Pane canvas;
 	
-	@FXML
-	Circle me;
+	Circle mySprite;
 	
 	ScreenBuffer screen;
 	int my_id;
 	private ArrayBlockingQueue<String> channel = new ArrayBlockingQueue<String>(2);
-	HashMap<Integer, Circle> bullets = new HashMap<Integer, Circle>();
-	HashMap<Integer, Circle> players = new HashMap<Integer, Circle>();
+	HashMap<Integer, Circle> bulletSprites = new HashMap<Integer, Circle>();
+	HashMap<Integer, Circle> playerSprites = new HashMap<Integer, Circle>();
 	private TalkerThread talker;
 	private String host;
-	
+	private int port;
+
 	@FXML
 	private void initialize() {
-
+		
 		Timer timer = new Timer();
 		
 		timer.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
-				drawScreen();
+				if (screen != null && !playerSprites.isEmpty()) {
+					drawScreen();
+				}
 				if (host != null){
-					send(8888);
+					send(port);
 				}
 			}
 			
-		}, 0, 15);
+		}, 0, 5);
 
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
@@ -70,8 +72,8 @@ public class GameController {
 				x = 5;
 				screen.move(Direction.RIGHT);
 			} else if (event.getCode() == KeyCode.SPACE) {
-				Circle bullet = new Circle(me.getTranslateX() + me.getLayoutX(), me.getTranslateY() + me.getLayoutY(), 5);
-				bullets.put(my_id, bullet);
+				Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX(), mySprite.getTranslateY() + mySprite.getLayoutY(), 5);
+				bulletSprites.put(my_id, bullet);
 				canvas.getChildren().add(bullet);
 				screen.shootBullet();
 			}
@@ -87,12 +89,15 @@ public class GameController {
 	
 	public void initializeGame(PlayerInterface my_player, List<PlayerData> players, String host) {
 		screen = new ScreenBuffer(players, my_id);
-		screen.me = (Player) my_player;
-		me = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
+		screen.myPlayer = (Player) my_player;
+		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
+		//TODO: set sprite color
+		canvas.getChildren().add(mySprite);
 		my_id = my_player.getUniqueId();
+		playerSprites.put(my_id, mySprite);
 		if (host != null) {
 			this.host = host;
-			send(8888);
+			send(port);
 		} else {
 			host = null;
 		}
@@ -101,11 +106,11 @@ public class GameController {
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
 		for (PlayerInterface player : players) {
-			Circle playerSprite = this.players.get(player.getUniqueId());
+			Circle playerSprite = playerSprites.get(player.getUniqueId());
 			playerSprite.setLayoutX(player.getCoordinates().getX());
 			playerSprite.setLayoutY(player.getCoordinates().getY());
 			for (BulletInterface bullet : player.getBullets()) {
-				Circle bulletSprite = this.bullets.get(player.getUniqueId());
+				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
 				bulletSprite.setLayoutX(bullet.getCoordinates().getX());
 				bulletSprite.setLayoutY(bullet.getCoordinates().getY());
 			}
@@ -116,13 +121,9 @@ public class GameController {
 		return screen;
 	}
 	
-	public void updatePlayer(PlayerData player) {
-		screen.updatePlayer(player);
-	}
-	
 	private void move(double x, double y) {
-		me.setTranslateX(me.getTranslateX() + x);
-		me.setTranslateY(me.getTranslateY() + y);
+		mySprite.setTranslateX(mySprite.getTranslateX() + x);
+		mySprite.setTranslateY(mySprite.getTranslateY() + y);
 	}
 	
 	private void update(List<PlayerData> players, int port) {
@@ -130,11 +131,16 @@ public class GameController {
 		screen.updateBullets();
 	}
 	
+	public void updatePlayer(PlayerData player) {
+		screen.updatePlayer(player);
+		screen.updateBullets();
+	}
+	
 	private void send(int port) { //TODO: call this periodically IF host is not null!
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = JSON.generateJson(screen.me);
+		String json = JSON.generateJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -147,7 +153,7 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						Platform.runLater( () -> { update( JSON.parseJson(line), 8888); } );
+						Platform.runLater( () -> { update( JSON.parseJson(line), port); } );
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
