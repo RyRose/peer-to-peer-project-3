@@ -27,6 +27,10 @@ public class Map {
 		players.set(player_id, player);
 	}
 	
+	public void removePlayer(Player p) {
+		players.remove(p);
+	}
+	
 	public List<Point> getObstacles() {
 		return obstacles;
 	}

@@ -51,6 +51,7 @@ public class GameController {
 					Platform.runLater( () -> {
 						drawScreen();
 					});
+					moveBullets();
 					screen.updateBullets();
 				}
 				if (host != null){
@@ -146,6 +147,10 @@ public class GameController {
 	private void move(double x, double y) {
 		mySprite.setTranslateX(mySprite.getTranslateX() + x);
 		mySprite.setTranslateY(mySprite.getTranslateY() + y);
+	}
+	
+	private void moveBullets() {
+		
 	}
 	
 	private void update(List<PlayerData> players, int port) {
