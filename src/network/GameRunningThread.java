@@ -31,15 +31,18 @@ public class GameRunningThread extends Thread {
         	
             while (!responses.ready()){}
             while (responses.ready()) {
-        		String s = responses.readLine();
+        		PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+        		String s = "hello";
+        		
+        		System.out.println("responses: " + s);
         		updatePlayer(s);
         		JSON j = new JSON();
         		String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
-        		PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        		System.out.println(network_message);
             	writer.println(network_message);
             	writer.flush();
             }
-            	            
             socket.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();

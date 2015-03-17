@@ -34,6 +34,7 @@ public class GameController {
 	HashMap<Integer, Circle> bulletSprites = new HashMap<Integer, Circle>();
 	HashMap<Integer, Circle> playerSprites = new HashMap<Integer, Circle>();
 	private TalkerThread talker;
+	private GameReceiver receiverThread;
 	private String host;
 	private int port;
 
@@ -99,6 +100,7 @@ public class GameController {
 		canvas.getChildren().add(mySprite);
 		my_id = my_player.getUniqueId();
 		playerSprites.put(my_id, mySprite);
+		receiverThread = new GameReceiver();
 		if (host != null) {
 			this.host = host;
 			send(port);
@@ -110,26 +112,29 @@ public class GameController {
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
 		for (PlayerInterface player : players) {
-			System.out.println(players);
-			System.out.println(playerSprites);
+			// System.out.println(players);
+			// System.out.println(playerSprites);
 			Circle playerSprite;
 			if ( !playerSprites.containsKey(player.getUniqueId())) {
 				playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
 				playerSprites.put(player.getUniqueId(), playerSprite);
 				
+				canvas.getChildren().add(playerSprite);
+				
 				for( BulletInterface bullet : player.getBullets() ) {
 					Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
 					bulletSprites.put(player.getUniqueId(), bulletSprite);
+					canvas.getChildren().add(bulletSprite);
 				}
-			} else {
+			} else if (!(player.getUniqueId() == screen.getMe().getUniqueId())){
 				playerSprite = playerSprites.get(player.getUniqueId());
-				playerSprite.setLayoutX(player.getCoordinates().getX());
-				playerSprite.setLayoutY(player.getCoordinates().getY());
-			for (BulletInterface bullet : player.getBullets()) {
-				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
-				bulletSprite.setLayoutX(bullet.getCoordinates().getX());
-				bulletSprite.setLayoutY(bullet.getCoordinates().getY());
-			}
+				
+				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
+				for (BulletInterface bullet : player.getBullets()) {
+					Circle bulletSprite = bulletSprites.get(player.getUniqueId());
+					bulletSprite.setTranslateX(bullet.getCoordinates().getX());
+					bulletSprite.setTranslateY(bullet.getCoordinates().getY());
+				}
 			}
 		}
 	}
@@ -144,6 +149,7 @@ public class GameController {
 	}
 	
 	private void update(List<PlayerData> players, int port) {
+		System.out.println("update players");
 		screen.updatePlayers(players);
 		screen.updateBullets();
 	}
@@ -153,13 +159,15 @@ public class GameController {
 	}
 	
 	private void send(int port) { 
+		System.out.println("send in GameController");
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
 		JSON j = new JSON();
 		String json = j.generateJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
-		new GameReceiver().start();
+		if ( !receiverThread.isAlive() )
+			receiverThread.start();
 		talker.start();
 	}
 	

@@ -25,14 +25,16 @@ public class Server extends Thread {
 
 	public void listen() throws IOException {
 		for (;;) {
+			System.out.println("server is listening");
 			Socket s = accepter.accept();
+			System.out.println("Connection accepted from " + s.getInetAddress());
+
 			
 			if( isSettingUp ) {
 				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted, this);
-
-				System.out.println("Connection accepted from " + s.getInetAddress());
 				gameSetup.start();
 			} else if (isGameStarted) {
+				System.out.println("GameRunningThread starting");
 				if (gameController != null) {
 					GameRunningThread gameRunning = new GameRunningThread(s, IPaddresses, gameController);
 					gameRunning.start();
