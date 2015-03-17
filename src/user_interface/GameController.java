@@ -140,7 +140,8 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = JSON.generateJson(screen.myPlayer);
+		JSON j = new JSON();
+		String json = j.generateJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -153,7 +154,10 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						Platform.runLater( () -> { update( JSON.parseJson(line), port); } );
+						Platform.runLater( () -> { 
+							JSON j = new JSON();
+							update( j.parseJson(line), port); 
+						} );
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

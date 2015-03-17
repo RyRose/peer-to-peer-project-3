@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.rmi.ConnectException;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class TalkerThread extends Thread {
@@ -41,11 +42,12 @@ public class TalkerThread extends Thread {
 				if ( line != null ) {channel.put(line);}
 			}
 			going = false;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} finally {
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		finally {
             try {
                 if (s != null) {s.close();}
             } catch (IOException ioe) {
