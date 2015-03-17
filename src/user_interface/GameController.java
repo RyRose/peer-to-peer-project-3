@@ -110,13 +110,26 @@ public class GameController {
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
 		for (PlayerInterface player : players) {
-			Circle playerSprite = playerSprites.get(player.getUniqueId());
-			playerSprite.setLayoutX(player.getCoordinates().getX());
-			playerSprite.setLayoutY(player.getCoordinates().getY());
+			System.out.println(players);
+			System.out.println(playerSprites);
+			Circle playerSprite;
+			if ( !playerSprites.containsKey(player.getUniqueId())) {
+				playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
+				playerSprites.put(player.getUniqueId(), playerSprite);
+				
+				for( BulletInterface bullet : player.getBullets() ) {
+					Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
+					bulletSprites.put(player.getUniqueId(), bulletSprite);
+				}
+			} else {
+				playerSprite = playerSprites.get(player.getUniqueId());
+				playerSprite.setLayoutX(player.getCoordinates().getX());
+				playerSprite.setLayoutY(player.getCoordinates().getY());
 			for (BulletInterface bullet : player.getBullets()) {
 				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
 				bulletSprite.setLayoutX(bullet.getCoordinates().getX());
 				bulletSprite.setLayoutY(bullet.getCoordinates().getY());
+			}
 			}
 		}
 	}
