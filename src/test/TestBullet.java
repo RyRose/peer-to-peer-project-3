@@ -1,5 +1,6 @@
 package test;
 
+import game.Point;
 import interfaces.BulletInterface;
 import interfaces.PointInterface;
 
@@ -30,7 +31,15 @@ public class TestBullet implements BulletInterface {
 	@Override
 	public void shoot() {
 		point = new TestPoint(point.getX() + 5*Math.cos(direction), point.getY() - 5*Math.sin(direction));
-
+	}
+	
+	@Override
+	public double distanceTo(Point p) {
+		double x1 = this.getCoordinates().getX();
+		double y1 = this.getCoordinates().getY();
+		double x2 = p.getX();
+		double y2 = p.getY();
+		return Math.sqrt(  Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1-y2), 2)  );
 	}
 
 }

@@ -25,5 +25,14 @@ public class Bullet implements BulletInterface{
 	public void shoot() {
 		coordinates = new Point(coordinates.getX() + 10*Math.cos(direction), coordinates.getY() - 10*Math.sin(direction));
 	}
+	
+	@Override
+	public double distanceTo(Point p) {
+		double x1 = this.getCoordinates().getX();
+		double y1 = this.getCoordinates().getY();
+		double x2 = p.getX();
+		double y2 = p.getY();
+		return Math.sqrt(  Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1-y2), 2)  );
+	}
 
 }

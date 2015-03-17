@@ -96,5 +96,9 @@ public class Player implements PlayerInterface{
 				"|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + 
 				getHeadingAsDouble() + "\n" + bullets;
 	}
+	
+	public void kill() {
+		alive = false;
+	}
 
 }

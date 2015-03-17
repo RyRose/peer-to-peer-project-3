@@ -68,6 +68,7 @@ public class ScreenBuffer {
 		for (PlayerInterface player : map.getPlayers()) {
 			for (BulletInterface bullet : player.getBullets()) {
 				bullet.shoot();
+				checkAlive(bullet);
 			}
 		}
 	}
@@ -75,6 +76,16 @@ public class ScreenBuffer {
 	public void shootBullet() {
 		BulletInterface newBullet = new Bullet(myPlayer.getCoordinates(), myPlayer.getHeadingAsDouble());
 		myPlayer.addBullet(newBullet);
+	}
+	
+	public void checkAlive(BulletInterface bullet) {
+		if (bullet.distanceTo(myPlayer.getCoordinates()) <= 25) {
+			killPlayer();	
+		}
+	}
+	
+	public void killPlayer() {
+		map.removePlayer(myPlayer);
 	}
 	
 	public Player getMe() {
