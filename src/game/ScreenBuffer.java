@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network_to_game.NetworkMessage;
-import network_to_game.NetworkToGameMessage;
 import network_to_game.PlayerData;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -20,8 +18,8 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	public ScreenBuffer(NetworkToGameMessage networkMessage, int player_id) {
-		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
+	public ScreenBuffer(List<PlayerData> players_data, int player_id) {
+		List<PlayerData> allPlayerData = players_data;
 		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
 		for (PlayerData playerData : allPlayerData) {
 			players.add(playerData.toPlayer());
@@ -30,8 +28,8 @@ public class ScreenBuffer {
 		map = new Map(players, new ArrayList<Point>());
 	}
 	
-	public void updatePlayer(NetworkToGameMessage message) {
-		PlayerData playerUpdate = message.getPlayer();
+	public void updatePlayer(PlayerData player2) {
+		PlayerData playerUpdate = player2;
 		int playerId = playerUpdate.id;
 		Player player = (Player) map.players.get(playerId);
 		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
@@ -39,8 +37,8 @@ public class ScreenBuffer {
 		map.players.set(playerId, updatedPlayer);
 	}
 	
-	public void updatePlayers(NetworkToGameMessage networkMessage) {
-		List<PlayerData> allPlayerData = networkMessage.getAllPlayers();
+	public void updatePlayers(List<PlayerData> players_data) {
+		List<PlayerData> allPlayerData = players_data;
 		for (PlayerData playerUpdate : allPlayerData) {
 			int playerId = playerUpdate.id;
 			Player player = (Player) map.players.get(playerId);

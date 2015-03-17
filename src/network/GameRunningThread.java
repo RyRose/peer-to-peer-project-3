@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import network_to_game.GameToNetworkMessage;
-import network_to_game.NetworkToGameMessage;
+import network_to_game.JSON;
+import network_to_game.PlayerData;
 import user_interface.GameController;
 
 public class GameRunningThread extends Thread {
@@ -32,11 +32,10 @@ public class GameRunningThread extends Thread {
             while (!responses.ready()){}
             while (responses.ready()) {
         		String s = responses.readLine();
-        		NetworkToGameMessage message = new NetworkToGameMessage(s, false);
-        		controller.updatePlayer(message);
-        		GameToNetworkMessage message2 = new GameToNetworkMessage(null, controller.getScreen().getMap().getPlayers());
+        		updatePlayer(s);
+        		String network_message = JSON.generateJson(controller.getScreen().getMap().getPlayers());
         		PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            	writer.println(message2.getAllPlayersJson());
+            	writer.println(network_message);
             	writer.flush();
             }
             	            
@@ -46,4 +45,8 @@ public class GameRunningThread extends Thread {
         }
     }
 	
+	private void updatePlayer( String s ) {
+		PlayerData player = JSON.parseJson(s).get(0);
+		controller.updatePlayer(player);
+	} 
 }

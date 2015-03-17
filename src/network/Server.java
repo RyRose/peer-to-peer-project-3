@@ -35,7 +35,6 @@ public class Server extends Thread {
 			} else if (isGameStarted) {
 				if (gameController != null) {
 					GameRunningThread gameRunning = new GameRunningThread(s, IPaddresses, gameController);
-				
 					gameRunning.start();
 				}
 			}

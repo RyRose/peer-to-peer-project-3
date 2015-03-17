@@ -11,22 +11,11 @@ import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 
-public class JSONparser {
-
-	public PlayerData parseOnePlayerJSON( InputStream in) {
-		JsonParser parser = Json.createParser(in);
-		return getPlayerFromJson(parser);
-
-	}
+public class JSONParser {
 
 	public PlayerData parseOnePlayerJSON( String json ) {
 		JsonParser parser = Json.createParser( new StringReader(json) );
 		return getPlayerFromJson(parser);
-	}
-	
-	public ArrayList<PlayerData> parseMultipleJson( InputStream in ) {
-		JsonParser parser = Json.createParser(in);
-		return extractMultiplePlayersFromJson(parser);
 	}
 	
 	public ArrayList<PlayerData> parseMultipleJson( String json ) {

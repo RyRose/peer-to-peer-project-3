@@ -8,9 +8,8 @@ import interfaces.PlayerInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import network_to_game.GameToNetworkMessage;
-import network_to_game.NetworkMessage;
-import network_to_game.NetworkToGameMessage;
+import network_to_game.JSON;
+import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -93,16 +92,15 @@ public class ControlCreatePage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			
-			GameToNetworkMessage message = new GameToNetworkMessage(null, all_players);
-			NetworkToGameMessage message2 = new NetworkToGameMessage(message.getAllPlayersJson(), true);
+									
 			server.isGameStarted = true;
-			System.out.println(message2.getAllPlayers());
-			controller.initializeScreen(message2, all_players.get(0).getUniqueId());
-			controller.initializePlayer(all_players.get(0));
+			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+	}
+	
+	private ArrayList<PlayerData> getPlayersDataFromPlayerInterfaces( ArrayList<PlayerInterface> players ) {
+		return JSON.parseJson(JSON.generateJson(players));
 	}
 }

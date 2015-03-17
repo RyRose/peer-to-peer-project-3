@@ -8,13 +8,14 @@ import interfaces.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkerThread;
-import network_to_game.GameToNetworkMessage;
-import network_to_game.NetworkToGameMessage;
+import network_to_game.JSON;
+import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -35,13 +36,10 @@ public class GameController {
 	HashMap<Integer, Circle> players = new HashMap<Integer, Circle>();
 	private TalkerThread talker;
 	private String host;
-	private NetworkToGameMessage networkMessage; //TODO: the game controller will draw data from here and update the data through this?
 	
 	@FXML
 	private void initialize() {
-		
-		initializeScreen(networkMessage, my_id);
-		
+				
 		Timer timer = new Timer();
 		
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -59,7 +57,6 @@ public class GameController {
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
-			System.out.println(screen.me);
 			if (event.getCode() == KeyCode.UP) {
 				y = -5;
 				screen.move(Direction.UP);
@@ -83,13 +80,22 @@ public class GameController {
 		
 	}
 	
-	public void start() {
-		send(8888);
-	}
+	@FXML
+	public void grabKeys() {
+		canvas.requestFocus();
+	}	
 	
-	public void initialize(NetworkToGameMessage message, int unique_id) {
-		this.networkMessage = message;
-		screen = new ScreenBuffer(networkMessage, my_id);
+	public void initializeGame(PlayerInterface my_player, List<PlayerData> players, String host) {
+		screen = new ScreenBuffer(players, my_id);
+		screen.me = (Player) my_player;
+		me = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
+		my_id = my_player.getUniqueId();
+		if (host != null) {
+			this.host = host;
+			send(8888);
+		} else {
+			host = null;
+		}
 	}
 	
 	private void drawScreen() {
@@ -106,26 +112,12 @@ public class GameController {
 		}
 	}
 	
-	public void initializeScreen(NetworkToGameMessage message, int unique_id) {
-		this.networkMessage = message;
-		screen = new ScreenBuffer(networkMessage, my_id);
-		me = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
+	public ScreenBuffer getScreen() {
+		return screen;
 	}
 	
-	@FXML
-	public void grabKeys() {
-		canvas.requestFocus();
-	}	
-	
-	public void initializeHost(String host) {
-		this.host = host;
-	}
-	
-	public void initializePlayer( PlayerInterface playerInterface ) {
-		screen.me = (Player) playerInterface;
-		me = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
-		my_id = playerInterface.getUniqueId();
-		
+	public void updatePlayer(PlayerData player) {
+		screen.updatePlayer(player);
 	}
 	
 	private void move(double x, double y) {
@@ -133,16 +125,8 @@ public class GameController {
 		me.setTranslateY(me.getTranslateY() + y);
 	}
 	
-	public ScreenBuffer getScreen() {
-		return screen;
-	}
-	
-	public void updatePlayer(NetworkToGameMessage message) {
-		screen.updatePlayer(message);
-	}
-	
-	private void update(NetworkToGameMessage message, int port) {
-		screen.updatePlayers(message);
+	private void update(List<PlayerData> players, int port) {
+		screen.updatePlayers(players);
 		screen.updateBullets();
 	}
 	
@@ -150,8 +134,7 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = new GameToNetworkMessage(screen.me, null).getSingleJson();
-		System.out.println(json);
+		String json = JSON.generateJson(screen.me);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -164,7 +147,7 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						Platform.runLater( () -> { update(new NetworkToGameMessage(line, true), 8888); } );
+						Platform.runLater( () -> { update( JSON.parseJson(line), 8888); } );
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

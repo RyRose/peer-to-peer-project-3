@@ -6,7 +6,7 @@ import interfaces.PlayerInterface;
 import java.util.ArrayList;
 
 import network_to_game.JSONGenerator;
-import network_to_game.JSONparser;
+import network_to_game.JSONParser;
 import network_to_game.PlayerData;
 
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.junit.Test;
 public class JsonTest {
 	
 	JSONGenerator generator = new JSONGenerator();
-	JSONparser parser = new JSONparser();
+	JSONParser parser = new JSONParser();
 
 	@Test
 	public void testJsonGenerateAndParse() {

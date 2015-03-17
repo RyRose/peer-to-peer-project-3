@@ -7,13 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkerThread;
-import network_to_game.NetworkToGameMessage;
+import network_to_game.JSON;
+import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -152,12 +154,12 @@ public class ControlJoinPage {
 					line = channel.take();
 					System.out.println("line: " + line);
 					if (line.endsWith("}}]}")) {
-						NetworkToGameMessage message = new NetworkToGameMessage(line, true);
-						if (message.getAllPlayers().size() == 1) {
-							initializePlayer( message );
+						ArrayList<PlayerData> players = JSON.parseJson(line);
+						if (players.size() == 1) {
+							initializePlayer( players.get(0) );
 						} else {
 							//talker.halt();
-							Platform.runLater( () -> {startGame(message); } );
+							Platform.runLater( () -> {startGame(players); } );
 						}
 					} 
 				} catch (InterruptedException e) {
@@ -167,11 +169,11 @@ public class ControlJoinPage {
 		}
 	}
 	
-	private void initializePlayer( NetworkToGameMessage message ) {
-		this.player = message.getAllPlayers().get(0).toPlayer();
+	private void initializePlayer( PlayerData player ) {
+		this.player = player.toPlayer();
 	}
 	
-	public void startGame( NetworkToGameMessage message ) {
+	public void startGame( ArrayList<PlayerData> players ) {
 		try {
 			System.out.println("startGame in ControllJoinPage");
 			notStarted = false;
@@ -184,11 +186,7 @@ public class ControlJoinPage {
 			GameController controller = 
 					cont.<GameController>getController();
 			System.out.println(player);
-			controller.initialize(message, player.getUniqueId());
-			controller.initializeScreen(message, player.getUniqueId());
-			controller.initializeHost(users.getSelectionModel().getSelectedItem());
-			controller.initializePlayer(player);
-			controller.start();
+			controller.initializeGame(player, players, users.getSelectionModel().getSelectedItem());
 		}
 		catch (IOException e) {
 			e.printStackTrace();

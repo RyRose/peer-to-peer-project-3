@@ -8,25 +8,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Random;
 
-import network_to_game.GameToNetworkMessage;
-import network_to_game.NetworkMessage;
+
 import user_interface.ControlCreatePage;
+import network_to_game.JSON;
 
 public class GameSetupThread extends Thread {
 	
 	    private Socket socket;
-	    public boolean started;
 	    private ControlCreatePage controller;
+	    public boolean isGameStarted;
 	    private Server server;
 	    
 	    
 	    public GameSetupThread(Socket socket, ControlCreatePage controller, boolean isGameStarted, Server server) {
 	        this.socket = socket;
 	        this.controller = controller;
-	        started = isGameStarted;
+	        this.isGameStarted = isGameStarted;
 	        this.server = server;
 	    }
 
@@ -40,9 +38,9 @@ public class GameSetupThread extends Thread {
 	            while (responses.ready()) {
     	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-            		if (started) {
-        				GameToNetworkMessage message = new GameToNetworkMessage(null, controller.all_players);
-        				writer.println(message.getAllPlayersJson());
+            		if (isGameStarted) {
+        				String json = JSON.generateJson(controller.all_players);
+        				writer.println(json);
         				writer.flush();
         				server.isSettingUp = false;
         				break;
@@ -52,20 +50,20 @@ public class GameSetupThread extends Thread {
                     	
         	            if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
         	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
-        	            	GameToNetworkMessage message = new GameToNetworkMessage(player, null);
-                			writer.println(message.getSingleJson());
+        	            	String json = JSON.generateJson(player);
+                			writer.println(json);
                 			writer.flush();
                 		} else {
                 	        
                 			if(s.isEmpty()) {
             	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()) );
-            	            	GameToNetworkMessage message = new GameToNetworkMessage(player, null);
-                    			writer.println(message.getSingleJson());
+            	            	String json = JSON.generateJson(player);
+                    			writer.println(json);
                     			writer.flush();
                 			} else {
                 			
-                			GameToNetworkMessage message = new GameToNetworkMessage(makeAnotherPlayer(), null);
-                			writer.println(message.getSingleJson());
+            	            	String json = JSON.generateJson(makeAnotherPlayer());
+                    			writer.println(json);
                 			writer.flush();
                     	
                 			updateLobbyScreen(s);
@@ -82,7 +80,7 @@ public class GameSetupThread extends Thread {
 	    }
 	    
 	    private String getUniqueID() {
-	    	return String.valueOf(server.IPaddresses.indexOf(socket.getInetAddress().toString()) + 1);
+	    	return String.valueOf(Server.IPaddresses.indexOf(socket.getInetAddress().toString()) + 1);
 	    }
 	    
 	    private Player makeAnotherPlayer() {
