@@ -40,7 +40,7 @@ public class GameController {
 	@FXML
 	private void initialize() {
 		
-		initializeScreen(networkMessage, my_id);
+		//initializeScreen(networkMessage, my_id);
 		
 		Timer timer = new Timer();
 		

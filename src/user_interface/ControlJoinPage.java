@@ -186,7 +186,7 @@ public class ControlJoinPage {
 			System.out.println(player);
 			controller.initialize(message, player.getUniqueId());
 			controller.initializeScreen(message, player.getUniqueId());
-			controller.initializeHost(users.getSelectionModel().getSelectedItem());
+			controller.initializeHost(NametoIP.get(users.getSelectionModel().getSelectedItem()));
 			controller.initializePlayer(player);
 			controller.start();
 		}
