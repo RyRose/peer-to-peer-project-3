@@ -31,29 +31,41 @@ public class ControlCreatePage {
 	ObservableList<String> names = FXCollections.observableArrayList();
 	ArrayList<Point> startCoordinates = new ArrayList<Point>();
 	ArrayList<Direction> directions = new ArrayList<Direction>();
+	private int lowerXBound = 5;
+	private int upperXBound = 795;
+	private int lowerYBound = 5;
+	private int upperYBound = 595;
 	
 	public ArrayList<PlayerInterface> all_players = new ArrayList<PlayerInterface>();
 	public int player_id = 0;
 	
 	@FXML
 	public void initialize() throws IOException {
-		server = new network.Server(8888, this);
-		server.isSettingUp = true;
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
+		generateHostPlayer();
+		setupServer();
+	}
+	
+	private void generateHostPlayer() {
 		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
 		player.setUniqueId(player_id);
 		all_players.add(player);
 		player_id++;
+	}
+	
+	private void setupServer() throws IOException {
+		server = new network.Server(8888, this);
+		server.isSettingUp = true;
 		server.start();
 	}
 	
 	private void setupCoordinates() {
-		startCoordinates.add(new Point(5, 5)); //TODO: change if screen size changes from 800x600
-		startCoordinates.add(new Point(795, 595));
-		startCoordinates.add(new Point(5, 595));
-		startCoordinates.add(new Point(795, 5));
+		startCoordinates.add(new Point(lowerXBound, lowerYBound));
+		startCoordinates.add(new Point(upperXBound, upperYBound));
+		startCoordinates.add(new Point(lowerXBound, upperYBound));
+		startCoordinates.add(new Point(upperXBound, lowerYBound));
 	}
 	
 	private void setupDirections() {
@@ -73,7 +85,6 @@ public class ControlCreatePage {
 	
 	@FXML
 	private void begin() {
-		//TODO: new game controller with all players in the listview starts and sends a message with all initial coordinates
 		openGame();
 	}
 	
@@ -84,21 +95,16 @@ public class ControlCreatePage {
 	
 	private void openGame() {
 		try {
+			server.isGameStarted = true;
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));
-			Parent home_page_parent = (Parent) cont.load();
-			
-			GameController controller = 
-					cont.<GameController>getController();
-									
-			server.isGameStarted = true;
-			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
-			
+			Parent home_page_parent = (Parent) cont.load();  
 			Scene home_page_scene = new Scene(home_page_parent);
 			Stage app_stage = (Stage) Begin.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
-			
-			
+			GameController controller = 
+					cont.<GameController>getController();						
+			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

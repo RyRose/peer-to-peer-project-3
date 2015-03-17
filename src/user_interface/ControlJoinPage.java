@@ -50,20 +50,16 @@ public class ControlJoinPage {
 	
 	String filename = "friendlist.txt";
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
-	private ArrayBlockingQueue<String> channel;
+	private ArrayBlockingQueue<String> channel = new ArrayBlockingQueue<String>(2,true);
 	private TalkerThread talker;
 	private Boolean notStarted;
-	private Integer uniqueID;
 	private HashMap<String, String> NametoIP = new HashMap<String, String>();
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
 	private void initialize(){
 		users.setItems(IPAddresses);
-		users.getSelectionModel().select(0);
 		addSavedIPs();
-		
-		channel = new ArrayBlockingQueue<String>(2, true);
 	}
 	
 	private void addSavedIPs() {
@@ -84,15 +80,18 @@ public class ControlJoinPage {
 	
 	@FXML
 	private void addnew(){
+		addHostToDict();
+		IP.setText("");
+		hostname.setText("");
+		users.getSelectionModel().selectLast();
+		saveFriendList();		
+	}
+	
+	private void addHostToDict() {
 		String tempHostIP = IP.getText();
 		String tempHostName = hostname.getText();
 		NametoIP.put(tempHostName, tempHostIP);
 		IPAddresses.add(tempHostName);
-		IP.setText("");
-		hostname.setText("");
-		saveFriendList();
-		users.getSelectionModel().selectLast();
-		
 	}
 	
 	private void saveFriendList() {
@@ -112,25 +111,19 @@ public class ControlJoinPage {
 	private void joinGame() throws InterruptedException {
 		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("")) {
 			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
-			//TODO: I think on the other end it automatically adds player or something, check that out.
-			
 			Timer timer = new Timer();
-			
 			timer.scheduleAtFixedRate(new TimerTask() {
-
 				@Override
 				public void run() {
 					if (!notStarted) {
 						cancel();
 					}
-					send("", users.getSelectionModel().getSelectedItem(), 8888);
+					send("", NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
 				}
 				
 			}, 0, 100);
 			
 			notStarted = true;
-			
-			//TODO: later we can change this so that it says "player name" is joining game, and that way it will pop up as their name for the creater
 		}
 		else {
 			//TODO: maybe give an error box telling them to select a player

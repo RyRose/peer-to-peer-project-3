@@ -50,6 +50,7 @@ public class GameSetupThread extends Thread {
                     	
         	            if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
         	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
+        	            	System.out.println(player);
         	            	String json = JSON.generateJson(player);
                 			writer.println(json);
                 			writer.flush();

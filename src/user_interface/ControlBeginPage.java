@@ -22,16 +22,16 @@ public class ControlBeginPage {
 	
 	@FXML
 	private void openCreatePage() throws IOException {
-		Parent home_page_parent = FXMLLoader.load(getClass().getResource("createpage.fxml"));
-		Scene home_page_scene = new Scene(home_page_parent);
-		Stage app_stage = (Stage) Create.getScene().getWindow();
-		app_stage.setScene(home_page_scene);
-		app_stage.show();
+		switchScreen("CreatePage.fxml");
 	}
 	
 	@FXML
 	private void openJoinPage() throws IOException {
-		Parent home_page_parent = FXMLLoader.load(getClass().getResource("joinpage.fxml"));
+		switchScreen("JoinPage.fxml");
+	}
+	
+	private void switchScreen(String FXMLFile) throws IOException {
+		Parent home_page_parent = FXMLLoader.load(getClass().getResource(FXMLFile));
 		Scene home_page_scene = new Scene(home_page_parent);
 		Stage app_stage = (Stage) Create.getScene().getWindow();
 		app_stage.setScene(home_page_scene);
