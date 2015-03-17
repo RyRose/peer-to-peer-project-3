@@ -19,11 +19,15 @@ public class Map {
 		this.obstacles = obstacles;
 	}
 
-		public ArrayList<PlayerInterface> getPlayers() {
+	public ArrayList<PlayerInterface> getPlayers() {
 		return players;
 	}
-
-		public List<Point> getObstacles() {
+		
+	public void setPlayer(int player_id, Player player) {
+		players.set(player_id, player);
+	}
+	
+	public List<Point> getObstacles() {
 		return obstacles;
 	}
 	

@@ -18,33 +18,30 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	public ScreenBuffer(List<PlayerData> players_data, int player_id) {
-		List<PlayerData> allPlayerData = players_data;
+	public ScreenBuffer(List<PlayerData> allPlayerData, int player_id) {
 		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
 		for (PlayerData playerData : allPlayerData) {
 			players.add(playerData.toPlayer());
 		}
-		myPlayer = null;
 		map = new Map(players, new ArrayList<Point>());
+		myPlayer = null;
 	}
 	
-	public void updatePlayer(PlayerData player2) {
-		PlayerData playerUpdate = player2;
+	public void updatePlayer(PlayerData playerUpdate) {
 		int playerId = playerUpdate.id;
 		Player player = (Player) map.getPlayers().get(playerId);
 		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
-		map.getPlayers().set(playerId, updatedPlayer);
+		map.setPlayer(playerId, updatedPlayer);
 	}
 	
-	public void updatePlayers(List<PlayerData> players_data) {
-		List<PlayerData> allPlayerData = players_data;
+	public void updatePlayers(List<PlayerData> allPlayerData) {
 		for (PlayerData playerUpdate : allPlayerData) {
 			int playerId = playerUpdate.id;
 			Player player = (Player) map.getPlayers().get(playerId);
 			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
-			map.getPlayers().set(playerId, updatedPlayer);
+			map.setPlayer(playerId, updatedPlayer);
 		}
 	}
 	
