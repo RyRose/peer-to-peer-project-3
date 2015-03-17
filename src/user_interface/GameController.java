@@ -48,6 +48,7 @@ public class GameController {
 			public void run() {
 				if (screen != null && !playerSprites.isEmpty()) {
 					drawScreen();
+					screen.updateBullets();
 				}
 				if (host != null){
 					send(port);
@@ -72,7 +73,7 @@ public class GameController {
 				x = 5;
 				screen.move(Direction.RIGHT);
 			} else if (event.getCode() == KeyCode.SPACE) {
-				Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX(), mySprite.getTranslateY() + mySprite.getLayoutY(), 5);
+				Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX() + 5, mySprite.getTranslateY() + mySprite.getLayoutY() + 5, 5);
 				bulletSprites.put(my_id, bullet);
 				canvas.getChildren().add(bullet);
 				screen.shootBullet();
@@ -88,6 +89,7 @@ public class GameController {
 	}	
 	
 	public void initializeGame(PlayerInterface my_player, List<PlayerData> players, String host) {
+		System.out.println("game initializing");
 		screen = new ScreenBuffer(players, my_id);
 		screen.myPlayer = (Player) my_player;
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
@@ -133,14 +135,14 @@ public class GameController {
 	
 	public void updatePlayer(PlayerData player) {
 		screen.updatePlayer(player);
-		screen.updateBullets();
 	}
 	
-	private void send(int port) { //TODO: call this periodically IF host is not null!
+	private void send(int port) { 
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = JSON.generateJson(screen.myPlayer);
+		JSON j = new JSON();
+		String json = j.generateJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -153,7 +155,11 @@ public class GameController {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						Platform.runLater( () -> { update( JSON.parseJson(line), port); } );
+						Platform.runLater( () -> { 
+							JSON j = new JSON();
+							update( j.parseJson(line), port);
+							System.out.println("screen updated");
+						} );
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

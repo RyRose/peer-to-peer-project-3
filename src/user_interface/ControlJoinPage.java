@@ -30,6 +30,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class ControlJoinPage {
+	public static String USERNAME_HOST_ERROR = "Enter a name and host!";
 	
 	Player player;
 	
@@ -54,12 +55,15 @@ public class ControlJoinPage {
 	private TalkerThread talker;
 	private Boolean notStarted;
 	private HashMap<String, String> NametoIP = new HashMap<String, String>();
+	private Receiver receiverThread;
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
 	private void initialize(){
+		channel = new ArrayBlockingQueue<String>(2, true);
 		users.setItems(IPAddresses);
 		addSavedIPs();
+		receiverThread = new Receiver();
 	}
 	
 	private void addSavedIPs() {
@@ -92,6 +96,10 @@ public class ControlJoinPage {
 		String tempHostName = hostname.getText();
 		NametoIP.put(tempHostName, tempHostIP);
 		IPAddresses.add(tempHostName);
+		IP.setText("");
+		hostname.setText("");
+		saveFriendList();
+		users.getSelectionModel().selectLast();
 	}
 	
 	private void saveFriendList() {
@@ -109,7 +117,7 @@ public class ControlJoinPage {
 	
 	@FXML
 	private void joinGame() throws InterruptedException {
-		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("")) {
+		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("") && !username.getText().equals(USERNAME_HOST_ERROR)) {
 			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
 			Timer timer = new Timer();
 			timer.scheduleAtFixedRate(new TimerTask() {
@@ -125,8 +133,8 @@ public class ControlJoinPage {
 			
 			notStarted = true;
 		}
-		else {
-			//TODO: maybe give an error box telling them to select a player
+		else { 
+			username.setText(USERNAME_HOST_ERROR);
 		}
 	}
 	
@@ -135,8 +143,11 @@ public class ControlJoinPage {
 			talker.halt();
 		}
 		talker = new TalkerThread(msg, host, port, channel);
-		new Receiver().start();
-		talker.start();		
+		
+		if ( !receiverThread.isAlive() ) 
+			receiverThread.start();
+		
+		talker.start();
 	}
 	
 	private class Receiver extends Thread {
@@ -147,7 +158,8 @@ public class ControlJoinPage {
 					line = channel.take();
 					System.out.println("line: " + line);
 					if (line.endsWith("}}]}")) {
-						ArrayList<PlayerData> players = JSON.parseJson(line);
+						JSON j = new JSON();
+						ArrayList<PlayerData> players = j.parseJson(line);
 						if (players.size() == 1) {
 							initializePlayer( players.get(0) );
 						} else {

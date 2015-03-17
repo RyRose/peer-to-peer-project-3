@@ -111,6 +111,7 @@ public class ControlCreatePage {
 	}
 	
 	private ArrayList<PlayerData> getPlayersDataFromPlayerInterfaces( ArrayList<PlayerInterface> players ) {
-		return JSON.parseJson(JSON.generateJson(players));
+		JSON j = new JSON();
+		return j.parseJson(j.generateJson(players));
 	}
 }

@@ -33,7 +33,8 @@ public class GameRunningThread extends Thread {
             while (responses.ready()) {
         		String s = responses.readLine();
         		updatePlayer(s);
-        		String network_message = JSON.generateJson(controller.getScreen().getMap().getPlayers());
+        		JSON j = new JSON();
+        		String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
         		PrintWriter writer = new PrintWriter(socket.getOutputStream());
             	writer.println(network_message);
             	writer.flush();
@@ -46,7 +47,8 @@ public class GameRunningThread extends Thread {
     }
 	
 	private void updatePlayer( String s ) {
-		PlayerData player = JSON.parseJson(s).get(0);
+		JSON j = new JSON();
+		PlayerData player = j.parseJson(s).get(0);
 		controller.updatePlayer(player);
 	} 
 }
