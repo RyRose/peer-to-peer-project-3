@@ -179,7 +179,7 @@ public class ControlJoinPage {
 	
 	private void initializePlayer( PlayerData player ) {
 		this.player = player.toPlayer();
-		//TODO:color = player.getColor();
+		color = this.player.getColor();
 		showPlayerTheirColor();
 	}
 	

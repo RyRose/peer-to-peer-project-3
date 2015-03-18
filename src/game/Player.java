@@ -2,8 +2,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -108,12 +106,13 @@ public class Player implements PlayerInterface{
 		alive = false;
 	}
 	
-	@Override
-	public void setColor(Paint paint) {
-		color = paint;
-	}
+
 	
 	@Override
+	public void setColor(Paint c) {
+		color = c;
+	}
+	
 	public Paint getColor() {
 		return color;
 	}
