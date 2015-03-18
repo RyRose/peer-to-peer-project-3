@@ -128,8 +128,8 @@ public class GameController {
 				canvas.getChildren().add(playerSprite);
 				for (BulletInterface bullet : player.getBullets()) {
 					Circle bulletSprite = bulletSprites.get(player.getUniqueId());
-					bulletSprite.setTranslateX(bullet.getCoordinates().getX());
-					bulletSprite.setTranslateY(bullet.getCoordinates().getY());
+					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
+					canvas.getChildren().add(bulletSprite);
 				}
 			}
 		}

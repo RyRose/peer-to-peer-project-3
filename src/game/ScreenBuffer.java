@@ -28,13 +28,13 @@ public class ScreenBuffer {
 	}
 	
 	public void updatePlayer(PlayerData playerUpdate) {
-		// System.out.println("updatePlayer: " + playerUpdate);
 		int playerId = playerUpdate.id;
 		Player player = (Player) map.getPlayers().get(playerId);
 		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		updatedPlayer.setUniqueId(playerId);
 		map.setPlayer(playerId, updatedPlayer);
+		updateMyPlayer();
 	}
 	
 	public void updatePlayers(List<PlayerData> allPlayerData) {
@@ -45,6 +45,10 @@ public class ScreenBuffer {
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			map.setPlayer(playerId, updatedPlayer);
 		}
+	}
+	
+	public void updateMyPlayer() {
+		map.setPlayer(myPlayer.getUniqueId(), myPlayer);
 	}
 	
 	public ArrayList<PlayerInterface> getPlayers() {

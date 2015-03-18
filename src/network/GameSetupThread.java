@@ -35,11 +35,11 @@ public class GameSetupThread extends Thread {
 	            BufferedReader responses = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             	
 	            while (!responses.ready()){}
-	            // while (responses.ready()) {
+	            while (responses.ready()) {
 	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
 	            	JSON j = new JSON();
 
-	            	if (isGameStarted) {
+	            	if (isGameStarted && server.isSettingUp) {
 	            		String json = j.generateJson(controller.all_players);
 	            		writer.println(json);
 	            		writer.flush();
@@ -53,7 +53,7 @@ public class GameSetupThread extends Thread {
 	            			String single_json = j.generateJson(player);
 	            			writer.println(single_json);
 	            			writer.flush();
-	            		} else if (!s.isEmpty()){
+	            		} else if ( !s.isEmpty() ){
 	            			String json = j.generateJson(makeAnotherPlayer());
 	            			writer.println(json);
 	            			writer.flush();
@@ -61,7 +61,7 @@ public class GameSetupThread extends Thread {
 	            			Server.IPaddresses.add( socket.getInetAddress().toString() );
 	            		}
 	            	}
-	         //   }
+	            }
 	            	            
 	            socket.close();
 	        } catch (IOException ioe) {
