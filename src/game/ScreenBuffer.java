@@ -28,26 +28,12 @@ public class ScreenBuffer {
 	}
 	
 	public void updatePlayer(PlayerData playerUpdate) {
-		int playerId = playerUpdate.id;
-		Player player = (Player) map.getPlayers().get(playerId);
-		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
-		updatedPlayer.setUniqueId(playerId);
-		updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
-		updatedPlayer.setColor(playerUpdate.color);
-		map.setPlayer(playerId, updatedPlayer);
+		map.setPlayer(playerUpdate.id, playerUpdate.toPlayer());
 	}
 	
 	public void updatePlayers(List<PlayerData> allPlayerData) {
 		for (PlayerData playerUpdate : allPlayerData) {
-			int playerId = playerUpdate.id;
-			Player player = (Player) map.getPlayers().get(playerId);
-			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
-			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
-			updatedPlayer.setUniqueId(playerId);
-			updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
-			updatedPlayer.setColor(playerUpdate.color);
-			map.setPlayer(playerId, updatedPlayer);
+			map.setPlayer(playerUpdate.id, playerUpdate.toPlayer());
 		}
 	}
 	
@@ -79,7 +65,6 @@ public class ScreenBuffer {
 	}
 	
 	public void updateBullets() {
-		
 			for (int i = 0; i < myPlayer.getBullets().size(); i++) {
 				Bullet bullet = (Bullet) myPlayer.getBullets().get(i);
 				bullet.shoot();

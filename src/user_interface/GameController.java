@@ -156,6 +156,7 @@ public class GameController {
 	
 	public void updatePlayer(PlayerData player) {
 		screen.updatePlayer(player);
+		screen.updateBullets();
 		screen.updateMyPlayer();
 	}
 	
