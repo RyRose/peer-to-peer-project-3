@@ -34,8 +34,8 @@ public class Server extends Thread {
 				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted, this);
 				gameSetup.start();
 			} else if (isGameStarted) {
-				System.out.println("GameRunningThread starting");
 				if (gameController != null) {
+					System.out.println("GameRunningThread starting");
 					GameRunningThread gameRunning = new GameRunningThread(s, IPaddresses, gameController);
 					gameRunning.start();
 				}

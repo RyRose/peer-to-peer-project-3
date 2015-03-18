@@ -20,4 +20,8 @@ public class JSON {
 	public ArrayList<PlayerData> parseJson( String json ) {
 		return parser.parseMultipleJson(json);
 	}
+	
+	public PlayerData parserSingleJson( String json ) {
+		return parser.parseOnePlayerJSON(json);
+	}
 }

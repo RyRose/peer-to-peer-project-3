@@ -35,47 +35,33 @@ public class GameSetupThread extends Thread {
 	            BufferedReader responses = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             	
 	            while (!responses.ready()){}
-	            while (responses.ready()) {
-    	            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+	            // while (responses.ready()) {
+	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
+	            	JSON j = new JSON();
 
-            		if (isGameStarted) {
-            			JSON j = new JSON();
-        				String json = j.generateJson(controller.all_players);
-        				writer.println(json);
-        				writer.flush();
-        				server.isSettingUp = false;
-        				break;
-            		} else {
-                    	
-                		String s = responses.readLine();
-                    	
-        	            if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
-        	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
-        	            	System.out.println(player);
-        	            	JSON j = new JSON();
-        	            	String single_json = j.generateJson(player);
-                			writer.println(single_json);
-                			writer.flush();
-                		} else {
-                	        
-                			if(s.isEmpty()) {
-            	            	PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()) );
-            	            	JSON j = new JSON();
-            	            	String empty_json = j.generateJson(player);
-                    			writer.println(empty_json);
-                    			writer.flush();
-                			} else {
-                				JSON j = new JSON();
-            	            	String json = j.generateJson(makeAnotherPlayer());
-                    			writer.println(json);
-                			writer.flush();
-                    	
-                			updateLobbyScreen(s);
-                			Server.IPaddresses.add( socket.getInetAddress().toString() );
-                			}
-                		}
-            		}
-	            }
+	            	if (isGameStarted) {
+	            		String json = j.generateJson(controller.all_players);
+	            		writer.println(json);
+	            		writer.flush();
+	            		server.isSettingUp = false;
+	            	} else {
+
+	            		String s = responses.readLine();
+
+	            		if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
+	            			PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
+	            			String single_json = j.generateJson(player);
+	            			writer.println(single_json);
+	            			writer.flush();
+	            		} else if (!s.isEmpty()){
+	            			String json = j.generateJson(makeAnotherPlayer());
+	            			writer.println(json);
+	            			writer.flush();
+	            			updateLobbyScreen(s);
+	            			Server.IPaddresses.add( socket.getInetAddress().toString() );
+	            		}
+	            	}
+	         //   }
 	            	            
 	            socket.close();
 	        } catch (IOException ioe) {
