@@ -103,10 +103,12 @@ public class Player implements PlayerInterface{
 		alive = false;
 	}
 	
+	@Override
 	public void setColor(Color c) {
 		color = c;
 	}
 	
+	@Override
 	public Color getColor() {
 		return color;
 	}

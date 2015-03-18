@@ -47,6 +47,7 @@ public class JSONGenerator {
 			.write("y", player.getCoordinates().getY())
 			.write("heading_enum", player.getHeading().name())
 			.write("heading_double", player.getHeadingAsDouble())
+			.write("color", player.getColor().toString())
 			.writeStartObject("bullets");
 		
 		for( BulletInterface b : player.getBullets()) {

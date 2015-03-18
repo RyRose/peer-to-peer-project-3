@@ -6,6 +6,8 @@ import game.Direction;
 import java.io.StringReader;
 import java.util.ArrayList;
 
+import javafx.scene.paint.Color;
+
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
@@ -60,6 +62,9 @@ public class JSONParser {
 					parser.next();
 					player.heading_double = parser.getBigDecimal().doubleValue();
 					break;
+				case "color":
+					parser.next();
+					player.color = Color.valueOf(parser.getString());
 				case "bullet":
 					parser.next();
 					e = parser.next();
