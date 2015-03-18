@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
@@ -64,7 +65,7 @@ public class JSONParser {
 					break;
 				case "color":
 					parser.next();
-					player.color = Color.valueOf(parser.getString());
+					player.color = Paint.valueOf(parser.getString());
 				case "bullet":
 					parser.next();
 					e = parser.next();

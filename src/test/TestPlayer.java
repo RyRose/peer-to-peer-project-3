@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import game.Direction;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -92,13 +93,13 @@ public class TestPlayer implements PlayerInterface {
 	}
 
 	@Override
-	public void setColor(Color c) {
+	public void setColor(Paint c) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Color getColor() {
+	public Paint getColor() {
 		// TODO Auto-generated method stub
 		return null;
 	}
