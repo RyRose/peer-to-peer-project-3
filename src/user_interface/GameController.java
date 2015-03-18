@@ -112,23 +112,21 @@ public class GameController {
 		canvas.getChildren().clear();
 		for (PlayerInterface player : players) {
 			Circle playerSprite;
-			if ( !playerSprites.containsKey(player.getUniqueId()) && player.isAlive() ) {
-				playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
-				playerSprites.put(player.getUniqueId(), playerSprite);
-				
-				canvas.getChildren().add(playerSprite);
-				
-				for( BulletInterface bullet : player.getBullets() ) {
-					Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
-					bulletSprites.put(player.getUniqueId(), bulletSprite);
-					canvas.getChildren().add(bulletSprite);
-				}
-			} 
 			
-			if (player.isAlive()){
+			if( player.isAlive() ) {
+				if (!playerSprites.containsKey(player.getUniqueId()) ) {
+					playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
+					playerSprites.put(player.getUniqueId(), playerSprite);
+										
+					for( BulletInterface bullet : player.getBullets() ) {
+						Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
+						bulletSprites.put(player.getUniqueId(), bulletSprite);
+						canvas.getChildren().add(bulletSprite);
+					}
+				}
+				
 				playerSprite = playerSprites.get(player.getUniqueId());
 				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
-				canvas.getChildren().add(playerSprite);
 				
 				for ( int i = 0; i < player.getBullets().size(); i++) {
 					BulletInterface bullet = player.getBullets().get(i);
@@ -136,7 +134,13 @@ public class GameController {
 					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
 					canvas.getChildren().add(bulletSprite);
 				}
-			}	
+				
+				canvas.getChildren().add(playerSprite);
+			} else if (playerSprites.containsKey(player.getUniqueId())) {
+				playerSprites.remove(player.getUniqueId());
+			}
+			
+			
 		}
 		screen.updateMyPlayer();
 		// System.out.println("drawScreen: " + players);

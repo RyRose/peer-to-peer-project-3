@@ -42,6 +42,9 @@ public class PlayerData {
 		player.getBullets().addAll(toBullets());
 		player.setUniqueId(id);
 		player.setColor(color);
+		if (!isAlive) {
+			player.kill();
+		}
 		return player;
 	}
 	
