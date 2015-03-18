@@ -184,6 +184,7 @@ public class ControlJoinPage {
 	}
 	
 	private void showPlayerTheirColor() {
+		
 		//TODO: implement here
 	}
 	

@@ -7,8 +7,6 @@ import game.Point;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class PlayerData {
@@ -36,8 +34,7 @@ public class PlayerData {
 	
 	@Override
 	public String toString() {
-		return "id: " + id + "|x: " + x + "|y: " + y + "|isAlive: " + isAlive + "|heading_enum " 
-	+ heading_enum + "|heading_double " + heading_double + "|color " + color.toString() + "\n" + bullets;
+		return "id: " + id + "|x: " + x + "|y: " + y + "|isAlive: " + isAlive + "|heading_enum " + heading_enum + "|heading_double " + heading_double + "\n" + bullets;
 	}
 	
 	public Player toPlayer() {
