@@ -185,9 +185,11 @@ public class ControlJoinPage {
 	}
 	
 	private void showPlayerTheirColor() {
-		colorRegion.setTextFill(color);
-		colorRegion.setText("Your color is " + color.toString() + "!");
-		colorRegion.setVisible(true);
+		Platform.runLater( ()-> {
+			colorRegion.setTextFill(color);
+			colorRegion.setText("Your color is " + color.toString() + "!");
+			colorRegion.setVisible(true);
+		});
 	}
 	
 	public void startGame( ArrayList<PlayerData> players ) {
