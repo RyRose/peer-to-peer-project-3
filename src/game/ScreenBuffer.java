@@ -45,6 +45,7 @@ public class ScreenBuffer {
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			map.setPlayer(playerId, updatedPlayer);
 		}
+		updateMyPlayer();
 	}
 	
 	public void updateMyPlayer() {

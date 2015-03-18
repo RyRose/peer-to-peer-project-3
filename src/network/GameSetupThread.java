@@ -39,11 +39,12 @@ public class GameSetupThread extends Thread {
 	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
 	            	JSON j = new JSON();
 
-	            	if (isGameStarted && server.isSettingUp) {
+	            	if (isGameStarted) {
 	            		String json = j.generateJson(controller.all_players);
 	            		writer.println(json);
 	            		writer.flush();
 	            		server.isSettingUp = false;
+	            		break;
 	            	} else {
 
 	            		String s = responses.readLine();
