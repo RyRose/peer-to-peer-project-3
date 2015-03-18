@@ -50,11 +50,12 @@ public class JSONGenerator {
 			.write("color", player.getColor().toString())
 			.writeStartObject("bullets");
 		
-		for( BulletInterface b : player.getBullets()) {
+		for( int i = 0; i < player.getBullets().size(); i++) {
+			BulletInterface bullet = player.getBullets().get(i);
 			generator.writeStartObject("bullet")
-				.write("x", b.getCoordinates().getX())
-				.write("y", b.getCoordinates().getY())
-				.write("direction", b.getDirection())
+				.write("x", bullet.getCoordinates().getX())
+				.write("y", bullet.getCoordinates().getY())
+				.write("direction", bullet.getDirection())
 			.writeEnd();
 		}
 		

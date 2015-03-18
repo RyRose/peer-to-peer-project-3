@@ -56,7 +56,7 @@ public class GameController {
 				}
 			}
 			
-		}, 0, 5);
+		}, 0, 25);
 		
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
@@ -127,7 +127,8 @@ public class GameController {
 				canvas.getChildren().add(playerSprite);
 			}
 			
-			for (BulletInterface bullet : player.getBullets()) {
+			for ( int i = 0; i < player.getBullets().size(); i++) {
+				BulletInterface bullet = player.getBullets().get(i);
 				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
 				// System.out.println("bulletSprite: " + bulletSprite);
 				bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
