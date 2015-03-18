@@ -34,13 +34,11 @@ public class GameController {
 	HashMap<Integer, Circle> bulletSprites = new HashMap<Integer, Circle>();
 	HashMap<Integer, Circle> playerSprites = new HashMap<Integer, Circle>();
 	private TalkerThread talker;
-	private GameReceiver receiverThread;
 	private String host;
 	private int port = 8888;
 
 	@FXML
 	private void initialize() {
-		
 		Timer timer = new Timer();
 		
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -55,12 +53,11 @@ public class GameController {
 					screen.updateBullets();
 				}
 				if (host != null){
-					send(port);
-				} 
+					send();
+				}
 			}
 			
 		}, 0, 5);
-
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
@@ -84,6 +81,7 @@ public class GameController {
 			}
 			move(x,y);
 		});
+		canvas.requestFocus();
 		
 	}
 	
@@ -102,7 +100,7 @@ public class GameController {
 		playerSprites.put(my_id, mySprite);
 		if (host != null) {
 			this.host = host;
-			send(port);
+			send();
 		} 
 	}
 	
@@ -161,7 +159,7 @@ public class GameController {
 		screen.updatePlayer(player);
 	}
 	
-	private void send(int port) { 
+	private void send() { 
 		System.out.println("send in GameController");
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
