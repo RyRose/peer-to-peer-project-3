@@ -41,13 +41,13 @@ public class Player implements PlayerInterface{
 		double direction = 0;
 		switch (heading) {
 		case UP:
-			direction = 90;
+			direction = Math.PI/2;
 			break;
 		case DOWN:
-			direction = -90;
+			direction = -Math.PI/2;
 			break;
 		case LEFT:
-			direction = 180;
+			direction = Math.PI;
 			break;
 		case RIGHT:
 			direction = 0;

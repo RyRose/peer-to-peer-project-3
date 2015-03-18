@@ -23,7 +23,7 @@ public class Bullet implements BulletInterface{
 	
 	@Override
 	public void shoot() {
-		coordinates = new Point(coordinates.getX() + 10*Math.cos(direction), coordinates.getY() - 10*Math.sin(direction));
+		coordinates = new Point(coordinates.getX() + 5*Math.cos(direction), coordinates.getY() - 5*Math.sin(direction));
 	}
 	
 	@Override
