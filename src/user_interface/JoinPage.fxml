@@ -12,7 +12,7 @@
    <center>
       <Pane fx:id="canvas" prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="add" layoutX="345.0" layoutY="229.0" mnemonicParsing="false" onAction="#addnew" prefHeight="44.0" prefWidth="89.0" text="Add Host" textAlignment="CENTER" textFill="#0d0b0a">
+            <Button fx:id="add" layoutX="345.0" layoutY="229.0" mnemonicParsing="false" onAction="#addnew" prefHeight="44.0" prefWidth="125.0" text="Add Host" textAlignment="CENTER" textFill="#0d0b0a">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -23,12 +23,17 @@
                </font>
             </Button>
             <ChoiceBox fx:id="users" layoutX="187.0" layoutY="83.0" prefHeight="50.0" prefWidth="223.0" />
-            <TextField fx:id="IP" layoutX="187.0" layoutY="235.0" prefHeight="31.0" prefWidth="146.0" promptText="Enter host IP address" />
-            <TextField fx:id="hostname" layoutX="64.0" layoutY="235.0" prefHeight="31.0" prefWidth="111.0" promptText="Enter host name" />
+            <TextField fx:id="IP" layoutX="178.0" layoutY="235.0" prefHeight="31.0" prefWidth="162.0" promptText="Enter host IP address" />
+            <TextField fx:id="hostname" layoutX="37.0" layoutY="235.0" prefHeight="31.0" prefWidth="136.0" promptText="Enter host name" />
             <TextField fx:id="username" layoutX="185.0" layoutY="28.0" prefHeight="31.0" promptText="Enter your name" />
-            <Label layoutX="87.0" layoutY="93.0" prefHeight="31.0" prefWidth="85.0" text="Select Host:">
+            <Label layoutX="57.0" layoutY="93.0" prefHeight="31.0" prefWidth="115.0" text="Select Host:">
                <font>
                   <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="colorRegion" layoutX="69.0" layoutY="352.0" prefHeight="103.0" prefWidth="362.0" visible="false">
+               <font>
+                  <Font size="24.0" />
                </font>
             </Label>
          </children>

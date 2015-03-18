@@ -32,19 +32,19 @@ public class GameRunningThread extends Thread {
             System.out.println("Responses about to be ready");
             while (!responses.ready()){}
             while (responses.ready()) {
-            System.out.println("Responses ready!");
-        	PrintWriter writer = new PrintWriter(socket.getOutputStream());
-        	String s = responses.readLine();
-        		
-        	System.out.println("responses: " + s + " end_responses");
-        	if ( !s.isEmpty() ) {
-        		updatePlayer(s);
-        	}
-        	JSON j = new JSON();
-        	String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
-        	System.out.println(network_message);
-            writer.println(network_message);
-            writer.flush();  
+            	System.out.println("Responses ready!");
+            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            	String s = responses.readLine();
+
+            	System.out.println("responses: " + s + " end_responses");
+            	if ( !s.isEmpty() ) {
+            		updatePlayer(s);
+            	}
+            	JSON j = new JSON();
+            	String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
+            	System.out.println(network_message);
+            	writer.println(network_message);
+            	writer.flush();  
             }
             
             socket.close();

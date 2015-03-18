@@ -1,7 +1,6 @@
 package user_interface;
 
 import game.Player;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
-
 import network.TalkerThread;
 import network_to_game.JSON;
 import network_to_game.PlayerData;
@@ -25,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
@@ -49,6 +48,8 @@ public class ControlJoinPage {
 	TextField username;
 	@FXML
 	TextField hostname;
+	@FXML
+	Label colorRegion;
 	
 	String filename = "friendlist.txt";
 	ObservableList<String> IPAddresses = FXCollections.observableArrayList();
@@ -184,8 +185,9 @@ public class ControlJoinPage {
 	}
 	
 	private void showPlayerTheirColor() {
-		
-		//TODO: implement here
+		colorRegion.setTextFill(color);
+		colorRegion.setText("Your color is " + color.toString() + "!");
+		colorRegion.setVisible(true);
 	}
 	
 	public void startGame( ArrayList<PlayerData> players ) {

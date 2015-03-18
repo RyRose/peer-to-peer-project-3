@@ -66,6 +66,7 @@ public class JSONParser {
 				case "color":
 					parser.next();
 					player.color = Paint.valueOf(parser.getString());
+					break;
 				case "bullet":
 					parser.next();
 					e = parser.next();
