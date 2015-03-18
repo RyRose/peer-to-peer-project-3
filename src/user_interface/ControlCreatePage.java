@@ -55,6 +55,7 @@ public class ControlCreatePage {
 	private void generateHostPlayer() {
 		Player player = new Player(startCoordinates.get(player_id), directions.get(player_id));
 		player.setUniqueId(player_id);
+		player.setColor(colors.get(player_id));
 		all_players.add(player);
 		player_id++;
 	}
