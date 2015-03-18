@@ -78,7 +78,7 @@ public class ScreenBuffer {
 		myPlayer.setHeading(d);
 	}
 	
-	public void updateBullets() {
+	public synchronized void updateBullets() {
 		for (int i = 0; i < map.getPlayers().size(); i++) {
 			for (BulletInterface bullet : map.getPlayers().get(i).getBullets()) {
 				bullet.shoot();
