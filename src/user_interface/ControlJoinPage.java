@@ -56,6 +56,7 @@ public class ControlJoinPage {
 	private Boolean notStarted;
 	private HashMap<String, String> NametoIP = new HashMap<String, String>();
 	private Receiver receiverThread;
+	private int port = 8888;
 	
 	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
@@ -118,7 +119,7 @@ public class ControlJoinPage {
 	@FXML
 	private void joinGame() throws InterruptedException {
 		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("") && !username.getText().equals(USERNAME_HOST_ERROR)) {
-			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
+			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()));
 			Timer timer = new Timer();
 			timer.scheduleAtFixedRate(new TimerTask() {
 				@Override
@@ -126,7 +127,7 @@ public class ControlJoinPage {
 					if (!notStarted) {
 						cancel();
 					}
-					send("", NametoIP.get(users.getSelectionModel().getSelectedItem()), 8888);
+					send("", NametoIP.get(users.getSelectionModel().getSelectedItem()));
 				}
 				
 			}, 0, 100);
@@ -138,7 +139,7 @@ public class ControlJoinPage {
 		}
 	}
 	
-	private void send(String msg, String host, int port) {
+	private void send(String msg, String host) {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
