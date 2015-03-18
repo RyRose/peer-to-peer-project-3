@@ -3,7 +3,6 @@ package network_to_game;
 
 import game.Direction;
 
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 

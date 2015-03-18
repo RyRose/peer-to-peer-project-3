@@ -24,6 +24,7 @@ public class Map {
 	}
 		
 	public void setPlayer(int player_id, Player player) {
+		// System.out.println("setPlayer: player_id- " + player_id + "- player: " + player);
 		players.set(player_id, player);
 	}
 	

@@ -181,7 +181,6 @@ public class ControlJoinPage {
 	
 	public void startGame( ArrayList<PlayerData> players ) {
 		try {
-			System.out.println("startGame in ControllJoinPage");
 			notStarted = false;
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
@@ -191,7 +190,6 @@ public class ControlJoinPage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			System.out.println(player);
 			controller.initializeGame(player, players, NametoIP.get(users.getSelectionModel().getSelectedItem()));
 		}
 		catch (IOException e) {

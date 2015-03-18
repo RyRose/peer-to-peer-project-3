@@ -103,8 +103,9 @@ public class ControlCreatePage {
 			Stage app_stage = (Stage) Begin.getScene().getWindow();
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
-					cont.<GameController>getController();						
+					cont.<GameController>getController();
 			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
+			server.startGame(controller);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
