@@ -29,24 +29,25 @@ public class GameRunningThread extends Thread {
         	
             BufferedReader responses = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         	
-            System.out.println("Responses about to be ready");
+            // System.out.println("Responses about to be ready");
             while (!responses.ready()){}
-            while (responses.ready()) {
-            	System.out.println("Responses ready!");
+            // while (responses.ready()) {
+            	// System.out.println("Responses ready!");
             	PrintWriter writer = new PrintWriter(socket.getOutputStream());
             	String s = responses.readLine();
 
-            	System.out.println("responses: " + s + " end_responses");
+            	// System.out.println("responses: " + s + " end_responses");
             	if ( !s.isEmpty() ) {
             		updatePlayer(s);
             	}
             	JSON j = new JSON();
-            	System.out.println(controller.getScreen().getMap().getPlayers());
+            	// System.out.println(controller.getScreen().getMap().getPlayers());
             	String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
-            	System.out.println(network_message);
+            	// System.out.println(network_message);
             	writer.println(network_message);
-            	writer.flush();  
-            }
+            	writer.flush();
+            	// break;
+           // }
             
             socket.close();
         } catch (IOException ioe) {

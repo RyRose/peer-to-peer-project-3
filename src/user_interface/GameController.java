@@ -105,6 +105,7 @@ public class GameController {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
 		// System.out.println("drawScreen-playerSprites: " + playerSprites);
 		// System.out.println("drawScreen-players: " + players);
+		System.out.println("drawScreen-bulletSprites: " + bulletSprites);
 		canvas.getChildren().clear();
 		canvas.getChildren().add(mySprite);
 		for (PlayerInterface player : players) {
