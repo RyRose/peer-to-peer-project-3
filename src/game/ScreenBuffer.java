@@ -43,6 +43,7 @@ public class ScreenBuffer {
 			Player player = (Player) map.getPlayers().get(playerId);
 			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
+			updatedPlayer.setUniqueId(playerId);
 			map.setPlayer(playerId, updatedPlayer);
 		}
 		updateMyPlayer();
@@ -58,15 +59,20 @@ public class ScreenBuffer {
 	
 	public void move(Direction d) {
 		PointInterface coordinates = myPlayer.getCoordinates();
+		System.out.println("Direction: " + d);
 		switch (d) {
 		case UP:
 			myPlayer.setCoordinates(coordinates.getX(), coordinates.getY() - 5);
+			break;
 		case DOWN:
 			myPlayer.setCoordinates(coordinates.getX(), coordinates.getY() + 5);
+			break;
 		case LEFT:
 			myPlayer.setCoordinates(coordinates.getX() - 5, coordinates.getY());
+			break;
 		case RIGHT:
 			myPlayer.setCoordinates(coordinates.getX() + 5, coordinates.getY());
+			break;
 		}
 		myPlayer.setHeading(d);
 	}

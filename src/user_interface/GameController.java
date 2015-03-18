@@ -149,7 +149,6 @@ public class GameController {
 	}
 	
 	private void update(List<PlayerData> players, int port) {
-		// System.out.println("update players");
 		screen.updatePlayers(players);
 		screen.updateBullets();
 	}
