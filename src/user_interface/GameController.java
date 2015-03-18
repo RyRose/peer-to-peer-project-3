@@ -92,6 +92,7 @@ public class GameController {
 		screen = new ScreenBuffer(players, my_id);
 		screen.myPlayer = (Player) my_player;
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
+		mySprite.setFill(screen.myPlayer.getColor());
 		canvas.getChildren().add(mySprite);
 		my_id = my_player.getUniqueId();
 		playerSprites.put(my_id, mySprite);
