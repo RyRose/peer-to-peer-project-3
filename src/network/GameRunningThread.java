@@ -36,7 +36,7 @@ public class GameRunningThread extends Thread {
             	PrintWriter writer = new PrintWriter(socket.getOutputStream());
             	String s = responses.readLine();
 
-            	// System.out.println("responses: " + s + " end_responses");
+            	System.out.println("responses: " + s + " end_responses");
             	if ( !s.isEmpty() ) {
             		updatePlayer(s);
             	}
