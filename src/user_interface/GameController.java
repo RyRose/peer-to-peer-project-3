@@ -104,7 +104,7 @@ public class GameController {
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
 		// System.out.println("drawScreen-playerSprites: " + playerSprites);
-		System.out.println("drawScreen-players: " + players);
+		// System.out.println("drawScreen-players: " + players);
 		canvas.getChildren().clear();
 		canvas.getChildren().add(mySprite);
 		for (PlayerInterface player : players) {
@@ -128,13 +128,13 @@ public class GameController {
 			
 			for (BulletInterface bullet : player.getBullets()) {
 				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
-				System.out.println("bulletSprite: " + bulletSprite);
+				// System.out.println("bulletSprite: " + bulletSprite);
 				bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
 				canvas.getChildren().add(bulletSprite);
 			}
 		}
 		screen.updateMyPlayer();
-		System.out.println("drawScreen: " + players);
+		// System.out.println("drawScreen: " + players);
 	}
 	
 	public ScreenBuffer getScreen() {

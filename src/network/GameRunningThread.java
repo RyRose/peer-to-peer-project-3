@@ -41,6 +41,7 @@ public class GameRunningThread extends Thread {
             		updatePlayer(s);
             	}
             	JSON j = new JSON();
+            	System.out.println(controller.getScreen().getMap().getPlayers());
             	String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
             	System.out.println(network_message);
             	writer.println(network_message);

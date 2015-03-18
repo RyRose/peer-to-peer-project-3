@@ -41,6 +41,7 @@ public class PlayerData {
 		Player player = new Player(new Point(x, y), heading_enum);
 		player.getBullets().addAll(toBullets());
 		player.setUniqueId(id);
+		player.setColor(color);
 		return player;
 	}
 	

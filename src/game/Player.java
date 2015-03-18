@@ -99,7 +99,7 @@ public class Player implements PlayerInterface{
 	public String toString() {
 		return "id: " + uniqueId + "|x: " + coordinates.getX() + "|y: " + coordinates.getY() + 
 				"|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + 
-				getHeadingAsDouble() + "\n" + bullets;
+				getHeadingAsDouble() + "|color " + getColor() + "\n" + bullets;
 	}
 	
 	public void kill() {
@@ -113,6 +113,7 @@ public class Player implements PlayerInterface{
 		color = c;
 	}
 	
+	@Override
 	public Paint getColor() {
 		return color;
 	}

@@ -34,6 +34,7 @@ public class ScreenBuffer {
 		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		updatedPlayer.setUniqueId(playerId);
 		updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
+		updatedPlayer.setColor(playerUpdate.color);
 		map.setPlayer(playerId, updatedPlayer);
 	}
 	
@@ -45,6 +46,7 @@ public class ScreenBuffer {
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			updatedPlayer.setUniqueId(playerId);
 			updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
+			updatedPlayer.setColor(playerUpdate.color);
 			map.setPlayer(playerId, updatedPlayer);
 		}
 	}
