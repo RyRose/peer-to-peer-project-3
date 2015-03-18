@@ -99,6 +99,7 @@ public class ScreenBuffer {
 	
 	public void killPlayer() {
 		map.removePlayer(myPlayer);
+		myPlayer.kill();
 	}
 	
 	public Player getMe() {

@@ -49,7 +49,6 @@ public class GameController {
 					Platform.runLater( () -> {
 						drawScreen();
 					});
-					moveBullets();
 					screen.updateBullets();
 				}
 				if (host != null){
@@ -67,7 +66,7 @@ public class GameController {
 			} else if (event.getCode() == KeyCode.DOWN) {
 				y = 5;
 				screen.move(Direction.DOWN);
-			}else if (event.getCode() == KeyCode.LEFT) {
+			} else if (event.getCode() == KeyCode.LEFT) {
 				x = -5;
 				screen.move(Direction.LEFT);
 			} else if (event.getCode() == KeyCode.RIGHT) {
@@ -93,7 +92,6 @@ public class GameController {
 		screen = new ScreenBuffer(players, my_id);
 		screen.myPlayer = (Player) my_player;
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
-		//TODO: set sprite color
 		canvas.getChildren().add(mySprite);
 		my_id = my_player.getUniqueId();
 		playerSprites.put(my_id, mySprite);
@@ -142,10 +140,6 @@ public class GameController {
 	private void move(double x, double y) {
 		mySprite.setTranslateX(mySprite.getTranslateX() + x);
 		mySprite.setTranslateY(mySprite.getTranslateY() + y);
-	}
-	
-	private void moveBullets() {
-		
 	}
 	
 	private void update(List<PlayerData> players, int port) {

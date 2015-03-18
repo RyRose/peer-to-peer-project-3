@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
 
@@ -12,6 +13,7 @@ public class Player implements PlayerInterface{
 	private Point coordinates;
 	private Direction heading;
 	private boolean alive = true;
+	private Color color;
 	
 	public Player (Point coordinates, Direction heading) {
 		this.coordinates = coordinates;
@@ -99,6 +101,14 @@ public class Player implements PlayerInterface{
 	
 	public void kill() {
 		alive = false;
+	}
+	
+	public void setColor(Color c) {
+		color = c;
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 
 }

@@ -138,7 +138,7 @@ public class ControlJoinPage {
 			username.setText(USERNAME_HOST_ERROR);
 		}
 	}
-	
+
 	private void send(String msg, String host) {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
