@@ -126,6 +126,7 @@ public class GameController {
 				}
 				
 				playerSprite = playerSprites.get(player.getUniqueId());
+				playerSprite.setFill(player.getColor());
 				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
 				
 				for ( int i = 0; i < player.getBullets().size(); i++) {
