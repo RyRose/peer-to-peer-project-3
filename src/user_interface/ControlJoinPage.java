@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class ControlJoinPage {
@@ -57,6 +58,7 @@ public class ControlJoinPage {
 	private HashMap<String, String> NametoIP = new HashMap<String, String>();
 	private Receiver receiverThread;
 	private int port = 8888;
+	private Paint color;
 	
 	@FXML
 	private void initialize(){
@@ -177,6 +179,12 @@ public class ControlJoinPage {
 	
 	private void initializePlayer( PlayerData player ) {
 		this.player = player.toPlayer();
+		//TODO:color = player.getColor();
+		showPlayerTheirColor();
+	}
+	
+	private void showPlayerTheirColor() {
+		//TODO: implement here
 	}
 	
 	public void startGame( ArrayList<PlayerData> players ) {
