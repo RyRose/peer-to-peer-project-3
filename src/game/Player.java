@@ -42,12 +42,16 @@ public class Player implements PlayerInterface{
 		switch (heading) {
 		case UP:
 			direction = 90;
+			break;
 		case DOWN:
 			direction = -90;
+			break;
 		case LEFT:
 			direction = 180;
+			break;
 		case RIGHT:
 			direction = 0;
+			break;
 		}
 		return direction;
 	}
