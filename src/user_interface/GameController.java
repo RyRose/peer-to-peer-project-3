@@ -40,9 +40,7 @@ public class GameController {
 	@FXML
 	private void initialize() {
 		Timer timer = new Timer();
-		
 		timer.scheduleAtFixedRate(new TimerTask() {
-
 			@Override
 			public void run() {
 				if (screen != null && !playerSprites.isEmpty()) {
@@ -55,9 +53,7 @@ public class GameController {
 					send();
 				}
 			}
-			
-		}, 0, 25);
-		
+		}, 0, 15);
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
@@ -85,12 +81,8 @@ public class GameController {
 		
 	}
 	
-	@FXML
-	public void grabKeys() {
-		canvas.requestFocus();
-	}	
-	
 	public void initializeGame(PlayerInterface my_player, List<PlayerData> players, String host) {
+		canvas.requestFocus();
 		screen = new ScreenBuffer(players, my_id);
 		screen.myPlayer = (Player) my_player;
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
@@ -106,45 +98,34 @@ public class GameController {
 	
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
-		// System.out.println("drawScreen-playerSprites: " + playerSprites);
-		// System.out.println("drawScreen-players: " + players);
-		System.out.println("drawScreen-bulletSprites: " + bulletSprites);
 		canvas.getChildren().clear();
 		for (PlayerInterface player : players) {
 			Circle playerSprite;
-			
 			if( player.isAlive() ) {
 				if (!playerSprites.containsKey(player.getUniqueId()) ) {
 					playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
-					playerSprites.put(player.getUniqueId(), playerSprite);
-										
+					playerSprites.put(player.getUniqueId(), playerSprite);					
 					for( BulletInterface bullet : player.getBullets() ) {
 						Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
 						bulletSprites.put(player.getUniqueId(), bulletSprite);
 						canvas.getChildren().add(bulletSprite);
 					}
 				}
-				
 				playerSprite = playerSprites.get(player.getUniqueId());
 				playerSprite.setFill(player.getColor());
 				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
-				
 				for ( int i = 0; i < player.getBullets().size(); i++) {
 					BulletInterface bullet = player.getBullets().get(i);
 					Circle bulletSprite = bulletSprites.get(player.getUniqueId());
 					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
 					canvas.getChildren().add(bulletSprite);
 				}
-				
 				canvas.getChildren().add(playerSprite);
 			} else if (playerSprites.containsKey(player.getUniqueId())) {
 				playerSprites.remove(player.getUniqueId());
 			}
-			
-			
 		}
 		screen.updateMyPlayer();
-		// System.out.println("drawScreen: " + players);
 	}
 	
 	public ScreenBuffer getScreen() {
@@ -169,7 +150,6 @@ public class GameController {
 	}
 	
 	private void send() { 
-		System.out.println("send in GameController");
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
@@ -189,9 +169,7 @@ public class GameController {
 					if (line.endsWith("}}]}")) {
 						Platform.runLater( () -> { 
 							JSON j = new JSON();
-							System.out.println(line);
 							update( j.parseJson(line), port);
-							System.out.println("screen updated");
 						} );
 					}
 				} catch (InterruptedException e) {

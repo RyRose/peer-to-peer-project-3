@@ -31,14 +31,11 @@ public class GameSetupThread extends Thread {
 	    @Override
 	    public void run() {
 	        try {
-	        	
 	            BufferedReader responses = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            	
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
 	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
 	            	JSON j = new JSON();
-
 	            	if (isGameStarted) {
 	            		String json = j.generateJson(controller.all_players);
 	            		writer.println(json);
@@ -46,9 +43,7 @@ public class GameSetupThread extends Thread {
 	            		server.isSettingUp = false;
 	            		break;
 	            	} else {
-
 	            		String s = responses.readLine();
-
 	            		if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
 	            			PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
 	            			String single_json = j.generateJson(player);

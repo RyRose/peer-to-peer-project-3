@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.rmi.ConnectException;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class TalkerThread extends Thread {
@@ -34,7 +33,6 @@ public class TalkerThread extends Thread {
 			PrintWriter writer = new PrintWriter(s.getOutputStream());
 			writer.println(msg);
 			writer.flush();
-
 			BufferedReader responses = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			while (going) {
 				while (going && !responses.ready());
@@ -51,7 +49,7 @@ public class TalkerThread extends Thread {
             try {
                 if (s != null) {s.close();}
             } catch (IOException ioe) {
-                System.out.println("error closing socket");
+            	ioe.printStackTrace();
             }
         }		
 	}

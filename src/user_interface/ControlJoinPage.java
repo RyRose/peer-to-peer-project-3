@@ -131,9 +131,7 @@ public class ControlJoinPage {
 					}
 					send("", NametoIP.get(users.getSelectionModel().getSelectedItem()));
 				}
-				
 			}, 0, 100);
-			
 			notStarted = true;
 			play.setVisible(false);
 		}
@@ -147,10 +145,8 @@ public class ControlJoinPage {
 			talker.halt();
 		}
 		talker = new TalkerThread(msg, host, port, channel);
-		
 		if ( !receiverThread.isAlive() ) 
 			receiverThread.start();
-		
 		talker.start();
 	}
 	
@@ -160,14 +156,12 @@ public class ControlJoinPage {
 				String line;
 				try {
 					line = channel.take();
-					System.out.println("line: " + line);
 					if (line.endsWith("}}]}")) {
 						JSON j = new JSON();
 						ArrayList<PlayerData> players = j.parseJson(line);
 						if (players.size() == 1) {
 							initializePlayer( players.get(0) );
 						} else {
-							//talker.halt();
 							Platform.runLater( () -> {startGame(players); } );
 						}
 					} 

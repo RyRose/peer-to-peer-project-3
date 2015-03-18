@@ -20,23 +20,17 @@ public class Server extends Thread {
 	public Server(int port, ControlCreatePage controller) throws IOException {
 		accepter = new ServerSocket(port);
 		this.controller = controller;
-		System.out.println("Server IP address: " + accepter.getInetAddress());
 	}
 
 	public void listen() throws IOException {
 		for (;;) {
-			System.out.println("server is listening");
-			Socket s = accepter.accept();
-			System.out.println("Connection accepted from " + s.getInetAddress());
-
-			
+			Socket s = accepter.accept();			
 			if( isSettingUp ) {
 				GameSetupThread gameSetup = new GameSetupThread(s, controller, isGameStarted, this);
 				gameSetup.start();
 			} else if (isGameStarted) {
 				if (gameController != null) {
-					System.out.println("GameRunningThread starting");
-					GameRunningThread gameRunning = new GameRunningThread(s, IPaddresses, gameController);
+					GameRunningThread gameRunning = new GameRunningThread(s, gameController);
 					gameRunning.start();
 				}
 			}
@@ -48,7 +42,6 @@ public class Server extends Thread {
 		try {
 			listen();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
