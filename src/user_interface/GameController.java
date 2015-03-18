@@ -74,9 +74,11 @@ public class GameController {
 				x = 5;
 				screen.move(Direction.RIGHT);
 			} else if (event.getCode() == KeyCode.SPACE) {
-				Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX() + 5, mySprite.getTranslateY() + mySprite.getLayoutY() + 5, 5);
-				bulletSprites.put(my_id, bullet);
-				screen.shootBullet();
+				if (screen.getMe().isAlive()) {
+					Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX() + 5, mySprite.getTranslateY() + mySprite.getLayoutY() + 5, 5);
+					bulletSprites.put(my_id, bullet);
+					screen.shootBullet();
+				}
 			}
 			move(x,y);
 		});
