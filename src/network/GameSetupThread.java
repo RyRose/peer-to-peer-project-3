@@ -77,6 +77,7 @@ public class GameSetupThread extends Thread {
 	    private Player makeAnotherPlayer() {
 	    	Player player = new Player( controller.getStartCoordinates().get(controller.player_id), controller.getStartDirections().get(controller.player_id));
 	    	player.setUniqueId(controller.player_id);
+	    	player.setColor(controller.getColors().get(controller.player_id));
 	    	controller.player_id++;
 	    	controller.all_players.add(player);
 	    	return player;

@@ -19,6 +19,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class ControlCreatePage {
@@ -31,6 +33,7 @@ public class ControlCreatePage {
 	ObservableList<String> names = FXCollections.observableArrayList();
 	ArrayList<Point> startCoordinates = new ArrayList<Point>();
 	ArrayList<Direction> directions = new ArrayList<Direction>();
+	ArrayList<Paint> colors = new ArrayList<Paint>();
 	private int lowerXBound = 5;
 	private int upperXBound = 795;
 	private int lowerYBound = 5;
@@ -44,6 +47,7 @@ public class ControlCreatePage {
 		listNames.setItems(names);
 		setupCoordinates();
 		setupDirections();
+		setupColors();
 		generateHostPlayer();
 		setupServer();
 	}
@@ -59,6 +63,13 @@ public class ControlCreatePage {
 		server = new network.Server(8888, this);
 		server.isSettingUp = true;
 		server.start();
+	}
+	
+	private void setupColors() {
+		colors.add(Color.BLACK);
+		colors.add(Color.RED);
+		colors.add(Color.BLUE);
+		colors.add(Color.GREEN);
 	}
 	
 	private void setupCoordinates() {
@@ -81,6 +92,10 @@ public class ControlCreatePage {
 	
 	public ArrayList<Direction> getStartDirections() {
 		return directions;
+	}
+	
+	public ArrayList<Paint> getColors() {
+		return colors;
 	}
 	
 	@FXML
