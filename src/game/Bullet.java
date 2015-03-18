@@ -35,4 +35,9 @@ public class Bullet implements BulletInterface{
 		return Math.sqrt(  Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1-y2), 2)  );
 	}
 
+	
+	@Override
+	public String toString() {
+		return "x: " + coordinates.getX() + "|y: " + coordinates.getY() + "|dir: " + direction;
+	}
 }
