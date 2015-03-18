@@ -181,16 +181,18 @@ public class ControlJoinPage {
 	
 	public void startGame( ArrayList<PlayerData> players ) {
 		try {
-			notStarted = false;
-			FXMLLoader cont = new FXMLLoader();
-			cont.setLocation(getClass().getResource("GameScreen.fxml"));		
-			Parent home_page_parent = (Parent) cont.load();  
-			Scene home_page_scene = new Scene(home_page_parent);
-			Stage app_stage = (Stage) play.getScene().getWindow();
-			app_stage.setScene(home_page_scene);
-			GameController controller = 
-					cont.<GameController>getController();
-			controller.initializeGame(player, players, NametoIP.get(users.getSelectionModel().getSelectedItem()));
+			if (notStarted == true) {
+				notStarted = false;
+				FXMLLoader cont = new FXMLLoader();
+				cont.setLocation(getClass().getResource("GameScreen.fxml"));		
+				Parent home_page_parent = (Parent) cont.load();  
+				Scene home_page_scene = new Scene(home_page_parent);
+				Stage app_stage = (Stage) play.getScene().getWindow();
+				app_stage.setScene(home_page_scene);
+				GameController controller = 
+						cont.<GameController>getController();
+				controller.initializeGame(player, players, NametoIP.get(users.getSelectionModel().getSelectedItem()));
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
