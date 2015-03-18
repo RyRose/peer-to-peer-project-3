@@ -9,4 +9,16 @@
    <center>
       <Pane fx:id="canvas" onMouseEntered="#grabKeys" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
    </center>
+   <top>
+      <Line endX="805.0" strokeWidth="5.0" BorderPane.alignment="TOP_LEFT" />
+   </top>
+   <bottom>
+      <Line endX="805.0" strokeWidth="5.0" BorderPane.alignment="BOTTOM_LEFT" />
+   </bottom>
+   <left>
+      <Line endY="600.0" strokeWidth="5.0" BorderPane.alignment="TOP_LEFT" />
+   </left>
+   <right>
+      <Line endY="600.0" strokeWidth="5.0" BorderPane.alignment="TOP_RIGHT" />
+   </right>
 </BorderPane>
