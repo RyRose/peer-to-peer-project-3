@@ -26,6 +26,13 @@ public class Bullet implements BulletInterface{
 		coordinates = new Point(coordinates.getX() + 5*Math.cos(direction), coordinates.getY() - 5*Math.sin(direction));
 	}
 	
+	public boolean isOffScreen() {
+		double x = coordinates.getX();
+		double y = coordinates.getY();
+		
+		return ( x < 0 || x > 800) || ( y < 0 || y > 600 );
+	}
+	
 	@Override
 	public double distanceTo(Point p) {
 		double x1 = this.getCoordinates().getX();

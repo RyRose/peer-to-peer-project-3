@@ -3,7 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import user_interface.GameController;
 import network_to_game.PlayerData;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -80,8 +80,12 @@ public class ScreenBuffer {
 	
 	public void updateBullets() {
 		for (int i = 0; i < map.getPlayers().size(); i++) {
-			for (BulletInterface bullet : map.getPlayers().get(i).getBullets()) {
+			for (int j = 0; j < map.getPlayers().get(i).getBullets().size(); j++) {
+				Bullet bullet = (Bullet) map.getPlayers().get(i).getBullets().get(j);
 				bullet.shoot();
+				if (bullet.isOffScreen()) {
+					map.getPlayers().get(i).getBullets().remove(bullet);
+				}
 				// checkAlive(bullet);
 			}
 		}
