@@ -58,7 +58,6 @@ public class ControlJoinPage {
 	private Receiver receiverThread;
 	private int port = 8888;
 	
-	//TODO: periodically need to check to see if the status has changed somewhere after joinGame() called. send("", users.getSelectionModel().getSelectedItem(), 8888)
 	@FXML
 	private void initialize(){
 		channel = new ArrayBlockingQueue<String>(2, true);
@@ -133,6 +132,7 @@ public class ControlJoinPage {
 			}, 0, 100);
 			
 			notStarted = true;
+			play.setVisible(false);
 		}
 		else { 
 			username.setText(USERNAME_HOST_ERROR);
