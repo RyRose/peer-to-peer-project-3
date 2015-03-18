@@ -81,7 +81,6 @@ public class GameController {
 			}
 			move(x,y);
 		});
-		canvas.requestFocus();
 		
 	}
 	
@@ -181,6 +180,7 @@ public class GameController {
 					if (line.endsWith("}}]}")) {
 						Platform.runLater( () -> { 
 							JSON j = new JSON();
+							System.out.println(line);
 							update( j.parseJson(line), port);
 							System.out.println("screen updated");
 						} );
