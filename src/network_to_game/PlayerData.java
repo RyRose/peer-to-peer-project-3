@@ -8,6 +8,8 @@ import game.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
+
 public class PlayerData {
 	public int id;
 	public double x;
@@ -15,6 +17,7 @@ public class PlayerData {
 	public boolean isAlive;
 	public Direction heading_enum;
 	public double heading_double;
+	public Color color;
 	
 	private ArrayList<BulletData> bullets;
 	

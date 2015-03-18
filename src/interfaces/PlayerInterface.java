@@ -4,6 +4,8 @@ import game.Direction;
 
 import java.util.List;
 
+import javafx.scene.paint.Color;
+
 public interface PlayerInterface {
 	
 	public void setUniqueId( int new_id );
@@ -16,4 +18,8 @@ public interface PlayerInterface {
 	public double getHeadingAsDouble();
 	public void setHeading(Direction d);
 	public void setCoordinates(double x, double y);
+
+	public void setColor(Color c);
+
+	public Color getColor();
 }

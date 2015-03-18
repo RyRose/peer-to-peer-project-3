@@ -3,6 +3,7 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
 import game.Direction;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
@@ -88,5 +89,17 @@ public class TestPlayer implements PlayerInterface {
 	@Override
 	public void setCoordinates(double x, double y) {
 		point = new TestPoint(x,y);
+	}
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Color getColor() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
