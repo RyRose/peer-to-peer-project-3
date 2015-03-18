@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.*;
 import interfaces.PlayerInterface;
 
+import java.awt.Paint;
 import java.util.ArrayList;
 
 import network_to_game.JSONGenerator;
@@ -19,6 +20,7 @@ public class JsonTest {
 	@Test
 	public void testJsonGenerateAndParse() {
 		TestPlayer player = new TestPlayer(0, 1);
+		player.setColor( javafx.scene.paint.Paint.valueOf("blue"));
 		player.addBullet( new TestBullet( 0, 1, 90 ));
 		player.addBullet( new TestBullet( 25, 50, 10.32442));
 		String json = generator.generateOnePlayerJson(player);
@@ -29,6 +31,7 @@ public class JsonTest {
 	@Test
 	public void testParseJson() {
 		TestPlayer player = new TestPlayer(13213, 12124);
+		player.setColor( javafx.scene.paint.Paint.valueOf("red"));
 		for( int i = 0; i < 10000; i++) {
 			player.addBullet( new TestBullet(i, i*10, i*1000));
 		}
@@ -42,6 +45,7 @@ public class JsonTest {
 		ArrayList<PlayerInterface> players = new ArrayList<>();
 		for( int i = 0; i < 10; i++ ) {
 			TestPlayer player = new TestPlayer(i , i + 1 );
+			player.setColor( javafx.scene.paint.Paint.valueOf("pink"));
 			player.addBullet( new TestBullet( i + 2, i + 4,( i + 100 ) / 3));
 			player.addBullet( new TestBullet( i + 3, i + 5, (i + 50) / 4));
 			players.add(player);

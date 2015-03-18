@@ -17,6 +17,7 @@ public class TestPlayer implements PlayerInterface {
 	private boolean alive;
 	private Direction heading;
 	public ArrayList<BulletInterface> bullets;
+	private Paint color;
 	
 
 	public TestPlayer( int x, int y) {
@@ -58,7 +59,8 @@ public class TestPlayer implements PlayerInterface {
 	
 	@Override
 	public String toString() {
-		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + getHeadingAsDouble() + "\n" + bullets;
+		return "id: " + id + "|x: " + point.x + "|y: " + point.y + "|isAlive: " + alive +  "|heading_enum " + heading + 
+				"|heading_double " + getHeadingAsDouble() + "|color " + getColor().toString() + "\n" + bullets;
 	}
 
 	@Override
@@ -94,13 +96,11 @@ public class TestPlayer implements PlayerInterface {
 
 	@Override
 	public void setColor(Paint c) {
-		// TODO Auto-generated method stub
-		
+		color = c;
 	}
 
 	@Override
 	public Paint getColor() {
-		// TODO Auto-generated method stub
-		return null;
+		return color;
 	}
 }
