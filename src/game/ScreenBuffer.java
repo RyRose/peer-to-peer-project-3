@@ -33,8 +33,8 @@ public class ScreenBuffer {
 		Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 		Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 		updatedPlayer.setUniqueId(playerId);
+		updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
 		map.setPlayer(playerId, updatedPlayer);
-		updateMyPlayer();
 	}
 	
 	public void updatePlayers(List<PlayerData> allPlayerData) {
@@ -44,9 +44,9 @@ public class ScreenBuffer {
 			Point updatedPosition = new Point(playerUpdate.x, playerUpdate.y);
 			Player updatedPlayer = new Player(updatedPosition, player.getBullets(), player.getHeading());
 			updatedPlayer.setUniqueId(playerId);
+			updatedPlayer.getBullets().addAll( playerUpdate.toPlayer().getBullets() );
 			map.setPlayer(playerId, updatedPlayer);
 		}
-		updateMyPlayer();
 	}
 	
 	public void updateMyPlayer() {
@@ -59,7 +59,6 @@ public class ScreenBuffer {
 	
 	public void move(Direction d) {
 		PointInterface coordinates = myPlayer.getCoordinates();
-		System.out.println("Direction: " + d);
 		switch (d) {
 		case UP:
 			myPlayer.setCoordinates(coordinates.getX(), coordinates.getY() - 5);
@@ -78,10 +77,10 @@ public class ScreenBuffer {
 	}
 	
 	public void updateBullets() {
-		for (PlayerInterface player : map.getPlayers()) {
-			for (BulletInterface bullet : player.getBullets()) {
+		for (int i = 0; i < map.getPlayers().size(); i++) {
+			for (BulletInterface bullet : map.getPlayers().get(i).getBullets()) {
 				bullet.shoot();
-				checkAlive(bullet);
+				// checkAlive(bullet);
 			}
 		}
 	}

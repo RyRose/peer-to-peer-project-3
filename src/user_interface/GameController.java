@@ -57,6 +57,7 @@ public class GameController {
 			}
 			
 		}, 0, 5);
+		
 		canvas.setOnKeyPressed(event -> {
 			double x = 0;
 			double y = 0;
@@ -75,7 +76,6 @@ public class GameController {
 			} else if (event.getCode() == KeyCode.SPACE) {
 				Circle bullet = new Circle(mySprite.getTranslateX() + mySprite.getLayoutX() + 5, mySprite.getTranslateY() + mySprite.getLayoutY() + 5, 5);
 				bulletSprites.put(my_id, bullet);
-				canvas.getChildren().add(bullet);
 				screen.shootBullet();
 			}
 			move(x,y);
@@ -103,7 +103,7 @@ public class GameController {
 	
 	private void drawScreen() {
 		ArrayList<PlayerInterface> players = screen.getPlayers();
-		System.out.println("drawScreen-playerSprites: " + playerSprites);
+		// System.out.println("drawScreen-playerSprites: " + playerSprites);
 		System.out.println("drawScreen-players: " + players);
 		canvas.getChildren().clear();
 		canvas.getChildren().add(mySprite);
@@ -124,13 +124,17 @@ public class GameController {
 				playerSprite = playerSprites.get(player.getUniqueId());
 				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
 				canvas.getChildren().add(playerSprite);
-				for (BulletInterface bullet : player.getBullets()) {
-					Circle bulletSprite = bulletSprites.get(player.getUniqueId());
-					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
-					canvas.getChildren().add(bulletSprite);
-				}
+			}
+			
+			for (BulletInterface bullet : player.getBullets()) {
+				Circle bulletSprite = bulletSprites.get(player.getUniqueId());
+				System.out.println("bulletSprite: " + bulletSprite);
+				bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
+				canvas.getChildren().add(bulletSprite);
 			}
 		}
+		screen.updateMyPlayer();
+		System.out.println("drawScreen: " + players);
 	}
 	
 	public ScreenBuffer getScreen() {
@@ -145,10 +149,12 @@ public class GameController {
 	private void update(List<PlayerData> players, int port) {
 		screen.updatePlayers(players);
 		screen.updateBullets();
+		screen.updateMyPlayer();
 	}
 	
 	public void updatePlayer(PlayerData player) {
 		screen.updatePlayer(player);
+		screen.updateMyPlayer();
 	}
 	
 	private void send() { 
