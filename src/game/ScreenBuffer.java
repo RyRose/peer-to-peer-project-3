@@ -79,16 +79,15 @@ public class ScreenBuffer {
 	}
 	
 	public void updateBullets() {
-		for (int i = 0; i < map.getPlayers().size(); i++) {
-			for (int j = 0; j < map.getPlayers().get(i).getBullets().size(); j++) {
-				Bullet bullet = (Bullet) map.getPlayers().get(i).getBullets().get(j);
+		
+			for (int i = 0; i < myPlayer.getBullets().size(); i++) {
+				Bullet bullet = (Bullet) myPlayer.getBullets().get(i);
 				bullet.shoot();
 				if (bullet.isOffScreen()) {
-					map.getPlayers().get(i).getBullets().remove(bullet);
+					myPlayer.getBullets().remove(bullet);
 				}
 				// checkAlive(bullet);
 			}
-		}
 	}
 	
 	public void shootBullet() {
