@@ -71,7 +71,14 @@ public class ScreenBuffer {
 				if (bullet.isOffScreen()) {
 					myPlayer.getBullets().remove(bullet);
 				}
-				// checkAlive(bullet);
+			}
+			for (int j = 0; j < map.getPlayers().size(); j++) {
+				ArrayList<BulletInterface> bullets = (ArrayList<BulletInterface>) map.getPlayers().get(j).getBullets();
+				if (map.getPlayers().get(j).getUniqueId() != myPlayer.getUniqueId()) {
+					for( int k = 0; k < bullets.size(); k++) {
+						checkAlive(bullets.get(k));
+					}
+				}
 			}
 	}
 	
@@ -87,7 +94,6 @@ public class ScreenBuffer {
 	}
 	
 	public void killPlayer() {
-		map.removePlayer(myPlayer);
 		myPlayer.kill();
 	}
 	

@@ -72,6 +72,7 @@ public class Player implements PlayerInterface{
 	}
 	
 	public void addBullet(BulletInterface bullet) {
+		System.out.println("bullet: " + bullet);
 		bullets.add(bullet);
 	}
 
