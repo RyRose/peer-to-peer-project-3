@@ -13,7 +13,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import network.TalkerThread;
 import network_to_game.JSON;
-import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -157,8 +156,7 @@ public class ControlJoinPage {
 				try {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
-						JSON j = new JSON();
-						ArrayList<PlayerData> players = j.parseJson(line);
+						ArrayList<Player> players = JSON.parseMultipleJson(line);
 						if (players.size() == 1) {
 							initializePlayer( players.get(0) );
 						} else {
@@ -172,9 +170,9 @@ public class ControlJoinPage {
 		}
 	}
 	
-	private void initializePlayer( PlayerData player ) {
-		this.player = player.toPlayer();
-		color = this.player.getColor();
+	private void initializePlayer( Player player ) {
+		this.player = player;
+		color = player.getColor();
 		showPlayerTheirColor();
 	}
 	
@@ -186,7 +184,7 @@ public class ControlJoinPage {
 		});
 	}
 	
-	public void startGame( ArrayList<PlayerData> players ) {
+	public void startGame( ArrayList<Player> players ) {
 		try {
 			if (notStarted == true) {
 				notStarted = false;

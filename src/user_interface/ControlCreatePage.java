@@ -3,13 +3,10 @@ package user_interface;
 import game.Direction;
 import game.Player;
 import game.Point;
-import interfaces.PlayerInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import network_to_game.JSON;
-import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +36,7 @@ public class ControlCreatePage {
 	private int lowerYBound = 5;
 	private int upperYBound = 595;
 	
-	public ArrayList<PlayerInterface> all_players = new ArrayList<PlayerInterface>();
+	public ArrayList<Player> all_players = new ArrayList<Player>();
 	public int player_id = 0;
 	
 	@FXML
@@ -120,15 +117,10 @@ public class ControlCreatePage {
 			app_stage.setScene(home_page_scene);
 			GameController controller = 
 					cont.<GameController>getController();
-			controller.initializeGame(all_players.get(0), getPlayersDataFromPlayerInterfaces(all_players) , null);
+			controller.initializeGame(all_players.get(0), all_players , null);
 			server.startGame(controller);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private ArrayList<PlayerData> getPlayersDataFromPlayerInterfaces( ArrayList<PlayerInterface> players ) {
-		JSON j = new JSON();
-		return j.parseJson(j.generateJson(players));
 	}
 }

@@ -1,61 +1,117 @@
 package test;
 
 import static org.junit.Assert.*;
-import interfaces.PlayerInterface;
+import game.Bullet;
+import game.Direction;
+import game.Player;
 
-import java.awt.Paint;
 import java.util.ArrayList;
+import java.util.Random;
 
-import network_to_game.JSONGenerator;
-import network_to_game.JSONParser;
-import network_to_game.PlayerData;
+import javax.json.stream.JsonParsingException;
+
+import javafx.scene.paint.Color;
+import network_to_game.JSON;
 
 import org.junit.Test;
 
-public class JsonTest {
-	
-	JSONGenerator generator = new JSONGenerator();
-	JSONParser parser = new JSONParser();
+public class JsonTest {	
+	Random rand = new Random();	
 
 	@Test
-	public void testJsonGenerateAndParse() {
-		TestPlayer player = new TestPlayer(0, 1);
-		player.setColor( javafx.scene.paint.Paint.valueOf("blue"));
-		player.addBullet( new TestBullet( 0, 1, 90 ));
-		player.addBullet( new TestBullet( 25, 50, 10.32442));
-		String json = generator.generateOnePlayerJson(player);
-		PlayerData transmitted_player = parser.parseOnePlayerJSON(json);
-		assertTrue( player.toString().equals(transmitted_player.toString()));
+	public void testPlayerWithoutBullets() {
+		Player player = generatePlayer();
+		String json = JSON.generateSingleJson(player);
+		Player transmitted_player = JSON.parseSingleJson(json);
+		assertEquals( player, transmitted_player);
 	}
 	
 	@Test
-	public void testParseJson() {
-		TestPlayer player = new TestPlayer(13213, 12124);
-		player.setColor( javafx.scene.paint.Paint.valueOf("red"));
-		for( int i = 0; i < 10000; i++) {
-			player.addBullet( new TestBullet(i, i*10, i*1000));
+	public void testSinglePlayerWithBullets() {
+		Player player = generatePlayer();
+		for( int i = 0; i < 10; i++) {
+			player.addBullet( generateBullet() );
 		}
-		String json = generator.generateOnePlayerJson(player);
-		PlayerData transmitted_player = parser.parseOnePlayerJSON(json);
-		assertTrue( player.toString().equals(transmitted_player.toString()));
+		String json = JSON.generateSingleJson(player);
+		Player transmitted_player = JSON.parseSingleJson(json);
+		assertEquals(player, transmitted_player);
 	}
 	
 	@Test
-	public void testMultipleJsonGenerateAndParse() {
-		ArrayList<PlayerInterface> players = new ArrayList<>();
+	public void testMultiplePlayersWithBullets() {
+		ArrayList<Player> players = new ArrayList<>();
 		for( int i = 0; i < 10; i++ ) {
-			TestPlayer player = new TestPlayer(i , i + 1 );
-			player.setColor( javafx.scene.paint.Paint.valueOf("pink"));
-			player.addBullet( new TestBullet( i + 2, i + 4,( i + 100 ) / 3));
-			player.addBullet( new TestBullet( i + 3, i + 5, (i + 50) / 4));
+			Player player = generatePlayer();
+			
+			for( int j = 0; j < 100; j++)
+				player.addBullet( generateBullet() );
+			
 			players.add(player);
 		}
 		
-		String json = generator.generateMultiplePlayerJson(players);
-		ArrayList<PlayerData> players_data = parser.parseMultipleJson(json);
+		String json = JSON.generateMultipleJson(players);
+		ArrayList<Player> transmitted_players = JSON.parseMultipleJson(json);
 		for ( int i = 0; i < players.size(); i++ ) {
-			assertTrue( players.get(i).toString().equals(players_data.get(i).toString()) );
+			assertEquals(players.get(i), transmitted_players.get(i));
 		}
 	}
 	
+	@Test(expected = JsonParsingException.class)
+	public void testInvalidJson() {
+		JSON.parseMultipleJson("This is not good JSON");
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testIncompletePlayerGeneration() {
+		Player player = new Player(); // No instance variables initialized
+		JSON.generateSingleJson(player);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testSingleJsonInMultipleJson() {
+		JSON.parseMultipleJson( JSON.generateSingleJson(generatePlayer()) );
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testMultipleJsoninSingleJson() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (int i = 0; i < 10; i++) {
+			players.add( generatePlayer() );
+		}
+		
+		JSON.parseSingleJson(JSON.generateMultipleJson(players));
+	}
+	
+	private Bullet generateBullet() {
+		Bullet bullet = new Bullet();
+		bullet.setX(rand.nextInt() + rand.nextDouble());
+		bullet.setY(rand.nextInt() + rand.nextDouble());
+		bullet.setDirection(rand.nextInt() + rand.nextDouble());
+		return bullet;
+	}
+	
+	private Player generatePlayer() {
+		Player player = new Player();
+		player.setUniqueId(rand.nextInt());
+		player.setAlive(rand.nextBoolean());
+		player.setX(rand.nextInt());
+		player.setY(rand.nextInt());
+		player.setColor(Color.BLACK.toString());
+		
+		switch( rand.nextInt(4) ) { // Generates random direction from 4 choices
+		case 0:
+			player.setHeading(Direction.DOWN);
+			break;
+		case 1:
+			player.setHeading(Direction.UP);
+			break;
+		case 2:
+			player.setHeading(Direction.LEFT);
+			break;
+		case 3:
+			player.setHeading(Direction.RIGHT);
+			break;
+		}
+		return player;
+	}
 }

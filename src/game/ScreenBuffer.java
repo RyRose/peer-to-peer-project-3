@@ -1,13 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import user_interface.GameController;
-import network_to_game.PlayerData;
-import interfaces.BulletInterface;
-import interfaces.PlayerInterface;
-import interfaces.PointInterface;
 
 public class ScreenBuffer {
 	
@@ -18,22 +11,22 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	public ScreenBuffer(List<PlayerData> allPlayerData, int player_id) {
-		ArrayList<PlayerInterface> players = new ArrayList<PlayerInterface>();
-		for (PlayerData playerData : allPlayerData) {
-			players.add(playerData.toPlayer());
+	public ScreenBuffer(ArrayList<Player> all_players, int player_id) {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player player : all_players) {
+			players.add(player);
 		}
 		map = new Map(players, new ArrayList<Point>());
 		myPlayer = null;
 	}
 	
-	public void updatePlayer(PlayerData playerUpdate) {
-		map.setPlayer(playerUpdate.id, playerUpdate.toPlayer());
+	public void updatePlayer(Player player) {
+		map.setPlayer(player.getUniqueId(), player);
 	}
 	
-	public void updatePlayers(List<PlayerData> allPlayerData) {
-		for (PlayerData playerUpdate : allPlayerData) {
-			map.setPlayer(playerUpdate.id, playerUpdate.toPlayer());
+	public void updatePlayers(ArrayList<Player> arrayList) {
+		for (Player player : arrayList) {
+			map.setPlayer(player.getUniqueId(), player);
 		}
 	}
 	
@@ -41,12 +34,12 @@ public class ScreenBuffer {
 		map.setPlayer(myPlayer.getUniqueId(), myPlayer);
 	}
 	
-	public ArrayList<PlayerInterface> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return map.getPlayers();
 	}
 	
 	public void move(Direction d) {
-		PointInterface coordinates = myPlayer.getCoordinates();
+		Point coordinates = myPlayer.getCoordinates();
 		switch (d) {
 		case UP:
 			myPlayer.setCoordinates(coordinates.getX(), coordinates.getY() - 5);
@@ -73,7 +66,7 @@ public class ScreenBuffer {
 				}
 			}
 			for (int j = 0; j < map.getPlayers().size(); j++) {
-				ArrayList<BulletInterface> bullets = (ArrayList<BulletInterface>) map.getPlayers().get(j).getBullets();
+				ArrayList<Bullet> bullets = map.getPlayers().get(j).getBullets();
 				if (map.getPlayers().get(j).getUniqueId() != myPlayer.getUniqueId()) {
 					for( int k = 0; k < bullets.size(); k++) {
 						checkAlive(bullets.get(k));
@@ -83,11 +76,11 @@ public class ScreenBuffer {
 	}
 	
 	public void shootBullet() {
-		BulletInterface newBullet = new Bullet(myPlayer.getCoordinates(), myPlayer.getHeadingAsDouble());
+		Bullet newBullet = new Bullet(myPlayer.getCoordinates(), myPlayer.getHeadingAsDouble());
 		myPlayer.addBullet(newBullet);
 	}
 	
-	public void checkAlive(BulletInterface bullet) {
+	public void checkAlive(Bullet bullet) {
 		if (bullet.distanceTo(myPlayer.getCoordinates()) <= 25) {
 			killPlayer();	
 		}

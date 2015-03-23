@@ -1,7 +1,6 @@
 package network;
 
 import game.Player;
-import interfaces.PlayerInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,9 +34,8 @@ public class GameSetupThread extends Thread {
 	            while (!responses.ready()){}
 	            while (responses.ready()) {
 	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
-	            	JSON j = new JSON();
 	            	if (isGameStarted) {
-	            		String json = j.generateJson(controller.all_players);
+	            		String json = JSON.generateMultipleJson(controller.all_players);
 	            		writer.println(json);
 	            		writer.flush();
 	            		server.isSettingUp = false;
@@ -45,12 +43,12 @@ public class GameSetupThread extends Thread {
 	            	} else {
 	            		String s = responses.readLine();
 	            		if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
-	            			PlayerInterface player = controller.all_players.get( Integer.valueOf(getUniqueID()));
-	            			String single_json = j.generateJson(player);
+	            			Player player = controller.all_players.get( Integer.valueOf(getUniqueID()));
+	            			String single_json = JSON.generateSingleJson(player);
 	            			writer.println(single_json);
 	            			writer.flush();
 	            		} else if ( !s.isEmpty() ){
-	            			String json = j.generateJson(makeAnotherPlayer());
+	            			String json = JSON.generateSingleJson(makeAnotherPlayer());
 	            			writer.println(json);
 	            			writer.flush();
 	            			updateLobbyScreen(s);

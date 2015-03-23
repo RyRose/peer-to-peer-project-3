@@ -1,121 +1,102 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
 
-public class Player implements PlayerInterface{
+public class Player implements PlayerInterface {
 	private int uniqueId;
-	private List<BulletInterface> bullets;
-	private Point coordinates;
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private Point coordinates = new Point();
 	private Direction heading;
-	private boolean alive = true;
-	private Paint color;
+	private boolean alive;
+	private String color;
+	
+	public Player() {} // Used for JSON
 	
 	public Player (Point coordinates, Direction heading) {
 		this.coordinates = coordinates;
 		this.heading = heading;
-		this.bullets = new ArrayList<BulletInterface>();
+		this.color = Color.BLACK.toString();
+		this.alive = true;
+		this.uniqueId = 0;
 	}
-	
-	public Player (Point coordinates, List<BulletInterface> bullets) {
-		this.coordinates = coordinates;
-		this.bullets = bullets;		
-	}
-	
-	public Player (Point coordinates, List<BulletInterface> bullets, Direction heading) {
-		this.coordinates = coordinates;
-		this.bullets = bullets;
-		this.heading = heading;
-	}
-	
-	@Override
-	public Direction getHeading() {
-		return heading;
-	}
-	
-	@Override
+		
 	public double getHeadingAsDouble() {
-		double direction = 0;
-		switch (heading) {
-		case UP:
-			direction = Math.PI/2;
-			break;
-		case DOWN:
-			direction = -Math.PI/2;
-			break;
-		case LEFT:
-			direction = Math.PI;
-			break;
-		case RIGHT:
-			direction = 0;
-			break;
-		}
-		return direction;
+		return heading.asDouble();
 	}
 	
-	@Override
-	public void setHeading(Direction d) {
-		heading = d;
-	}
-
-	@Override
-	public void setUniqueId(int new_id) {
-		uniqueId = new_id;
-	}
-
-	@Override
-	public List<BulletInterface> getBullets() {
-		return bullets;
-	}
-	
-	public void addBullet(BulletInterface bullet) {
+	public void addBullet(Bullet bullet) {
 		bullets.add(bullet);
 	}
 
-	@Override
 	public Point getCoordinates() {
 		return coordinates;
 	}
 	
-	@Override
 	public void setCoordinates(double x, double y) {
-		coordinates = new Point(x,y);
-	}
-
-	@Override
-	public int getUniqueId() {
-		return uniqueId;
-	}
-	
-	@Override
-	public boolean isAlive() {
-		return alive;
-	}
-	
-	@Override
-	public String toString() {
-		return "id: " + uniqueId + "|x: " + coordinates.getX() + "|y: " + coordinates.getY() + 
-				"|isAlive: " + alive +  "|heading_enum " + heading + "|heading_double " + 
-				getHeadingAsDouble() + "|color " + getColor() + "\n" + bullets;
+		setX(x);
+		setY(y);
 	}
 	
 	public void kill() {
 		alive = false;
 	}
 	
-
-	
-	@Override
 	public void setColor(Paint c) {
-		color = c;
+		color = c.toString();
+	}
+	
+	public Paint getColor() {
+		return Paint.valueOf(color);
 	}
 	
 	@Override
-	public Paint getColor() {
-		return color;
+	public String toString() {
+		return "id: " + getUniqueId() + "|x: " + getX() + "|y: " + getY() + 
+				"|isAlive: " + isAlive() +  "|heading_enum " + getHeading() + 
+				"|color " + getColor() + "\n" + getBullets();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if ( obj instanceof Player ) {
+			Player other = (Player) obj;
+			return  ( other.uniqueId == uniqueId ) &&
+					( other.alive == alive ) &&
+					( other.bullets.containsAll(bullets) ) && // this player's bullets subsets the other's
+					( bullets.containsAll(other.bullets) ) && // other's bullets subset this players. Therefore, sets are equal.
+					( other.getX() == getX() ) &&
+					( other.getY() == getY() ) &&
+					( other.heading == heading ) &&
+					( other.color.equals(color) );
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return uniqueId;
+	}
+	
+	// Getters and Setters
 
+	@Override
+	public ArrayList<Bullet> getBullets() { return bullets; }
+	
+	@Override public double getX() { return coordinates.getX(); }
+	@Override public void setX(double new_x) { coordinates.setX(new_x); }
+	@Override public double getY() { return coordinates.getY(); }
+	@Override public void setY(double new_y) { coordinates.setY(new_y); }
+	@Override public int getUniqueId() { return uniqueId;	}
+	@Override public void setUniqueId(int new_id) { uniqueId = new_id; }
+	@Override public boolean isAlive() { return alive; }
+	@Override public void setAlive(boolean isAlive) { alive = isAlive; }
+	@Override public String getColorAsString() { return color.toString(); }
+	@Override public void setColor(String color) { this.color = color; }
+	@Override public Direction getHeading() { return heading; }
+	@Override public void setHeading(Direction d) {	heading = d; }
 }

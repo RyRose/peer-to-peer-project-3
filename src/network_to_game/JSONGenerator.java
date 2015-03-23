@@ -1,5 +1,6 @@
 package network_to_game;
 
+import game.Player;
 import interfaces.BulletInterface;
 import interfaces.PlayerInterface;
 
@@ -19,7 +20,7 @@ public class JSONGenerator {
 		generator = Json.createGenerator( writer );
 	}
 	
-	public String generateOnePlayerJson( PlayerInterface player ) {
+	public String generateSingleJson( PlayerInterface player ) {
 		generator.writeStartObject();
 		
 		addPlayerJson(player);
@@ -29,9 +30,9 @@ public class JSONGenerator {
 		return writer.toString();
 	}
 	
-	public String generateMultiplePlayerJson( ArrayList<PlayerInterface> players ) {
+	public String generateMultipleJson( ArrayList<Player> all_players ) {
 		generator.writeStartObject();
-		for( PlayerInterface player : players )
+		for( PlayerInterface player : all_players )
 			addPlayerJson(player);
 		generator.writeEnd();
 		generator.flush();
@@ -43,18 +44,17 @@ public class JSONGenerator {
 			.writeStartObject()
 			.write("id", player.getUniqueId())
 			.write("alive", player.isAlive())
-			.write("x", player.getCoordinates().getX())
-			.write("y", player.getCoordinates().getY())
-			.write("heading_enum", player.getHeading().name())
-			.write("heading_double", player.getHeadingAsDouble())
-			.write("color", player.getColor().toString())
+			.write("x", player.getX())
+			.write("y", player.getY())
+			.write("heading", player.getHeading().name())
+			.write("color", player.getColorAsString())
 			.writeStartObject("bullets");
 		
 		for( int i = 0; i < player.getBullets().size(); i++) {
 			BulletInterface bullet = player.getBullets().get(i);
 			generator.writeStartObject("bullet")
-				.write("x", bullet.getCoordinates().getX())
-				.write("y", bullet.getCoordinates().getY())
+				.write("x", bullet.getX())
+				.write("y", bullet.getY())
 				.write("direction", bullet.getDirection())
 			.writeEnd();
 		}

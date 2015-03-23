@@ -1,21 +1,18 @@
 package user_interface;
 
+import game.Bullet;
 import game.Direction;
 import game.Player;
 import game.ScreenBuffer;
-import interfaces.BulletInterface;
-import interfaces.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import network.TalkerThread;
 import network_to_game.JSON;
-import network_to_game.PlayerData;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -81,10 +78,10 @@ public class GameController {
 		
 	}
 	
-	public void initializeGame(PlayerInterface my_player, List<PlayerData> players, String host) {
+	public void initializeGame(Player my_player, ArrayList<Player> players, String host) {
 		canvas.requestFocus();
 		screen = new ScreenBuffer(players, my_id);
-		screen.myPlayer = (Player) my_player;
+		screen.myPlayer = my_player;
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
 		mySprite.setFill(screen.myPlayer.getColor());
 		canvas.getChildren().add(mySprite);
@@ -97,16 +94,16 @@ public class GameController {
 	}
 	
 	private void drawScreen() {
-		ArrayList<PlayerInterface> players = screen.getPlayers();
+		ArrayList<Player> players = screen.getPlayers();
 		canvas.getChildren().clear();
-		for (PlayerInterface player : players) {
+		for (Player player : players) {
 			Circle playerSprite;
 			if( player.isAlive() ) {
 				if (!playerSprites.containsKey(player.getUniqueId()) ) {
 					playerSprite = new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20);
 					playerSprites.put(player.getUniqueId(), playerSprite);					
-					for( BulletInterface bullet : player.getBullets() ) {
-						Circle bulletSprite = new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5);
+					for( Bullet bullet : player.getBullets() ) {
+						Circle bulletSprite = new Circle(bullet.getX(), bullet.getY(), 5);
 						bulletSprites.put(player.getUniqueId(), bulletSprite);
 						canvas.getChildren().add(bulletSprite);
 					}
@@ -115,9 +112,9 @@ public class GameController {
 				playerSprite.setFill(player.getColor());
 				playerSprites.put(player.getUniqueId(), new Circle(player.getCoordinates().getX(), player.getCoordinates().getY(), 20));
 				for ( int i = 0; i < player.getBullets().size(); i++) {
-					BulletInterface bullet = player.getBullets().get(i);
+					Bullet bullet = player.getBullets().get(i);
 					Circle bulletSprite = bulletSprites.get(player.getUniqueId());
-					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getCoordinates().getX(), bullet.getCoordinates().getY(), 5));
+					bulletSprites.put(player.getUniqueId(), new Circle(bullet.getX(), bullet.getY(), 5));
 					canvas.getChildren().add(bulletSprite);
 				}
 				canvas.getChildren().add(playerSprite);
@@ -137,13 +134,13 @@ public class GameController {
 		mySprite.setTranslateY(mySprite.getTranslateY() + y);
 	}
 	
-	private void update(List<PlayerData> players, int port) {
-		screen.updatePlayers(players);
+	private void update(ArrayList<Player> arrayList, int port) {
+		screen.updatePlayers(arrayList);
 		screen.updateBullets();
 		screen.updateMyPlayer();
 	}
 	
-	public void updatePlayer(PlayerData player) {
+	public void updatePlayer(Player player) {
 		screen.updatePlayer(player);
 		screen.updateBullets();
 		screen.updateMyPlayer();
@@ -153,8 +150,7 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		JSON j = new JSON();
-		String json = j.generateJson(screen.myPlayer);
+		String json = JSON.generateSingleJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -168,8 +164,7 @@ public class GameController {
 					line = channel.take();
 					if (line.endsWith("}}]}")) {
 						Platform.runLater( () -> { 
-							JSON j = new JSON();
-							update( j.parseJson(line), port);
+							update( JSON.parseMultipleJson(line), port);
 						} );
 					}
 				} catch (InterruptedException e) {

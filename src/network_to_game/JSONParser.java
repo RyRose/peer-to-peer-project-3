@@ -1,74 +1,83 @@
 package network_to_game;
 
 
+import game.Bullet;
 import game.Direction;
+import game.Player;
+
 import java.io.StringReader;
 import java.util.ArrayList;
-import javafx.scene.paint.Paint;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 
 public class JSONParser {
+	
+	JsonParser parser;
 
-	public PlayerData parseOnePlayerJSON( String json ) {
-		JsonParser parser = Json.createParser( new StringReader(json) );
-		return getPlayerFromJson(parser);
+	public Player parseSingleJson( String json ) {
+		parser = Json.createParser( new StringReader(json) );
+		Player player = getPlayerFromJson();
+		
+		if( parser.hasNext() ) // This means there is more left to go. Or, that there are multiple players in the json..
+			throw new IllegalArgumentException("Attempting to parse multiple players with the single json method.");
+		
+		return player;
 	}
 	
-	public ArrayList<PlayerData> parseMultipleJson( String json ) {
-		JsonParser parser = Json.createParser( new StringReader(json) );
-		return extractMultiplePlayersFromJson(parser);
+	public ArrayList<Player> parseMultipleJson( String json ) {
+		parser = Json.createParser( new StringReader(json) );
+		return extractMultiplePlayersFromJson();
 	}
 	
-	private ArrayList<PlayerData> extractMultiplePlayersFromJson( JsonParser parser ) {
-		ArrayList<PlayerData> list = new ArrayList<>();
+	private ArrayList<Player> extractMultiplePlayersFromJson() {
+		ArrayList<Player> list = new ArrayList<>();
 		while ( parser.hasNext() ) {
-			list.add( getPlayerFromJson(parser) );
+			list.add( getPlayerFromJson() );
 		}
+		
+		if (list.size() == 1)
+			throw new IllegalArgumentException("Attempting to parse only one player with the multiple player json method.");
+		
 		return list;
 	}
 	
-	private PlayerData getPlayerFromJson( JsonParser parser ) {
-		PlayerData player = new PlayerData();
+	private Player getPlayerFromJson() {
+		Player player = new Player();
 		Event e = parser.next();
 		while ( parser.hasNext() && !e.equals(Event.END_ARRAY) ) {
 			if (e == Event.KEY_NAME) {
 				switch (parser.getString()) {
 				case "id":
 					parser.next();
-					player.id = parser.getInt();
+					player.setUniqueId(parser.getInt());
 					break;
 				case "alive":
 					e = parser.next();
-					player.isAlive = (e == Event.VALUE_TRUE);
+					player.setAlive(e == Event.VALUE_TRUE );
 					break;
 				case "x":
 					parser.next();
-					player.x = parser.getInt();
+					player.setX( parser.getBigDecimal().doubleValue() );
 					break;
 				case "y":
 					parser.next();
-					player.y = parser.getInt();
+					player.setY( parser.getBigDecimal().doubleValue() );
 					break;
-				case "heading_enum":
+				case "heading":
 					parser.next();
-					player.heading_enum = Direction.valueOf(parser.getString());
-					break;
-				case "heading_double":
-					parser.next();
-					player.heading_double = parser.getBigDecimal().doubleValue();
+					player.setHeading( Direction.valueOf(parser.getString()) );
 					break;
 				case "color":
 					parser.next();
-					player.color = Paint.valueOf(parser.getString());
+					player.setColor(parser.getString());
 					break;
 				case "bullet":
 					parser.next();
 					e = parser.next();
 					if ( e != Event.END_OBJECT) {
-						player.addBullet( extractBullet(parser, e) );
+						player.addBullet( extractBullet(e) );
 					}
 				}
 			}
@@ -78,24 +87,24 @@ public class JSONParser {
 		return player;
 	}
 
-	private BulletData extractBullet( JsonParser parser, Event e ) {
-		BulletData bullet = new BulletData();
+	private Bullet extractBullet( Event e ) {
+		Bullet bullet = new Bullet();
 		for( int i = 0; i < 3; ) {
 			if (e == Event.KEY_NAME) {
 				switch (parser.getString()) {
 				case "x":
 					parser.next();
-					bullet.x = parser.getInt();
+					bullet.setX(parser.getBigDecimal().doubleValue());
 					i++;
 					break;
 				case "y":
 					parser.next();
-					bullet.y = parser.getInt();
+					bullet.setY(parser.getBigDecimal().doubleValue());
 					i++;
 					break;
 				case "direction":
 					parser.next();
-					bullet.direction = parser.getBigDecimal().doubleValue();
+					bullet.setDirection(parser.getBigDecimal().doubleValue());
 					i++;
 				}
 			}

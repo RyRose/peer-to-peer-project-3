@@ -1,5 +1,7 @@
 package network;
 
+import game.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,7 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import network_to_game.JSON;
-import network_to_game.PlayerData;
 import user_interface.GameController;
 
 public class GameRunningThread extends Thread {
@@ -30,8 +31,7 @@ public class GameRunningThread extends Thread {
             if ( !s.isEmpty() ) {
             	updatePlayer(s);
             }
-            JSON j = new JSON();
-            String network_message = j.generateJson(controller.getScreen().getMap().getPlayers());
+            String network_message = JSON.generateMultipleJson(controller.getScreen().getMap().getPlayers());
             writer.println(network_message);
             writer.flush();
             socket.close();
@@ -41,8 +41,7 @@ public class GameRunningThread extends Thread {
     }
 	
 	private void updatePlayer( String s ) {
-		JSON j = new JSON();
-		PlayerData player = j.parserSingleJson(s);
+		Player player = JSON.parseSingleJson(s);
 		controller.updatePlayer(player);
 	} 
 }
