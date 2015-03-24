@@ -4,8 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="src" path="lib"/>
-	<classpathentry kind="lib" path="lib/javax.json-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/javax.json-api-1.0 .jar"/>
-	<classpathentry kind="lib" path ="lib/jackson-core-2.5.0.jar" />
+	<classpathentry kind="lib" path="lib/jackson-core-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.5.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

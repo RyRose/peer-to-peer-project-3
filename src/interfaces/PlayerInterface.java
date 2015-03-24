@@ -6,6 +6,7 @@ import game.Direction;
 import java.util.ArrayList;
 
 
+
 public interface PlayerInterface extends PointInterface {
 		
 	public ArrayList<Bullet> getBullets();
@@ -20,5 +21,5 @@ public interface PlayerInterface extends PointInterface {
 	public void setHeading(Direction d);
 	
 	public String getColorAsString();
-	public void setColor(String color);
+	public void setColorAsString(String color);
 }

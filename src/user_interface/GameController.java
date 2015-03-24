@@ -162,7 +162,7 @@ public class GameController {
 				String line;
 				try {
 					line = channel.take();
-					if (line.endsWith("}}]}")) {
+					if (JSON.isGameJson(line)) {
 						Platform.runLater( () -> { 
 							update( JSON.parseMultipleJson(line), port);
 						} );

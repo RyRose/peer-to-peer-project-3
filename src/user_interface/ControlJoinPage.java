@@ -155,7 +155,7 @@ public class ControlJoinPage {
 				String line;
 				try {
 					line = channel.take();
-					if (line.endsWith("}}]}")) {
+					if (JSON.isGameJson(line)) {
 						ArrayList<Player> players = JSON.parseMultipleJson(line);
 						if (players.size() == 1) {
 							initializePlayer( players.get(0) );
