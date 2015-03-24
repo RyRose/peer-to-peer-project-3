@@ -35,7 +35,7 @@ public class GameSetupThread extends Thread {
 	            while (responses.ready()) {
 	            	PrintWriter writer = new PrintWriter(socket.getOutputStream());
 	            	if (isGameStarted) {
-	            		String json = JSON.generateMultipleJson(controller.all_players);
+	            		String json = JSON.generateJson(controller.all_players);
 	            		writer.println(json);
 	            		writer.flush();
 	            		server.isSettingUp = false;
@@ -44,11 +44,11 @@ public class GameSetupThread extends Thread {
 	            		String s = responses.readLine();
 	            		if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
 	            			Player player = controller.all_players.get( Integer.valueOf(getUniqueID()));
-	            			String single_json = JSON.generateSingleJson(player);
+	            			String single_json = JSON.generateJson(player);
 	            			writer.println(single_json);
 	            			writer.flush();
 	            		} else if ( !s.isEmpty() ){
-	            			String json = JSON.generateSingleJson(makeAnotherPlayer());
+	            			String json = JSON.generateJson(makeAnotherPlayer());
 	            			writer.println(json);
 	            			writer.flush();
 	            			updateLobbyScreen(s);

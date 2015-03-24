@@ -1,26 +1,23 @@
 package network_to_game;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import game.Player;
-import interfaces.PlayerInterface;
 
 public class JSON {
 			
-	public static String generateSingleJson( PlayerInterface player ) {
+	public static String generateJson( Object obj ) {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
-			return mapper.writeValueAsString(player);
+			return mapper.writeValueAsString(obj);
 		} catch (JsonGenerationException e) {
-			throw new IllegalArgumentException("Invalid Json");
+			throw new IllegalArgumentException("Invalid Object");
 		} catch (JsonMappingException e) {
 			throw new IllegalArgumentException("Invalid mapping");
 		} catch (IOException e) {
@@ -28,43 +25,19 @@ public class JSON {
 		}		
 	}
 	
-	public static String generateMultipleJson( ArrayList<Player> all_players ) {
+	public static Player[] parseJson( String json ) {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
-			return mapper.writeValueAsString(all_players);
-		} catch (JsonGenerationException e) {
-			throw new IllegalArgumentException("Invalid Json");
-		} catch (JsonMappingException e) {
-			throw new IllegalArgumentException("Invalid mapping");
-		} catch (IOException e) {
-			throw new IllegalArgumentException();
-		}		
-	}
-	
-	public static Player parseSingleJson( String json ) {
-		ObjectMapper mapper = new ObjectMapper();
-		
-		try {
-			return mapper.readValue(json , Player.class);
+			return new Player[] {mapper.readValue(json , Player.class)}; // If the json just contains a player
 		} catch (JsonParseException e) {
 			throw new IllegalArgumentException("Invalid json");
 		} catch (JsonMappingException e) {
-			throw new IllegalArgumentException("Invalid mapping");
-		} catch (IOException e) {
-			throw new IllegalArgumentException();
-		}
-	}
-	
-	public static ArrayList<Player> parseMultipleJson( String json ) {
-		ObjectMapper mapper = new ObjectMapper();
-		
-		try {
-			return mapper.readValue(json , new TypeReference<ArrayList<Player>>(){});
-		} catch (JsonParseException e) {
-			throw new IllegalArgumentException("Invalid json");
-		} catch (JsonMappingException e) {
-			throw new IllegalArgumentException("Invalid mapping");
+			try {
+				return mapper.readValue(json, Player[].class); // If the json contains multiple players or a list with just one player.
+			} catch (IOException e1) {
+				throw new IllegalArgumentException("Invalid json");
+			}
 		} catch (IOException e) {
 			throw new IllegalArgumentException();
 		}
@@ -76,7 +49,7 @@ public class JSON {
 			mapper.readValue(possible_json, Player.class); // If Json is a player
 		} catch (IOException e) {
 			try {
-				mapper.readValue(possible_json , new TypeReference<ArrayList<Player>>(){}); // If Json is a list of players
+				mapper.readValue(possible_json , Player[].class); // If Json is a list of players
 			} catch (IOException e1) {
 				return false;
 			}

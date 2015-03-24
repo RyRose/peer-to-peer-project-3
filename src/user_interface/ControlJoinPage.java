@@ -1,16 +1,21 @@
 package user_interface;
 
 import game.Player;
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
+
+
 import network.TalkerThread;
 import network_to_game.JSON;
 import javafx.application.Platform;
@@ -156,11 +161,11 @@ public class ControlJoinPage {
 				try {
 					line = channel.take();
 					if (JSON.isGameJson(line)) {
-						ArrayList<Player> players = JSON.parseMultipleJson(line);
-						if (players.size() == 1) {
-							initializePlayer( players.get(0) );
+						Player[] players = JSON.parseJson(line);
+						if (players.length == 1) {
+							initializePlayer( players[0] );
 						} else {
-							Platform.runLater( () -> {startGame(players); } );
+							Platform.runLater( () -> {startGame(Arrays.asList(players)); } );
 						}
 					} 
 				} catch (InterruptedException e) {
@@ -184,7 +189,7 @@ public class ControlJoinPage {
 		});
 	}
 	
-	public void startGame( ArrayList<Player> players ) {
+	public void startGame( List<Player> players ) {
 		try {
 			if (notStarted == true) {
 				notStarted = false;

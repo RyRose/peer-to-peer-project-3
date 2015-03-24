@@ -31,7 +31,7 @@ public class GameRunningThread extends Thread {
             if ( !s.isEmpty() ) {
             	updatePlayer(s);
             }
-            String network_message = JSON.generateMultipleJson(controller.getScreen().getMap().getPlayers());
+            String network_message = JSON.generateJson(controller.getScreen().getMap().getPlayers());
             writer.println(network_message);
             writer.flush();
             socket.close();
@@ -41,7 +41,7 @@ public class GameRunningThread extends Thread {
     }
 	
 	private void updatePlayer( String s ) {
-		Player player = JSON.parseSingleJson(s);
-		controller.updatePlayer(player);
+		Player[] player = JSON.parseJson(s);
+		controller.updatePlayer(player[0]);
 	} 
 }

@@ -20,33 +20,33 @@ public class JsonTest {
 	@Test
 	public void testSinglePlayerWithoutBullets() {
 		Player player = generatePlayer(false);
-		String json = JSON.generateSingleJson(player);
-		Player transmitted_player = JSON.parseSingleJson(json);
-		assertEquals( player, transmitted_player);
+		String json = JSON.generateJson(player);
+		Player[] transmitted_player = JSON.parseJson(json);
+		assertEquals( player, transmitted_player[0]);
 	}
 	
 	@Test
 	public void testSinglePlayerWithBullets() {
 		Player player = generatePlayer(true);
-		String json = JSON.generateSingleJson(player);
-		Player transmitted_player = JSON.parseSingleJson(json);
-		assertEquals(player, transmitted_player);
+		String json = JSON.generateJson(player);
+		Player[] transmitted_player = JSON.parseJson(json);
+		assertEquals(player, transmitted_player[0]);
 	}
 	
 	@Test
 	public void testMultiplePlayersWithoutBullets() {
-		ArrayList<Player> players = generateMultiplePlayers(false);
-		String json = JSON.generateMultipleJson(players);
-		ArrayList<Player> transmitted_players = JSON.parseMultipleJson(json);
-		assertEquals(players, transmitted_players);
+		Player[] players = generateMultiplePlayers(false);
+		String json = JSON.generateJson(players);
+		Player[] transmitted_players = JSON.parseJson(json);
+		assertArrayEquals(players, transmitted_players);
 	}
 	
 	@Test
 	public void testMultiplePlayersWithBullets() {
-		ArrayList<Player> players = generateMultiplePlayers(true);
-		String json = JSON.generateMultipleJson(players);
-		ArrayList<Player> transmitted_players = JSON.parseMultipleJson(json);
-		assertEquals(players, transmitted_players);
+		Player[] players = generateMultiplePlayers(true);
+		String json = JSON.generateJson(players);
+		Player[] transmitted_players = JSON.parseJson(json);
+		assertArrayEquals(players, transmitted_players);
 	}
 	
 	@Test
@@ -56,26 +56,26 @@ public class JsonTest {
 		assertFalse( JSON.isGameJson(""));
 		assertFalse( JSON.isGameJson("{}"));
 		assertFalse( JSON.isGameJson("[]"));
-		assertTrue ( JSON.isGameJson(JSON.generateSingleJson(generatePlayer(false))) );
-		assertTrue ( JSON.isGameJson(JSON.generateSingleJson(generatePlayer(true))) );
-		assertTrue ( JSON.isGameJson(JSON.generateMultipleJson(generateMultiplePlayers(false))) );
-		assertTrue ( JSON.isGameJson(JSON.generateMultipleJson(generateMultiplePlayers(true))) );
+		assertTrue ( JSON.isGameJson(JSON.generateJson(generatePlayer(false))) );
+		assertTrue ( JSON.isGameJson(JSON.generateJson(generatePlayer(true))) );
+		assertTrue ( JSON.isGameJson(JSON.generateJson(generateMultiplePlayers(false))) );
+		assertTrue ( JSON.isGameJson(JSON.generateJson(generateMultiplePlayers(true))) );
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidSingleJson() {
-		JSON.parseSingleJson("This is not good JSON");
+		JSON.parseJson("This is not good JSON");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidMultipleJson() {
-		JSON.parseMultipleJson("This is not good JSON");
+		JSON.parseJson("This is not good JSON");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testIncompletePlayerGeneration() {
 		Player player = new Player(); // No instance variables initialized
-		JSON.generateSingleJson(player);
+		JSON.generateJson(player);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -83,17 +83,7 @@ public class JsonTest {
 		ArrayList<Player> players = new ArrayList<Player>();
 		for( int i = 0; i < BIG_NUM; i++)
 			players.add( new Player() );
-		JSON.generateMultipleJson(players);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testSingleJsonInMultipleJson() {
-		JSON.parseMultipleJson( JSON.generateSingleJson(generatePlayer(false)) );
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testMultipleJsoninSingleJson() {
-		JSON.parseSingleJson( JSON.generateMultipleJson(generateMultiplePlayers(false)) );
+		JSON.generateJson(players);
 	}
 	
 	// Generating random players and bullets
@@ -114,10 +104,10 @@ public class JsonTest {
 		return player;
 	}
 	
-	private ArrayList<Player> generateMultiplePlayers( boolean hasBullets ) {
-		ArrayList<Player> players = new ArrayList<>();
+	private Player[] generateMultiplePlayers( boolean hasBullets ) {
+		Player[] players = new Player[BIG_NUM];
 		for( int i = 0; i < BIG_NUM; i++ ) {
-			players.add(generatePlayer(hasBullets));
+			players[i] = generatePlayer(hasBullets);
 		}
 		return players;
 	}

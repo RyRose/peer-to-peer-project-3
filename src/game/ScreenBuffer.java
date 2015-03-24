@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScreenBuffer {
 	
@@ -11,11 +12,7 @@ public class ScreenBuffer {
 		map = m;
 	}
 	
-	public ScreenBuffer(ArrayList<Player> all_players, int player_id) {
-		ArrayList<Player> players = new ArrayList<Player>();
-		for (Player player : all_players) {
-			players.add(player);
-		}
+	public ScreenBuffer(List<Player> players, int player_id) {
 		map = new Map(players, new ArrayList<Point>());
 		myPlayer = null;
 	}
@@ -24,8 +21,8 @@ public class ScreenBuffer {
 		map.setPlayer(player.getUniqueId(), player);
 	}
 	
-	public void updatePlayers(ArrayList<Player> arrayList) {
-		for (Player player : arrayList) {
+	public void updatePlayers(Player[] players) {
+		for (Player player : players) {
 			map.setPlayer(player.getUniqueId(), player);
 		}
 	}
@@ -34,7 +31,7 @@ public class ScreenBuffer {
 		map.setPlayer(myPlayer.getUniqueId(), myPlayer);
 	}
 	
-	public ArrayList<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return map.getPlayers();
 	}
 	

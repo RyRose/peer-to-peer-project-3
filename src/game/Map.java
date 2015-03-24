@@ -5,19 +5,19 @@ import java.util.List;
 
 public class Map {
 	
-	private ArrayList<Player> players;
+	private List<Player> players;
 	private ArrayList<Point> obstacles;
 	
 	public Map (ArrayList<Point> obstacles) {
 		this.obstacles = obstacles;
 	}
 	
-	public Map (ArrayList<Player> players, ArrayList<Point> obstacles) {
+	public Map (List<Player> players, ArrayList<Point> obstacles) {
 		this.players = players;
 		this.obstacles = obstacles;
 	}
 
-	public ArrayList<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 		

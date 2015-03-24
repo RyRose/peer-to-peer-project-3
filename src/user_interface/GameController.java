@@ -5,8 +5,8 @@ import game.Direction;
 import game.Player;
 import game.ScreenBuffer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -78,7 +78,7 @@ public class GameController {
 		
 	}
 	
-	public void initializeGame(Player my_player, ArrayList<Player> players, String host) {
+	public void initializeGame(Player my_player, List<Player> players, String host) {
 		canvas.requestFocus();
 		screen = new ScreenBuffer(players, my_id);
 		screen.myPlayer = my_player;
@@ -94,7 +94,7 @@ public class GameController {
 	}
 	
 	private void drawScreen() {
-		ArrayList<Player> players = screen.getPlayers();
+		List<Player> players = screen.getPlayers();
 		canvas.getChildren().clear();
 		for (Player player : players) {
 			Circle playerSprite;
@@ -134,8 +134,8 @@ public class GameController {
 		mySprite.setTranslateY(mySprite.getTranslateY() + y);
 	}
 	
-	private void update(ArrayList<Player> arrayList, int port) {
-		screen.updatePlayers(arrayList);
+	private void update(Player[] players, int port) {
+		screen.updatePlayers(players);
 		screen.updateBullets();
 		screen.updateMyPlayer();
 	}
@@ -150,7 +150,7 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = JSON.generateSingleJson(screen.myPlayer);
+		String json = JSON.generateJson(screen.myPlayer);
 		talker = new TalkerThread(json, host, port, channel);
 		new GameReceiver().start();
 		talker.start();
@@ -164,7 +164,7 @@ public class GameController {
 					line = channel.take();
 					if (JSON.isGameJson(line)) {
 						Platform.runLater( () -> { 
-							update( JSON.parseMultipleJson(line), port);
+							update( JSON.parseJson(line), port);
 						} );
 					}
 				} catch (InterruptedException e) {
