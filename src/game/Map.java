@@ -1,5 +1,7 @@
 package game;
 
+import interfaces.PlayerInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,16 @@ public class Map {
 	public Map (List<Player> players, ArrayList<Point> obstacles) {
 		this.players = players;
 		this.obstacles = obstacles;
+	}
+	
+	public boolean isConsistent() {
+		if (players == null) {return false;}
+		for (PlayerInterface player : players) {
+			Point playerPosition = (Point) player.getCoordinates();
+			for (Point obstacle : obstacles) {
+				if (playerPosition.equals(obstacle)) {return false;}
+			}
+		} return true;
 	}
 
 	public List<Player> getPlayers() {

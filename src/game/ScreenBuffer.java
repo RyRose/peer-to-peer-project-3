@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ScreenBuffer {
 	
 	private Map map;
@@ -15,6 +16,10 @@ public class ScreenBuffer {
 	public ScreenBuffer(List<Player> players, int player_id) {
 		map = new Map(players, new ArrayList<Point>());
 		myPlayer = null;
+	}
+	
+	public boolean isConsistent() {
+		return map != null && map.isConsistent();
 	}
 	
 	public void updatePlayer(Player player) {

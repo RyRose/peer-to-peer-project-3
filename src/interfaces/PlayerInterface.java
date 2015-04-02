@@ -2,6 +2,7 @@ package interfaces;
 
 import game.Bullet;
 import game.Direction;
+import game.Point;
 
 import java.util.ArrayList;
 
@@ -22,4 +23,6 @@ public interface PlayerInterface extends PointInterface {
 	
 	public String getColorAsString();
 	public void setColorAsString(String color);
+
+	public Point getCoordinates();
 }
