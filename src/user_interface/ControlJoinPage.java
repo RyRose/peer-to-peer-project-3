@@ -142,6 +142,7 @@ public class ControlJoinPage {
 			talker.halt();
 		}
 		talker = new TalkerThread(msg, host, port, channel);
+		receiverThread.updateTalker(talker);
 		if ( !receiverThread.isAlive() ) 
 			receiverThread.start();
 		talker.start();

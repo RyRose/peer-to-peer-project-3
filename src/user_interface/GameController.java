@@ -33,9 +33,14 @@ public class GameController {
 	private TalkerThread talker;
 	private String host;
 	private int port = 8888;
+	
+	private network.Receiver receiver;
 
 	@FXML
 	private void initialize() {
+		//if (host != null) {
+			receiver = new network.Receiver(null, channel, this);
+		//}
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -91,6 +96,7 @@ public class GameController {
 			this.host = host;
 			send();
 		} 
+		
 	}
 	
 	private void drawScreen() {
@@ -152,8 +158,12 @@ public class GameController {
 		}
 		String json = JSON.generateJson(screen.getMyPlayer());
 		talker = new TalkerThread(json, host, port, channel);
-		new network.Receiver(talker, channel, this).start();
+		receiver.updateTalker(talker);
 		talker.start();
+		if ( !receiver.isAlive() ) 
+			receiver.start();
+		//new network.Receiver(talker, channel, this).start();
+		//talker.start();
 	}
 
 }

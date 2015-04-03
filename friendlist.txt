@@ -2,3 +2,5 @@
 209.65.57.24,Gimli
 209.65.57.23,Legolas
 209.65.56.40,Graham
+209.65.57.18,Sam
+Boromir,Boromir

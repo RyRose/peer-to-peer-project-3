@@ -14,8 +14,8 @@ public class Receiver extends Thread {
 	private ArrayBlockingQueue<String> channel;
 	private TalkerThread talker;
 	private int port = 8888;
-	private GameController gameController;
-	private ControlJoinPage joinController;
+	private GameController gameController = null;
+	private ControlJoinPage joinController = null;
 	
 	public Receiver(TalkerThread talker, ArrayBlockingQueue<String> channel, GameController gameController) {
 		this.talker = talker;
@@ -29,6 +29,7 @@ public class Receiver extends Thread {
 		this.joinController = joinController;
 	}
 	
+	@Override
 	public void run() {
 		while (talker.isGoing()) {
 			String line;
@@ -57,6 +58,10 @@ public class Receiver extends Thread {
 				Platform.runLater( () -> {joinController.startGame(Arrays.asList(players)); } );
 			}
 		}
+	}
+	
+	public void updateTalker(TalkerThread talker) {
+		this.talker = talker;
 	}
 
 	

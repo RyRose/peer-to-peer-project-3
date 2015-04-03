@@ -28,8 +28,8 @@ public class ScreenBufferTest {
 		ScreenBuffer screen = new ScreenBuffer(map);
 		assertTrue(screen.isConsistent());
 		
-		screen.myPlayer = new Player();
-		screen.myPlayer.setHeading(Direction.UP);
+		screen.setMyPlayer(new Player());
+		screen.getMyPlayer().setHeading(Direction.UP);
 		checkKillPlayer(screen);
 		checkShootBullet(screen);
 		checkMove(screen);
@@ -39,7 +39,7 @@ public class ScreenBufferTest {
 	
 	private void checkKillPlayer(ScreenBuffer screen) {
 		screen.killPlayer();
-		assertFalse(screen.myPlayer.isAlive());
+		assertFalse(screen.getMyPlayer().isAlive());
 		assertTrue(screen.isConsistent());
 	}
 	
