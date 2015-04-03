@@ -43,7 +43,6 @@ public class TalkerThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
 		}
 		finally {
             try {

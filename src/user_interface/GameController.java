@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import network.Receiver;
 import network.TalkerThread;
 import network_to_game.JSON;
 import javafx.application.Platform;
@@ -38,9 +39,7 @@ public class GameController {
 
 	@FXML
 	private void initialize() {
-		//if (host != null) {
-			receiver = new network.Receiver(null, channel, this);
-		//}
+		receiver = new network.Receiver(null, channel, this);
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -52,7 +51,9 @@ public class GameController {
 					screen.updateBullets();
 				}
 				if (host != null){
+					Platform.runLater(() -> {
 					send();
+					} );
 				}
 			}
 		}, 0, 15);
@@ -158,12 +159,9 @@ public class GameController {
 		}
 		String json = JSON.generateJson(screen.getMyPlayer());
 		talker = new TalkerThread(json, host, port, channel);
-		receiver.updateTalker(talker);
+		receiver = new Receiver(talker, channel, this);
 		talker.start();
-		if ( !receiver.isAlive() ) 
-			receiver.start();
-		//new network.Receiver(talker, channel, this).start();
-		//talker.start();
+		receiver.start();
 	}
 
 }
