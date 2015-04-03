@@ -37,7 +37,7 @@ public class ControlCreatePage {
 	private int upperYBound = 595;
 	
 	public ArrayList<Player> all_players = new ArrayList<Player>();
-	public int player_id = 0;
+	private int player_id = 0;
 	
 	@FXML
 	public void initialize() throws IOException {
@@ -59,7 +59,7 @@ public class ControlCreatePage {
 	
 	private void setupServer() throws IOException {
 		server = new network.Server(8888, this);
-		server.isSettingUp = true;
+		server.setSettingUp(true);
 		server.start();
 	}
 	
@@ -108,7 +108,7 @@ public class ControlCreatePage {
 	
 	private void openGame() {
 		try {
-			server.isGameStarted = true;
+			server.setGameStarted(true);
 			FXMLLoader cont = new FXMLLoader();
 			cont.setLocation(getClass().getResource("GameScreen.fxml"));
 			Parent home_page_parent = (Parent) cont.load();  
@@ -122,5 +122,13 @@ public class ControlCreatePage {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addToPlayerID() {
+		player_id++;
+	}
+	
+	public int getPlayerID() {
+		return player_id;
 	}
 }

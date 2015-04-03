@@ -20,16 +20,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.input.KeyCode;
 
 public class GameController {
+	
 	@FXML
 	Pane canvas;
 	
-	Circle mySprite;
-	
-	ScreenBuffer screen;
-	int my_id;
+	private Circle mySprite;
+	private ScreenBuffer screen;
+	private int my_id;
 	private ArrayBlockingQueue<String> channel = new ArrayBlockingQueue<String>(2);
-	HashMap<Integer, Circle> bulletSprites = new HashMap<Integer, Circle>();
-	HashMap<Integer, Circle> playerSprites = new HashMap<Integer, Circle>();
+	private HashMap<Integer, Circle> bulletSprites = new HashMap<Integer, Circle>();
+	private HashMap<Integer, Circle> playerSprites = new HashMap<Integer, Circle>();
 	private TalkerThread talker;
 	private String host;
 	private int port = 8888;
@@ -81,9 +81,9 @@ public class GameController {
 	public void initializeGame(Player my_player, List<Player> players, String host) {
 		canvas.requestFocus();
 		screen = new ScreenBuffer(players, my_id);
-		screen.myPlayer = my_player;
+		screen.setMyPlayer(my_player);
 		mySprite = new Circle(screen.getMe().getCoordinates().getX(), screen.getMe().getCoordinates().getY(), 20);
-		mySprite.setFill(screen.myPlayer.getColor());
+		mySprite.setFill(screen.getMyPlayer().getColor());
 		canvas.getChildren().add(mySprite);
 		my_id = my_player.getUniqueId();
 		playerSprites.put(my_id, mySprite);
@@ -134,7 +134,7 @@ public class GameController {
 		mySprite.setTranslateY(mySprite.getTranslateY() + y);
 	}
 	
-	private void update(Player[] players, int port) {
+	public void update(Player[] players, int port) {
 		screen.updatePlayers(players);
 		screen.updateBullets();
 		screen.updateMyPlayer();
@@ -150,27 +150,10 @@ public class GameController {
 		if (talker != null && talker.isGoing()) {
 			talker.halt();
 		}
-		String json = JSON.generateJson(screen.myPlayer);
+		String json = JSON.generateJson(screen.getMyPlayer());
 		talker = new TalkerThread(json, host, port, channel);
-		new GameReceiver().start();
+		new network.Receiver(talker, channel, this).start();
 		talker.start();
 	}
-	
-	private class GameReceiver extends Thread {
-		public void run() {
-			while (talker.isGoing()) {
-				String line;
-				try {
-					line = channel.take();
-					if (JSON.isGameJson(line)) {
-						Platform.runLater( () -> { 
-							update( JSON.parseJson(line), port);
-						} );
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+
 }

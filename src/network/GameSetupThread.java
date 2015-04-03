@@ -16,7 +16,7 @@ public class GameSetupThread extends Thread {
 	
 	    private Socket socket;
 	    private ControlCreatePage controller;
-	    public boolean isGameStarted;
+	    private boolean isGameStarted;
 	    private Server server;
 	    
 	    
@@ -38,11 +38,11 @@ public class GameSetupThread extends Thread {
 	            		String json = JSON.generateJson(controller.all_players);
 	            		writer.println(json);
 	            		writer.flush();
-	            		server.isSettingUp = false;
+	            		server.setSettingUp(false);
 	            		break;
 	            	} else {
 	            		String s = responses.readLine();
-	            		if (Server.IPaddresses.contains(socket.getInetAddress().toString())) {
+	            		if (server.containsIPAddress(socket.getInetAddress().toString())) {
 	            			Player player = controller.all_players.get( Integer.valueOf(getUniqueID()));
 	            			String single_json = JSON.generateJson(player);
 	            			writer.println(single_json);
@@ -52,7 +52,7 @@ public class GameSetupThread extends Thread {
 	            			writer.println(json);
 	            			writer.flush();
 	            			updateLobbyScreen(s);
-	            			Server.IPaddresses.add( socket.getInetAddress().toString() );
+	            			server.addIPAddress(socket.getInetAddress().toString());
 	            		}
 	            	}
 	            }
@@ -64,14 +64,14 @@ public class GameSetupThread extends Thread {
 	    }
 	    
 	    private String getUniqueID() {
-	    	return String.valueOf(Server.IPaddresses.indexOf(socket.getInetAddress().toString()) + 1);
+	    	return String.valueOf(server.getIPAddressIndex(socket.getInetAddress().toString()) + 1);
 	    }
 	    
 	    private Player makeAnotherPlayer() {
-	    	Player player = new Player( controller.getStartCoordinates().get(controller.player_id), controller.getStartDirections().get(controller.player_id));
-	    	player.setUniqueId(controller.player_id);
-	    	player.setColor(controller.getColors().get(controller.player_id));
-	    	controller.player_id++;
+	    	Player player = new Player( controller.getStartCoordinates().get(controller.getPlayerID()), controller.getStartDirections().get(controller.getPlayerID()));
+	    	player.setUniqueId(controller.getPlayerID());
+	    	player.setColor(controller.getColors().get(controller.getPlayerID()));
+	    	controller.addToPlayerID();
 	    	controller.all_players.add(player);
 	    	return player;
 	    }

@@ -7,7 +7,7 @@ import java.util.List;
 public class ScreenBuffer {
 	
 	private Map map;
-	public Player myPlayer;
+	private Player myPlayer;
 	
 	public ScreenBuffer(Map m) {
 		map = m;
@@ -98,5 +98,13 @@ public class ScreenBuffer {
 	
 	public Map getMap() {
 		return map;
+	}
+	
+	public void setMyPlayer(Player player) {
+		myPlayer = player;
+	}
+	
+	public Player getMyPlayer() {
+		return myPlayer;
 	}
 }

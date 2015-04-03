@@ -12,10 +12,10 @@ public class Server extends Thread {
 	private ControlCreatePage controller;
 	private GameController gameController;
 	
-	public static final ArrayList<String> IPaddresses = new ArrayList<String>();
+	private static final ArrayList<String> IPaddresses = new ArrayList<String>();
 	
-	public boolean isSettingUp;
-	public boolean isGameStarted;
+	private boolean isSettingUp;
+	private boolean isGameStarted;
 
 	public Server(int port, ControlCreatePage controller) throws IOException {
 		accepter = new ServerSocket(port);
@@ -46,8 +46,28 @@ public class Server extends Thread {
 		}
 	}
 	
+	public Boolean containsIPAddress(String address) {
+		return IPaddresses.contains(address);
+	}
+	
+	public void addIPAddress(String address) {
+		IPaddresses.add(address);
+	}
+	
+	public int getIPAddressIndex(String address) {
+		return IPaddresses.indexOf(address);
+	}
+	
 	public void startGame( GameController controller ) {
 		gameController = controller;
+	}
+	
+	public void setSettingUp(Boolean value) {
+		isSettingUp = value;
+	}
+	
+	public void setGameStarted(Boolean value) {
+		isGameStarted = value;
 	}
 
 }

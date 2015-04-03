@@ -1,23 +1,17 @@
 package user_interface;
 
 import game.Player;
-
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
-
-
 import network.TalkerThread;
-import network_to_game.JSON;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,7 +55,7 @@ public class ControlJoinPage {
 	private TalkerThread talker;
 	private Boolean notStarted;
 	private HashMap<String, String> NametoIP = new HashMap<String, String>();
-	private Receiver receiverThread;
+	private network.Receiver receiverThread;
 	private int port = 8888;
 	private Paint color;
 	
@@ -70,7 +64,7 @@ public class ControlJoinPage {
 		channel = new ArrayBlockingQueue<String>(2, true);
 		users.setItems(IPAddresses);
 		addSavedIPs();
-		receiverThread = new Receiver();
+		receiverThread = new network.Receiver(talker, channel, this);
 	}
 	
 	private void addSavedIPs() {
@@ -124,24 +118,23 @@ public class ControlJoinPage {
 	
 	@FXML
 	private void joinGame() throws InterruptedException {
-		if (users.getSelectionModel().getSelectedIndex() != -1 && !username.getText().equals("") && !username.getText().equals(USERNAME_HOST_ERROR)) {
+		if (usernameProvided() && hostSelected()) {
 			send(username.getText(), NametoIP.get(users.getSelectionModel().getSelectedItem()));
-			Timer timer = new Timer();
-			timer.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					if (!notStarted) {
-						cancel();
-					}
-					send("", NametoIP.get(users.getSelectionModel().getSelectedItem()));
-				}
-			}, 0, 100);
+			setupTimer();
 			notStarted = true;
 			play.setVisible(false);
 		}
 		else { 
 			username.setText(USERNAME_HOST_ERROR);
 		}
+	}
+	
+	private Boolean usernameProvided() {
+		return !username.getText().equals("") && !username.getText().equals(USERNAME_HOST_ERROR);
+	}
+	
+	private Boolean hostSelected() {
+		return users.getSelectionModel().getSelectedIndex() != -1;
 	}
 
 	private void send(String msg, String host) {
@@ -154,28 +147,20 @@ public class ControlJoinPage {
 		talker.start();
 	}
 	
-	private class Receiver extends Thread {
-		public void run() {
-			while (talker.isGoing()) {
-				String line;
-				try {
-					line = channel.take();
-					if (JSON.isGameJson(line)) {
-						Player[] players = JSON.parseJson(line);
-						if (players.length == 1) {
-							initializePlayer( players[0] );
-						} else {
-							Platform.runLater( () -> {startGame(Arrays.asList(players)); } );
-						}
-					} 
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+	private void setupTimer() {
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				if (!notStarted) {
+					cancel();
 				}
+				send("", NametoIP.get(users.getSelectionModel().getSelectedItem()));
 			}
-		}
+		}, 0, 100);
 	}
 	
-	private void initializePlayer( Player player ) {
+	public void initializePlayer( Player player ) {
 		this.player = player;
 		color = player.getColor();
 		showPlayerTheirColor();
